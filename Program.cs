@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.IdentityModel.Tokens.Jwt;
+
 using System.Security.Cryptography;
 using System.Text;
 using static KeiroGenesis.API.Core.Database.PostgreSqlConnectionFactory;
@@ -87,106 +89,120 @@ builder.Services.AddScoped<CapabilityService>();
 builder.Services.AddScoped<UserManagementRepository>();
 builder.Services.AddScoped<UserManagementService>();
 
+//CloneWizard
+builder.Services.AddScoped<CloneWizardRepository>();
+builder.Services.AddScoped<CloneWizardService>();
+
+//Clone Service
+builder.Services.AddScoped<CloneService>();
+builder.Services.AddScoped<CloneRepository>();
+
+
+
+
 // ==========================================================================
-// AUTHENTICATION (JWT BEARER)
+// AUTHENTICATION (JWT/AUTH BEARER + PREAUTH) — SYMMETRIC ONLY
 // ==========================================================================
 
-// Check if using RSA keys (production) or symmetric key (development)
-var jwtSecret = builder.Configuration["Jwt:Secret"];
-var publicKeyPem = builder.Configuration["Auth:PublicKeyPem"];
+var jwtSecret = builder.Configuration["Auth:Secret"]
+    ?? throw new InvalidOperationException("Auth:Secret is required");
 
-if (!string.IsNullOrEmpty(publicKeyPem))
-{
-    // Production: RSA asymmetric keys
-    var rsa = RSA.Create();
-    rsa.ImportFromPem(publicKeyPem.ToCharArray());
-    var rsaSecurityKey = new RsaSecurityKey(rsa);
+var jwtIssuer = builder.Configuration["Auth:Issuer"]
+    ?? throw new InvalidOperationException("Auth:Issuer is required");
 
-    builder.Services
-        .AddAuthentication(options =>
+var jwtAudience = builder.Configuration["Auth:Audience"]
+    ?? throw new InvalidOperationException("Auth:Audience is required");
+
+var preAuthAudience = builder.Configuration["Auth:PreAuthAudience"]
+    ?? throw new InvalidOperationException("Auth:PreAuthAudience is required");
+
+var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = "Bearer";
+        options.DefaultChallengeScheme = "Bearer";
+    })
+
+    // ----------------------------------------------------------------------
+    // MAIN ACCESS TOKEN (Bearer)
+    // ----------------------------------------------------------------------
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer("Bearer", options =>
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = signingKey,
+
+            ClockSkew = TimeSpan.FromMinutes(1),
+
+            // ✅ IMPORTANT: make claims consistent across the app
+            NameClaimType = JwtRegisteredClaimNames.Sub,
+            RoleClaimType = System.Security.Claims.ClaimTypes.Role
+        };
+
+        // ✅ OPTIONAL: helps you see real auth failures in logs
+        options.Events = new JwtBearerEvents
         {
-            options.TokenValidationParameters = new TokenValidationParameters
+            OnAuthenticationFailed = context =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Auth:Issuer"] ?? "keiroclone",
-                ValidAudience = builder.Configuration["Auth:Audience"] ?? "keiroclone-api",
-                IssuerSigningKey = rsaSecurityKey,
-                ClockSkew = TimeSpan.FromMinutes(1),
-                RoleClaimType = System.Security.Claims.ClaimTypes.Role
-            };
-        })
-        .AddJwtBearer("PreAuth", options =>
+                var logger = context.HttpContext.RequestServices
+                    .GetRequiredService<ILoggerFactory>()
+                    .CreateLogger("JwtBearer");
+
+                logger.LogError(context.Exception, "Bearer token authentication failed");
+                return Task.CompletedTask;
+            }
+        };
+    })
+
+    // ----------------------------------------------------------------------
+    // PRE-AUTH TOKEN (Registration / Verification / MFA / Bootstrap)
+    // ----------------------------------------------------------------------
+    .AddJwtBearer("PreAuth", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
         {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Auth:Issuer"] ?? "keiroclone",
-                ValidAudience = builder.Configuration["Auth:PreAuthAudience"] ?? "keiroclone-preauth",
-                IssuerSigningKey = rsaSecurityKey,
-                ClockSkew = TimeSpan.FromMinutes(1),
-                RoleClaimType = System.Security.Claims.ClaimTypes.Role
-            };
-        });
-}
-else if (!string.IsNullOrEmpty(jwtSecret))
-{
-    // Development/MVP: Symmetric key (from Auth module)
-    builder.Services
-        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+
+            ValidIssuer = jwtIssuer,
+            ValidAudience = preAuthAudience,
+            IssuerSigningKey = signingKey,
+
+            ClockSkew = TimeSpan.FromMinutes(1),
+
+            // ✅ IMPORTANT: same claim mapping here too
+            NameClaimType = JwtRegisteredClaimNames.Sub,
+            RoleClaimType = System.Security.Claims.ClaimTypes.Role
+        };
+
+        // ✅ OPTIONAL: helps you see real auth failures in logs
+        options.Events = new JwtBearerEvents
         {
-            options.TokenValidationParameters = new TokenValidationParameters
+            OnAuthenticationFailed = context =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "KeiroGenesis",
-                ValidAudience = builder.Configuration["Jwt:Audience"] ?? "KeiroGenesis",
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwtSecret)
-                ),
-                ClockSkew = TimeSpan.FromMinutes(1),
-                RoleClaimType = System.Security.Claims.ClaimTypes.Role
-            };
-        });
-}
-else
-{
-    // Fallback: Development secret key
-    builder.Services
-        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(
-                        builder.Configuration["Auth:SecretKey"]
-                        ?? "dev-secret-key-min-32-characters!!"
-                    )
-                ),
-                RoleClaimType = System.Security.Claims.ClaimTypes.Role
-            };
-        });
-}
+                var logger = context.HttpContext.RequestServices
+                    .GetRequiredService<ILoggerFactory>()
+                    .CreateLogger("JwtBearer");
+
+                logger.LogError(context.Exception, "PreAuth token authentication failed");
+                return Task.CompletedTask;
+            }
+        };
+    });
 
 builder.Services.AddAuthorization();
+
 
 // ==========================================================================
 // API CONFIGURATION

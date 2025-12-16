@@ -2,8 +2,7 @@
 // PROGRAM.CS — Application Entry Point
 // KeiroGenesis API (MVP)
 // DI Registration, Middleware, Startup Configuration
-// ==========================================================================
-
+// ========================================================================
 using Dapper;
 using KeiroGenesis.API.Controllers.V1;
 using KeiroGenesis.API.Core.Database;

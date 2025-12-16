@@ -1,0 +1,96 @@
+# ============================================================
+# File: docker-compose.test.yml
+# Purpose: Staging/Test environment for KeiroGenesis REST API
+#           connecting to Google Cloud SQL (SQL Server)
+#           and managed Redis (Memorystore).
+# ============================================================
+
+version: "3.9"
+
+services:
+  # ============================================================
+  # KeiroGenesis API (.NET 8 backend)
+  # ============================================================
+  keirogenesis-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: keirogenesis-api-test
+    ports:
+      - "8080:8080"   # Cloud Run / test port (HTTPS handled by proxy)
+    environment:
+      # =====================================================
+      # 🧩 ASP.NET Core Configuration
+      # =====================================================
+      ASPNETCORE_ENVIRONMENT: Test
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+
+      # =====================================================
+      # 🧠 Database Configuration (Google Cloud SQL Server)
+      # =====================================================
+      DatabaseSettings__Host: "34.48.221.124"
+      DatabaseSettings__Port: "1433"
+      DatabaseSettings__Database: "kg-test-db"
+      DatabaseSettings__Username: "app_keiro"
+      DatabaseSettings__Password: "100Strong(!)P@ssword"
+      DatabaseSettings__Encrypt: "true"
+      DatabaseSettings__TrustServerCertificate: "true"
+
+      # =====================================================
+      # 🧱 Caching / Messaging (Google Memorystore Redis)
+      # =====================================================
+      ConnectionStrings__Redis: "10.0.0.15:6379"
+
+      # =====================================================
+      # 🔐 Authentication Settings
+      # =====================================================
+      Auth__Issuer: "KeiroGenesis"
+      Auth__Audience: "KeiroGenesisClients"
+      Auth__AccessTokenMinutes: "15"
+      Auth__RefreshTokenDays: "7"
+
+      # =====================================================
+      # 🌐 Frontend Integration (KeiroClone Test Environment)
+      # =====================================================
+      ApplicationOptions__DashboardBaseUrl: "https://test.keiroclone.com/dashboard"
+
+      # =====================================================
+      # 🧭 CORS (Allow Test React frontends)
+      # =====================================================
+      AllowedOrigins__0: "https://test.keiroclone.com"
+      AllowedOrigins__1: "https://staging.keiroclone.com"
+
+      # =====================================================
+      # 🧾 Logging (Serilog)
+      # =====================================================
+      Serilog__MinimumLevel__Default: "Information"
+      Serilog__MinimumLevel__Override__Microsoft: "Warning"
+      Serilog__MinimumLevel__Override__System: "Warning"
+
+    # =====================================================
+    # 🩺 Health Check Endpoint
+    # =====================================================
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    restart: unless-stopped
+    networks:
+      - keirogenesis-network
+
+    # Persist ASP.NET data protection keys for consistent token encryption
+    volumes:
+      - dataprotection_keys:/root/.aspnet/DataProtection-Keys
+
+# ============================================================
+# Network and Volume Definitions
+# ============================================================
+networks:
+  keirogenesis-network:
+    driver: bridge
+
+volumes:
+  dataprotection_keys:

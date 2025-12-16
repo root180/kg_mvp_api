@@ -1,0 +1,114 @@
+# ============================================================
+# File: docker-compose.dev.yml
+# Purpose: Local Docker build and test for KeiroGenesis REST API
+#           connecting to Cloud SQL (SQL Server) and serving
+#           KeiroClone as the frontend client.
+#           Includes Redis for caching and health checks.
+# ============================================================
+
+version: "3.9"
+
+services:
+  # ============================================================
+  # KeiroGenesis API (.NET 8 backend)
+  # ============================================================
+  keirogenesis-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: keirogenesis-api
+    ports:
+      - "8080:8080"   # HTTP - standardized for local and Cloud Run
+    environment:
+      # =====================================================
+      # 🧩 ASP.NET Core Configuration
+      # =====================================================
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+
+      # =====================================================
+      # 🧠 Database Configuration (Google Cloud SQL Server)
+      # =====================================================
+      DatabaseSettings__Host: "34.48.221.124"
+      DatabaseSettings__Port: "1433"
+      DatabaseSettings__Database: "kg-dev-db"
+      DatabaseSettings__Username: "app_keiro"
+      DatabaseSettings__Password: "100Strong(!)P@ssword"
+      DatabaseSettings__Encrypt: "true"
+      DatabaseSettings__TrustServerCertificate: "true"
+
+      # =====================================================
+      # 🧱 Caching / Messaging (use Redis container hostname)
+      # =====================================================
+      ConnectionStrings__Redis: "redis:6379"
+
+      # =====================================================
+      # 🔐 Authentication Settings
+      # =====================================================
+      Auth__Issuer: "KeiroGenesis"
+      Auth__Audience: "KeiroGenesisClients"
+      Auth__AccessTokenMinutes: "15"
+      Auth__RefreshTokenDays: "7"
+
+      # =====================================================
+      # 🌐 Frontend Integration (KeiroClone)
+      # =====================================================
+      ApplicationOptions__DashboardBaseUrl: "http://localhost:5173/dashboard"
+
+      # =====================================================
+      # 🧭 CORS (Allow local React frontends)
+      # =====================================================
+      AllowedOrigins__0: "http://localhost:3000"
+      AllowedOrigins__1: "http://localhost:5173"
+      AllowedOrigins__2: "http://localhost:8080"
+
+      # =====================================================
+      # 🧾 Logging (Serilog)
+      # =====================================================
+      Serilog__MinimumLevel__Default: "Information"
+      Serilog__MinimumLevel__Override__Microsoft: "Warning"
+      Serilog__MinimumLevel__Override__System: "Warning"
+
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - keirogenesis-network
+    volumes:
+      - dataprotection_keys:/root/.aspnet/DataProtection-Keys
+
+    # =====================================================
+    # 🩺 Health Check Endpoint
+    # =====================================================
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # ============================================================
+  # Redis Cache (Local container for dev)
+  # ============================================================
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - keirogenesis-network
+    restart: always
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+
+# ============================================================
+# Docker Networks and Volumes
+# ============================================================
+networks:
+  keirogenesis-network:
+    driver: bridge
+
+volumes:
+  redis_data:
+  dataprotection_keys:

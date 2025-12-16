@@ -1,0 +1,279 @@
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_request_email_verification]    Script Date: 8/27/2025 1:21:17 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+------------------------------------------------------------
+-- 5. Request Email Verification
+------------------------------------------------------------
+ALTER   PROCEDURE [auth].[sp_request_email_verification]
+    @p_email_or_username NVARCHAR(255),
+    @o_token NVARCHAR(255) OUTPUT,
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @user_id UNIQUEIDENTIFIER;
+
+    BEGIN TRY
+        SELECT TOP 1 @user_id = user_id
+        FROM core.users
+        WHERE (email = @p_email_or_username OR username = @p_email_or_username)
+          AND is_active = 1;
+
+        IF @user_id IS NULL
+        BEGIN
+            SET @o_success = 0; SET @o_message = N'User not found.'; SET @o_token = NULL; RETURN;
+        END
+
+        SET @o_token = CONVERT(NVARCHAR(255), NEWID());
+
+        INSERT INTO auth.user_tokens (token_id, user_id, token_type, token, expires_at, is_used, created_at)
+        VALUES (NEWID(), @user_id, 'email_verification', @o_token, DATEADD(DAY, 1, SYSUTCDATETIME()), 0, SYSUTCDATETIME());
+
+        SET @o_success = 1; SET @o_message = N'Email verification token generated.';
+    END TRY
+    BEGIN CATCH
+        SET @o_success = 0; SET @o_message = ERROR_MESSAGE(); SET @o_token = NULL;
+    END CATCH
+END;
+
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_request_password_reset]    Script Date: 8/27/2025 1:21:56 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+------------------------------------------------------------
+-- 2. Request Password Reset (Forgot Password)
+------------------------------------------------------------
+ALTER   PROCEDURE [auth].[sp_request_password_reset]
+    @p_email_or_username NVARCHAR(255),
+    @o_token NVARCHAR(255) OUTPUT,
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @user_id UNIQUEIDENTIFIER;
+
+    BEGIN TRY
+        SELECT TOP 1 @user_id = user_id
+        FROM core.users
+        WHERE (email = @p_email_or_username OR username = @p_email_or_username)
+          AND is_active = 1;
+
+        IF @user_id IS NULL
+        BEGIN
+            -- Security: never disclose if user exists
+            SET @o_success = 1; SET @o_message = N'If this account exists, a reset link has been sent.';
+            SET @o_token = NULL; RETURN;
+        END
+
+        SET @o_token = CONVERT(NVARCHAR(255), NEWID());
+
+        INSERT INTO auth.user_tokens (token_id, user_id, token_type, token, expires_at, is_used, created_at)
+        VALUES (NEWID(), @user_id, 'password_reset', @o_token, DATEADD(MINUTE, 30, SYSUTCDATETIME()), 0, SYSUTCDATETIME());
+
+        SET @o_success = 1; SET @o_message = N'Password reset token generated.';
+    END TRY
+    BEGIN CATCH
+        SET @o_success = 0; SET @o_message = ERROR_MESSAGE(); SET @o_token = NULL;
+    END CATCH
+END;
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_reset_password]    Script Date: 8/27/2025 1:22:45 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+------------------------------------------------------------
+-- 3. Reset Password (Consume Reset Token)
+------------------------------------------------------------
+ALTER   PROCEDURE [auth].[sp_reset_password]
+    @p_token NVARCHAR(255),
+    @p_new_password NVARCHAR(255),
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @user_id UNIQUEIDENTIFIER, @new_hash NVARCHAR(64);
+
+    BEGIN TRY
+        SELECT TOP 1 @user_id = ut.user_id
+        FROM auth.user_tokens ut
+        WHERE ut.token = @p_token
+          AND ut.token_type = 'password_reset'
+          AND ut.is_used = 0
+          AND ut.expires_at > SYSUTCDATETIME();
+
+        IF @user_id IS NULL
+        BEGIN
+            SET @o_success = 0; SET @o_message = N'Token invalid or expired.'; RETURN;
+        END
+
+        SET @new_hash = LOWER(CONVERT(VARCHAR(64),
+                          HASHBYTES('SHA2_256', CONVERT(VARBINARY(MAX), @p_new_password)), 2));
+
+        UPDATE core.users
+        SET password_hash = @new_hash, updated_at = SYSUTCDATETIME()
+        WHERE user_id = @user_id;
+
+        UPDATE auth.user_tokens
+        SET is_used = 1
+        WHERE token = @p_token;
+
+        SET @o_success = 1; SET @o_message = N'Password reset successfully.';
+    END TRY
+    BEGIN CATCH
+        SET @o_success = 0; SET @o_message = ERROR_MESSAGE();
+    END CATCH
+END;
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_revoke_user_tokens]    Script Date: 8/27/2025 1:23:34 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [auth].[sp_revoke_user_tokens]
+    @p_user_id UNIQUEIDENTIFIER,
+    @p_tenant_id UNIQUEIDENTIFIER,
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    BEGIN TRY
+        UPDATE auth.refresh_tokens
+        SET is_active = 0, revoked_at = SYSUTCDATETIME()
+        WHERE user_id = @p_user_id
+          AND tenant_id = @p_tenant_id
+          AND is_active = 1;
+
+        SET @o_success = 1;
+        SET @o_message = N'All active tokens for user revoked.';
+    END TRY
+    BEGIN CATCH
+        SET @o_success = 0;
+        SET @o_message = ERROR_MESSAGE();
+    END CATCH
+END;
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_soft_delete_user]    Script Date: 8/27/2025 1:23:52 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER   PROCEDURE [auth].[sp_soft_delete_user]
+    @p_user_id UNIQUEIDENTIFIER,
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validate user exists and active
+        IF NOT EXISTS (
+            SELECT 1 FROM core.users 
+            WHERE user_id = @p_user_id
+              AND is_active = 1
+              AND deleted_at IS NULL
+        )
+        BEGIN
+            SET @o_success = 0;
+            SET @o_message = N'User not found or already deleted.';
+            ROLLBACK TRANSACTION; RETURN;
+        END
+
+        -- Soft delete user-tenant roles
+        UPDATE core.user_tenant_roles
+        SET deleted_at = SYSUTCDATETIME()
+        WHERE user_id = @p_user_id
+          AND deleted_at IS NULL;
+
+        -- Soft delete API clients owned by this user (if applicable)
+        UPDATE core.api_clients
+        SET is_active = 0, deleted_at = SYSUTCDATETIME()
+        WHERE user_id = @p_user_id
+          AND is_active = 1
+          AND deleted_at IS NULL;
+
+        -- Soft delete the user
+        UPDATE core.users
+        SET is_active = 0, deleted_at = SYSUTCDATETIME()
+        WHERE user_id = @p_user_id;
+
+        COMMIT TRANSACTION;
+
+        SET @o_success = 1;
+        SET @o_message = N'User and related entities soft-deleted.';
+    END TRY
+    BEGIN CATCH
+        IF XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        SET @o_success = 0;
+        SET @o_message = ERROR_MESSAGE();
+    END CATCH
+END;
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_request_username_reminder]    Script Date: 8/27/2025 1:26:18 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+------------------------------------------------------------
+-- 4. Request Username Reminder
+------------------------------------------------------------
+USE [kg-test-db]
+GO
+/****** Object:  StoredProcedure [auth].[sp_forgot_username]    Script Date: 8/27/2025 1:28:07 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+------------------------------------------------------------
+-- 4. Request Username Reminder
+------------------------------------------------------------
+ALTER   PROCEDURE [auth].[sp_forgot_username]
+    @p_email NVARCHAR(255),
+    @o_username NVARCHAR(100) OUTPUT,
+    @o_success BIT OUTPUT,
+    @o_message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY
+        SELECT TOP 1 @o_username = username
+        FROM core.users
+        WHERE email = @p_email AND is_active = 1;
+
+        IF @o_username IS NULL
+        BEGIN
+            -- Don’t disclose
+            SET @o_success = 1; SET @o_message = N'If this account exists, your username has been sent.';
+            RETURN;
+        END
+
+        SET @o_success = 1; SET @o_message = N'Username reminder generated.';
+    END TRY
+    BEGIN CATCH
+        SET @o_success = 0; SET @o_message = ERROR_MESSAGE(); SET @o_username = NULL;
+    END CATCH
+END;

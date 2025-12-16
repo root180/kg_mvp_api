@@ -66,6 +66,13 @@ namespace KeiroGenesis.API.DTOs.ActorConversation
         public Guid? MessageId { get; set; }
     }
 
+    // Internal: Stored conversation result (fixes tuple deconstruction)
+    public class StoredConversationResult
+    {
+        public Guid ConversationId { get; set; }
+        public Guid MessageId { get; set; }
+    }
+
     // Internal: Actor runtime context (NOT a DTO - used internally only)
     public class ActorRuntimeContext
     {
@@ -196,20 +203,20 @@ namespace KeiroGenesis.API.Services
                 // 6. LLM Call
                 var llmResponse = await CallLlmAsync(finalPrompt, message);
 
-                // 7. Response Handling (Critical Step)
-                var (conversationId, messageId) = await StoreConversationAsync(
+                // 7. Response Handling (Critical Step) - Use DTO to avoid tuple deconstruction
+                var stored = await StoreConversationAsync(
                     tenantId, userId, actorId, message, llmResponse.Content);
 
                 // 8. Memory Feedback Loop (Async - fire and forget)
                 _ = Task.Run(async () => await ProcessMemoryFeedbackAsync(
-                    tenantId, actorId, conversationId, messageId, message, llmResponse.Content));
+                    tenantId, actorId, stored.ConversationId, stored.MessageId, message, llmResponse.Content));
 
                 return new ConversationResult
                 {
                     Success = true,
                     Response = llmResponse.Content,
-                    ConversationId = conversationId,
-                    MessageId = messageId
+                    ConversationId = stored.ConversationId,
+                    MessageId = stored.MessageId
                 };
             }
             catch (Exception ex)
@@ -641,10 +648,10 @@ namespace KeiroGenesis.API.Services
         }
 
         // ======================================================================
-        // 7. RESPONSE HANDLING (Critical Step) - Returns tuple of GUIDs
+        // 7. RESPONSE HANDLING (Critical Step) - Returns DTO
         // ======================================================================
 
-        private async Task<(Guid ConversationId, Guid MessageId)> StoreConversationAsync(
+        private async Task<StoredConversationResult> StoreConversationAsync(
             Guid tenantId,
             Guid userId,
             Guid actorId,
@@ -695,7 +702,11 @@ namespace KeiroGenesis.API.Services
                 "Stored conversation: ConversationId={ConversationId}, UserMsgId={UserMsgId}, ActorMsgId={ActorMsgId}",
                 conversationId, userMessageId, actorMessageId);
 
-            return (conversationId, actorMessageId);
+            return new StoredConversationResult
+            {
+                ConversationId = conversationId,
+                MessageId = actorMessageId
+            };
         }
 
         // ======================================================================

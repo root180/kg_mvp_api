@@ -7,3 +7,5 @@
 /.vs/KeiroGenesisPro/DesignTimeBuild
 /.vs/KeiroGenesisPro/v17
 /.vs
+/appsettings.Development.json
+/appsettings.Production.json

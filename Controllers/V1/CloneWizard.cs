@@ -212,13 +212,16 @@ namespace KeiroGenesis.API.Services
     public class CloneWizardService
     {
         private readonly Repositories.CloneWizardRepository _repo;
+        private readonly ActorService _actorService;
         private readonly ILogger<CloneWizardService> _logger;
 
         public CloneWizardService(
             Repositories.CloneWizardRepository repo,
+            ActorService actorService,
             ILogger<CloneWizardService> logger)
         {
             _repo = repo;
+            _actorService = actorService;
             _logger = logger;
         }
 
@@ -572,6 +575,19 @@ namespace KeiroGenesis.API.Services
                         ErrorCode = "BUSINESS_RULE_VIOLATION"
                     };
                 }
+
+                // ------------------------------------------------------
+                // Ensure runtime Actor exists for this clone (idempotent)
+                // ------------------------------------------------------
+                await _actorService.EnsureCloneActorAsync(
+                    tenantId: tenantId,
+                    cloneId: cloneId,
+                    ownerUserId: userId,
+                    displayName: result.display_name,
+                    handle: result.clone_slug,
+                    avatarUrl: result.avatar_url
+                );
+
 
                 _logger.LogInformation("Clone {CloneId} activated", cloneId);
 

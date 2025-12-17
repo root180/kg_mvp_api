@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Q2YX+c0XHMM=",
+  "dgSpecHash": "Hh59AiDQo1Y=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git\\KeiroGenesis.API.csproj",
+  "projectFilePath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\KeiroGenesis.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ai365\\.nuget\\packages\\azure.core\\1.47.1\\azure.core.1.47.1.nupkg.sha512",
     "C:\\Users\\ai365\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",

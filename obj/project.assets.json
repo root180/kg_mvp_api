@@ -4858,11 +4858,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git\\KeiroGenesis.API.csproj",
+      "projectUniqueName": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\KeiroGenesis.API.csproj",
       "projectName": "KeiroGenesis.API",
-      "projectPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git\\KeiroGenesis.API.csproj",
+      "projectPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\KeiroGenesis.API.csproj",
       "packagesPath": "C:\\Users\\ai365\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git\\obj\\",
+      "outputPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

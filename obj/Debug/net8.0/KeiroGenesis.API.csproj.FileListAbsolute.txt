@@ -157,7 +157,6 @@ D:\MVP\app\bin\Debug\net8.0\System.Text.Encodings.Web.dll
 D:\MVP\app\bin\Debug\net8.0\System.Text.Json.dll
 D:\MVP\app\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\ai365\source\repos\kg_mvp_api_git\bin\Debug\net8.0\appsettings.Development.json
-C:\Users\ai365\source\repos\kg_mvp_api_git\bin\Debug\net8.0\appsettings.json
 C:\Users\ai365\source\repos\kg_mvp_api_git\bin\Debug\net8.0\appsettings.Production.json
 C:\Users\ai365\source\repos\kg_mvp_api_git\bin\Debug\net8.0\appsettings.Test.json
 C:\Users\ai365\source\repos\kg_mvp_api_git\bin\Debug\net8.0\libman.json

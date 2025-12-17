@@ -868,6 +868,7 @@ namespace KeiroGenesis.API.Controllers.V1
                 throw new UnauthorizedAccessException("Invalid tenant claim");
             return tenantId;
         }
+
                 private Guid GetCurrentUserId()
         {
             var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value

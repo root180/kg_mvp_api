@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
@@ -10,3 +11,17 @@
 /appsettings.Development.json
 /appsettings.Production.json
 /appsettings.json
+=======
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/KeiroGenesis
+/.vs/KeiroGenesis/FileContentIndex
+/.vs/KeiroGenesisPro/DesignTimeBuild
+/.vs/KeiroGenesisPro/v17
+/.vs
+/appsettings.Development.json
+/appsettings.Production.json
+/appsettings.json
+>>>>>>> d7e57ddeb78821a940170cd5ae08f77086d7e2ea

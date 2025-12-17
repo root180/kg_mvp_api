@@ -1,0 +1,860 @@
+2025-12-16 00:03:28.502 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: '6-vocXAtvd4BlrUkVFyyCfOFAoVv9j7g19qcaaQbH08'. , KeyId: 
+'. Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'. 
+Exceptions caught:
+ '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:03:53.822 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: '6-vocXAtvd4BlrUkVFyyCfOFAoVv9j7g19qcaaQbH08'. , KeyId: 
+'. Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'. 
+Exceptions caught:
+ '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:03:53.974 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: '6-vocXAtvd4BlrUkVFyyCfOFAoVv9j7g19qcaaQbH08'. , KeyId: 
+'. Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'. 
+Exceptions caught:
+ '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:03:54.113 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: '6-vocXAtvd4BlrUkVFyyCfOFAoVv9j7g19qcaaQbH08'. , KeyId: 
+'. Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'. 
+Exceptions caught:
+ '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:07:48.896 -05:00 [Error] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'KeiroGenesis.API.Services.CloneWizardService' while attempting to activate 'KeiroGenesis.API.Controllers.V1.CloneWizardController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method43(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-16 00:14:40.337 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 00:14:40.595 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 00:14:40.762 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 00:14:40.763 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 00:14:40.769 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 00:14:40.770 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 00:14:40.770 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 00:14:54.902 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 00:14:55.323 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 00:14:55.420 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 00:14:55.961 -05:00 [Error] Error creating clone draft for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42501: permission denied for schema clone
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.CreateCloneDraftAsync(Guid tenantId, Guid userId, String displayName, String tagline, String bio, String visibility) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 63
+   at KeiroGenesis.API.Services.CloneWizardService.CreateCloneDraftAsync(Guid tenantId, Guid userId, Step1Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 241
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: permission denied for schema clone
+    Position: 15
+    File: aclchk.c
+    Line: 2843
+    Routine: aclcheck_error
+2025-12-16 00:18:06.682 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/16/2025 5:14:21 AM', Current time (UTC): '12/16/2025 5:18:06 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:19:25.116 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 00:20:06.362 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 00:20:06.882 -05:00 [Error] Error creating clone draft for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42702: column reference "clone_slug" is ambiguous
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.CreateCloneDraftAsync(Guid tenantId, Guid userId, String displayName, String tagline, String bio, String visibility) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 63
+   at KeiroGenesis.API.Services.CloneWizardService.CreateCloneDraftAsync(Guid tenantId, Guid userId, Step1Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 241
+  Exception data:
+    Severity: ERROR
+    SqlState: 42702
+    MessageText: column reference "clone_slug" is ambiguous
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    InternalPosition: 42
+    InternalQuery: EXISTS (SELECT 1 FROM clone.clones WHERE clone_slug = v_clone_slug)
+    Where: PL/pgSQL function clone.fn_create_clone_draft(uuid,uuid,character varying,character varying,character varying,character varying) line 26 at WHILE
+    File: pl_comp.c
+    Line: 1133
+    Routine: plpgsql_post_column_ref
+2025-12-16 00:22:27.366 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 00:22:27.405 -05:00 [Information] Clone draft created: 64e067ec-9db9-4a3e-baba-adb499bd9f9f for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 00:24:31.811 -05:00 [Error] Error getting wizard status for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+Npgsql.PostgresException (0x80004005): 42501: permission denied for schema memory
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.GetWizardStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 191
+   at KeiroGenesis.API.Services.CloneWizardService.GetWizardStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 623
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: permission denied for schema memory
+    InternalPosition: 46
+    InternalQuery: SELECT COUNT(*)                         FROM memory.memories
+    WHERE memory.memories.clone_id = p_clone_id
+    Where: PL/pgSQL function clone.fn_get_clone_wizard_status(uuid,uuid,uuid) line 28 at SQL statement
+    File: aclchk.c
+    Line: 2843
+    Routine: aclcheck_error
+2025-12-16 00:28:50.689 -05:00 [Information] Updating avatar for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:28:50.724 -05:00 [Information] Avatar updated for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:29:46.745 -05:00 [Information] Updating avatar for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:29:46.775 -05:00 [Information] Avatar updated for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:31:23.008 -05:00 [Information] Saving personality for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:31:23.192 -05:00 [Information] Personality saved for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:32:15.592 -05:00 [Information] Adding memories for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:32:16.073 -05:00 [Error] Error adding memories for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+Npgsql.PostgresException (0x80004005): 23503: insert or update on table "embedding_queue" violates foreign key constraint "embedding_queue_actor_id_fkey"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.AddMemorySeedsAsync(Guid tenantId, Guid userId, Guid cloneId, String[] memories) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 132
+   at KeiroGenesis.API.Services.CloneWizardService.AddMemoriesAsync(Guid tenantId, Guid userId, Guid cloneId, Step4Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 449
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "embedding_queue" violates foreign key constraint "embedding_queue_actor_id_fkey"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "INSERT INTO rag.embedding_queue (
+            queue_id, tenant_id, actor_id, source_id, source_type,
+            status, priority, created_at
+        )
+        VALUES (
+            gen_random_uuid(), p_tenant_id, v_clone_actor_id, v_memory_id, 'memory',
+            'pending', 5, NOW()
+        )"
+PL/pgSQL function clone.fn_add_memory_seeds(uuid,uuid,uuid,text[]) line 39 at SQL statement
+    SchemaName: rag
+    TableName: embedding_queue
+    ConstraintName: embedding_queue_actor_id_fkey
+    File: ri_triggers.c
+    Line: 2599
+    Routine: ri_ReportViolation
+2025-12-16 00:32:24.767 -05:00 [Information] Adding memories for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+2025-12-16 00:32:25.194 -05:00 [Error] Error adding memories for clone 64e067ec-9db9-4a3e-baba-adb499bd9f9f
+Npgsql.PostgresException (0x80004005): 23503: insert or update on table "embedding_queue" violates foreign key constraint "embedding_queue_actor_id_fkey"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.AddMemorySeedsAsync(Guid tenantId, Guid userId, Guid cloneId, String[] memories) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 132
+   at KeiroGenesis.API.Services.CloneWizardService.AddMemoriesAsync(Guid tenantId, Guid userId, Guid cloneId, Step4Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 449
+  Exception data:
+    Severity: ERROR
+    SqlState: 23503
+    MessageText: insert or update on table "embedding_queue" violates foreign key constraint "embedding_queue_actor_id_fkey"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "INSERT INTO rag.embedding_queue (
+            queue_id, tenant_id, actor_id, source_id, source_type,
+            status, priority, created_at
+        )
+        VALUES (
+            gen_random_uuid(), p_tenant_id, v_clone_actor_id, v_memory_id, 'memory',
+            'pending', 5, NOW()
+        )"
+PL/pgSQL function clone.fn_add_memory_seeds(uuid,uuid,uuid,text[]) line 39 at SQL statement
+    SchemaName: rag
+    TableName: embedding_queue
+    ConstraintName: embedding_queue_actor_id_fkey
+    File: ri_triggers.c
+    Line: 2599
+    Routine: ri_ReportViolation
+2025-12-16 00:43:12.727 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/16/2025 5:34:25 AM', Current time (UTC): '12/16/2025 5:43:12 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 00:45:10.907 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/16/2025 5:34:25 AM', Current time (UTC): '12/16/2025 5:45:10 AM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 07:57:21.368 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:00:59.836 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:04:27.337 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenSignatureKeyNotFoundException: IDX10517: Signature validation failed. The token's kid is missing. Keys tried: 'Microsoft.IdentityModel.Tokens.SymmetricSecurityKey, KeyId: '', InternalId: '6-vocXAtvd4BlrUkVFyyCfOFAoVv9j7g19qcaaQbH08'. , KeyId: 
+'. Number of keys in TokenValidationParameters: '1'. 
+Number of keys in Configuration: '0'. 
+Exceptions caught:
+ '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+token: '[PII of type 'Microsoft.IdentityModel.JsonWebTokens.JsonWebToken' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. See https://aka.ms/IDX10503 for details.
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignature(JsonWebToken jwtToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateSignatureAndIssuerSecurityKey(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 08:04:51.159 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:04:53.958 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:07:14.338 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 08:07:54.737 -05:00 [Information] Updating avatar for clone 00000000-0000-0000-0000-000000000000
+2025-12-16 08:07:54.755 -05:00 [Warning] User 76fba79d-803c-4fe5-8278-51e3ddbd7c94 attempted to update avatar for clone 00000000-0000-0000-0000-000000000000 (unauthorized)
+2025-12-16 08:08:24.657 -05:00 [Information] Adding memories for clone 00000000-0000-0000-0000-000000000000
+2025-12-16 08:08:24.670 -05:00 [Warning] User 76fba79d-803c-4fe5-8278-51e3ddbd7c94 attempted to add memories for clone 00000000-0000-0000-0000-000000000000 (unauthorized)
+2025-12-16 08:08:38.834 -05:00 [Information] Uploading knowledge for clone 00000000-0000-0000-0000-000000000000
+2025-12-16 08:08:38.850 -05:00 [Warning] User 76fba79d-803c-4fe5-8278-51e3ddbd7c94 attempted to upload knowledge for clone 00000000-0000-0000-0000-000000000000 (unauthorized)
+2025-12-16 08:08:51.468 -05:00 [Warning] User 76fba79d-803c-4fe5-8278-51e3ddbd7c94 attempted to get status for clone 00000000-0000-0000-0000-000000000000 (unauthorized)
+2025-12-16 08:26:15.359 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 08:26:15.612 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 08:26:15.823 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 08:26:15.825 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 08:26:15.835 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 08:26:15.838 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 08:26:15.838 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 08:26:28.412 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/16/2025 5:34:25 AM', Current time (UTC): '12/16/2025 1:26:28 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 08:27:01.536 -05:00 [Error] Bearer token authentication failed
+Microsoft.IdentityModel.Tokens.SecurityTokenExpiredException: IDX10223: Lifetime validation failed. The token is expired. ValidTo (UTC): '12/16/2025 1:15:59 PM', Current time (UTC): '12/16/2025 1:27:01 PM'.
+   at Microsoft.IdentityModel.Tokens.ValidatorUtilities.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.Tokens.Validators.ValidateLifetime(Nullable`1 notBefore, Nullable`1 expires, SecurityToken securityToken, TokenValidationParameters validationParameters)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateTokenPayloadAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ValidateJWSAsync(JsonWebToken jsonWebToken, TokenValidationParameters validationParameters, BaseConfiguration configuration)
+2025-12-16 08:27:52.125 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 08:27:52.556 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 08:27:53.416 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:28:31.340 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42703: column c.owner_id does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 169
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.owner_id does not exist
+    Hint: Perhaps you meant to reference the column "c.user_id".
+    InternalPosition: 58
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.tenant_id,
+        c.owner_id,
+        c.clone_name,
+        c.display_name,
+        CAST('' AS text) as bio,  -- Add if you have this column
+        c.avatar_url,
+        c.status_id,
+        c.is_active,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.owner_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC
+    Where: PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3723
+    Routine: errorMissingColumn
+2025-12-16 08:33:21.099 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 169
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 08:43:51.044 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 08:43:51.193 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 08:43:51.281 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 08:43:51.282 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 08:43:51.285 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 08:43:51.285 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 08:43:51.287 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 08:43:59.834 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 08:44:00.231 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 08:44:00.993 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:45:03.675 -05:00 [Information] Updating avatar for clone 00000000-0000-0000-0000-000000000000
+2025-12-16 08:45:03.695 -05:00 [Warning] User 76fba79d-803c-4fe5-8278-51e3ddbd7c94 attempted to update avatar for clone 00000000-0000-0000-0000-000000000000 (unauthorized)
+2025-12-16 08:53:33.701 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 08:53:54.122 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 08:56:00.896 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 09:03:54.887 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 09:03:55.153 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 09:03:55.308 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:03:55.308 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 09:03:55.314 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 09:03:55.316 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 09:03:55.316 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:04:13.297 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 09:04:13.690 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 09:04:14.600 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 09:52:34.488 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 09:54:08.740 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 09:54:08.892 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 09:54:08.980 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:54:08.981 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 09:54:08.985 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 09:54:08.986 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 09:54:08.987 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:54:14.775 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 09:54:15.121 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 09:54:16.091 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 09:55:53.588 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 09:55:53.770 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 09:55:53.897 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:55:53.897 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 09:55:53.905 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 09:55:53.909 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 09:55:53.909 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 09:55:59.495 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 09:56:00.006 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 09:56:02.410 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 10:06:25.959 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 10:06:26.124 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 10:06:26.221 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 10:06:26.221 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 10:06:26.225 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 10:06:26.228 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 10:06:26.228 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 10:06:31.361 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 10:06:31.704 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 10:06:32.550 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 10:07:55.382 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 10:07:55.635 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 10:07:55.819 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 10:07:55.819 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 10:07:55.825 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 10:07:55.826 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 10:07:55.826 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 10:08:00.700 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 10:08:01.056 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 10:08:01.886 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 10:12:22.702 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 11:21:47.235 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 11:21:47.430 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 11:21:47.547 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 11:21:47.547 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 11:21:47.551 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 11:21:47.552 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 11:21:47.552 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 11:22:14.023 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 11:22:14.426 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 11:22:15.418 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 11:22:34.942 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 11:22:35.450 -05:00 [Error] Error creating clone draft for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42501: permission denied for schema actor
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.CreateCloneDraftAsync(Guid tenantId, Guid userId, String displayName, String tagline, String bio, String visibility) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 63
+   at KeiroGenesis.API.Services.CloneWizardService.CreateCloneDraftAsync(Guid tenantId, Guid userId, Step1Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 241
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: permission denied for schema actor
+    InternalPosition: 8
+    InternalQuery: SELECT actor.fn_create_actor(
+    v_clone_id,
+    p_tenant_id,
+    'clone',
+    p_display_name,
+    v_clone_slug,
+    'draft'
+)
+    Where: PL/pgSQL function clone.fn_create_clone_draft(uuid,uuid,character varying,character varying,character varying,character varying) line 41 at PERFORM
+    File: aclchk.c
+    Line: 2843
+    Routine: aclcheck_error
+2025-12-16 11:31:11.881 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 11:31:12.576 -05:00 [Error] Error creating clone draft for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42501: permission denied for schema actor
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneWizardRepository.CreateCloneDraftAsync(Guid tenantId, Guid userId, String displayName, String tagline, String bio, String visibility) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 63
+   at KeiroGenesis.API.Services.CloneWizardService.CreateCloneDraftAsync(Guid tenantId, Guid userId, Step1Request request) in D:\MVP\app\Controllers\V1\CloneWizard.cs:line 241
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: permission denied for schema actor
+    InternalPosition: 8
+    InternalQuery: SELECT actor.fn_create_actor(
+    v_clone_id,
+    p_tenant_id,
+    'clone',
+    p_display_name,
+    v_clone_slug,
+    'draft'
+)
+    Where: PL/pgSQL function clone.fn_create_clone_draft(uuid,uuid,character varying,character varying,character varying,character varying) line 41 at PERFORM
+    File: aclchk.c
+    Line: 2843
+    Routine: aclcheck_error
+2025-12-16 11:32:07.186 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 11:32:07.221 -05:00 [Information] Clone draft created: 494f7dba-23c7-40d1-8f91-84985d33f624 for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 11:57:02.676 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 11:57:02.834 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 11:57:02.932 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 11:57:02.934 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 11:57:02.937 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 11:57:02.938 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 11:57:02.938 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 11:57:10.126 -05:00 [Error] Bearer token authentication failed
+System.ArgumentException: IDX14102: Unable to decode the header '[PII of type 'Microsoft.IdentityModel.Logging.SecurityArtifact' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]' as Base64Url encoded string.
+ ---> System.FormatException: IDX10400: Unable to decode: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]' as Base64url encoded string.
+   at Microsoft.IdentityModel.Tokens.Base64UrlEncoder.Decode(ReadOnlySpan`1 strSpan, Span`1 output, Boolean needReplace, Int32 decodedLength)
+   at Microsoft.IdentityModel.Tokens.Base64UrlEncoder.Decode(ReadOnlySpan`1 strSpan, Span`1 output)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.CreateClaimSet(ReadOnlySpan`1 strSpan, Int32 startIndex, Int32 length, Boolean createHeaderClaimSet)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(ReadOnlyMemory`1 encodedTokenMemory)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+2025-12-16 11:57:10.179 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 11:57:10.530 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 12:03:20.291 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 12:03:38.637 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 12:05:41.506 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 131
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:12:11.094 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 12:12:21.603 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 131
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:18:44.227 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 131
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.tenant_id,
+        c.user_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:18:47.550 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 131
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.tenant_id,
+        c.user_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:24:07.843 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 12:24:08.013 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 12:24:08.121 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 12:24:08.122 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 12:24:08.126 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 12:24:08.126 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 12:24:08.126 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 12:24:13.372 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 12:24:13.946 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 12:24:14.497 -05:00 [Error] Error getting clones for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 4.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 38
+   at KeiroGenesis.API.Services.CloneService.GetUserClonesAsync(Guid tenantId, Guid userId) in D:\MVP\app\Controllers\V1\Clone.cs:line 131
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 4.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.tenant_id,
+        c.user_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    ORDER BY c.created_at DESC"
+PL/pgSQL function clone.fn_get_user_clones(uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:26:35.298 -05:00 [Error] Error getting clone 494f7dba-23c7-40d1-8f91-84985d33f624
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 4.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneByIdAsync(Guid tenantId, Guid userId, Guid cloneId) in D:\MVP\app\Controllers\V1\Clone.cs:line 49
+   at KeiroGenesis.API.Services.CloneService.GetCloneAsync(Guid tenantId, Guid userId, Guid cloneId) in D:\MVP\app\Controllers\V1\Clone.cs:line 169
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 4.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.tenant_id,
+        c.user_id,
+        c.clone_slug,
+        c.display_name,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.created_at,
+        c.updated_at
+    FROM clone.clones c
+    WHERE c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.clone_id = p_clone_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_by_id(uuid,uuid,uuid) line 3 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-16 12:32:16.382 -05:00 [Information] Creating clone for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 12:32:16.426 -05:00 [Information] Clone draft created: 84f871b9-1de4-49b3-a209-766a92e69f5a for user 76fba79d-803c-4fe5-8278-51e3ddbd7c94
+2025-12-16 12:32:51.751 -05:00 [Information] User logged in with roles: "owner"
+2025-12-16 12:36:39.519 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 12:36:39.788 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 12:36:39.981 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 12:36:39.981 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 12:36:39.991 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 12:36:39.994 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 12:36:39.994 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 12:36:48.168 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 12:36:48.621 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 12:36:49.975 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42883: function actor.fn_get_user_actors(uuid, uuid) does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ActorRepository.GetUserActorsAsync(Guid tenantId, Guid userId) in D:\MVP\app\Actor.cs:line 155
+   at KeiroGenesis.API.Controllers.V1.ActorController.GetMyActors() in D:\MVP\app\Actor.cs:line 296
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function actor.fn_get_user_actors(uuid, uuid) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 15
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-16 14:19:55.030 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 14:19:55.352 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 14:19:55.569 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 14:19:55.570 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 14:19:55.577 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 14:19:55.578 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 14:19:55.578 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 14:28:58.318 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 14:28:58.459 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 14:28:58.590 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 14:28:58.592 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 14:28:58.606 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 14:28:58.606 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 14:28:58.607 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 14:30:48.059 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-16 14:30:52.655 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-16 14:30:53.768 -05:00 [Information] User registered with roles: "member"
+2025-12-16 16:52:26.118 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 16:52:26.258 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 16:52:26.345 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 16:52:26.345 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 16:52:26.348 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 16:52:26.349 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 16:52:26.349 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 22:09:53.162 -05:00 [Information] Starting KeiroGenesis API...
+2025-12-16 22:09:53.448 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-16 22:09:53.601 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-16 22:09:53.603 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-16 22:09:53.608 -05:00 [Information] 📝 Logs: Logs/keirogenesis-"20251216".log
+2025-12-16 22:09:53.610 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-16 22:09:53.611 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

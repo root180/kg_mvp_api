@@ -1,0 +1,31 @@
+{
+  "profiles": {
+    "KeiroGenesis.API (Development)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:8080"
+    },
+    "KeiroGenesis.API (Test)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test"
+      },
+      "applicationUrl": "http://localhost:5002"
+    },
+    "KeiroGenesis.API (Production)": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": "http://localhost:5003"
+    }
+  }
+}

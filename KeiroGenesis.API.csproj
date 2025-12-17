@@ -5,7 +5,6 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="Database.cs" />
   </ItemGroup>
@@ -40,6 +39,7 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
+    <Folder Include="Services\Actor\" />
   </ItemGroup>
 
 </Project>

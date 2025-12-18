@@ -8,6 +8,7 @@
 using Dapper;
 using KeiroGenesis.API.Core.Database;
 using KeiroGenesis.API.Core.Helpers;
+using KeiroGenesis.API.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,96 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
+
+
+// ==========================================================================
+// PASSWORD RECOVERY - DTOs
+// ==========================================================================
+// ADD THESE TO AuthController.cs - DTO SECTION (after existing DTOs, around line 230)
+// ==========================================================================
+
+#region DTOs
+namespace KeiroGenesis.API.DTOs
+{
+    // ============================================================
+    // 1. FORGOT PASSWORD
+    // ============================================================
+
+    public sealed class ForgotPasswordRequest
+    {
+        public string Email { get; init; } = string.Empty;
+    }
+
+    public sealed class ForgotPasswordResponse
+    {
+        public bool Success { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+
+    // ============================================================
+    // 2. VALIDATE RESET TOKEN
+    // ============================================================
+
+    public sealed class ValidateResetTokenRequest
+    {
+        public string Token { get; init; } = string.Empty;
+    }
+
+    public sealed class ValidateResetTokenResponse
+    {
+        public bool Success { get; init; }
+        public bool IsValid { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+
+    // ============================================================
+    // 3. RESET PASSWORD
+    // ============================================================
+
+    public sealed class ResetPasswordRequest
+    {
+        public string Token { get; init; } = string.Empty;
+        public string NewPassword { get; init; } = string.Empty;
+    }
+
+    public sealed class ResetPasswordResponse
+    {
+        public bool Success { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+
+    // ============================================================
+    // 4. FORGOT USERNAME
+    // ============================================================
+
+    public sealed class ForgotUsernameRequest
+    {
+        public string Email { get; init; } = string.Empty;
+    }
+
+    public sealed class ForgotUsernameResponse
+    {
+        public bool Success { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+
+    // ============================================================
+    // 5. CHANGE PASSWORD (AUTHENTICATED)
+    // ============================================================
+
+    public sealed class ChangePasswordRequest
+    {
+        public string CurrentPassword { get; init; } = string.Empty;
+        public string NewPassword { get; init; } = string.Empty;
+    }
+
+    public sealed class ChangePasswordResponse
+    {
+        public bool Success { get; init; }
+        public string Message { get; init; } = string.Empty;
+    }
+}
+#endregion
 // ==========================================================================
 // ==========================================================================
 // ==========================================================================
@@ -85,8 +176,10 @@ namespace KeiroGenesis.API.Repositories
             return result.FirstOrDefault();
         }
 
-        // Login - get user by email
-        public async Task<dynamic?> GetUserByEmailAsync(string email)
+        // ============================================================
+        // 1. LOGIN
+        // ============================================================
+        public async Task<dynamic?> Login(string email)
         {
             using var conn = _db.CreateConnection();
 
@@ -110,6 +203,97 @@ namespace KeiroGenesis.API.Repositories
 
             return result.FirstOrDefault();
         }
+
+        // ============================================================
+        // 1. CREATE PASSWORD RESET TOKEN
+        // ============================================================
+
+        public async Task<dynamic?> CreatePasswordResetTokenAsync(
+            string email,
+            string tokenHash,
+            string? ipAddress = null,
+            string? userAgent = null)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                "SELECT * FROM auth.fn_create_password_reset_token(@email, @token_hash, @ip_address, @user_agent)",
+                new
+                {
+                    email,
+                    token_hash = tokenHash,
+                    ip_address = ipAddress,
+                    user_agent = userAgent
+                });
+        }
+
+        // ============================================================
+        // 2. VALIDATE RESET TOKEN
+        // ============================================================
+
+        public async Task<dynamic?> ValidateResetTokenAsync(string tokenHash)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                "SELECT * FROM auth.fn_validate_reset_token(@token_hash)",
+                new { token_hash = tokenHash });
+        }
+
+        // ============================================================
+        // 3. RESET PASSWORD WITH TOKEN
+        // ============================================================
+
+        public async Task<dynamic?> ResetPasswordWithTokenAsync(
+            string tokenHash,
+            string newPasswordHash)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                "SELECT * FROM auth.fn_reset_password_with_token(@token_hash, @new_password_hash)",
+                new
+                {
+                    token_hash = tokenHash,
+                    new_password_hash = newPasswordHash
+                });
+        }
+
+        // ============================================================
+        // 4. GET USERNAME BY EMAIL
+        // ============================================================
+
+        public async Task<dynamic?> GetUsernameByEmailAsync(string email)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                "SELECT * FROM auth.fn_get_username_by_email(@email)",
+                new { email });
+        }
+
+        // ============================================================
+        // 5. CHANGE PASSWORD (AUTHENTICATED)
+        // ============================================================
+
+        public async Task<dynamic?> ChangePasswordAsync(
+            Guid userId,
+            string currentPasswordHash,
+            string newPasswordHash)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                "SELECT * FROM auth.fn_change_password(@user_id, @current_password_hash, @new_password_hash)",
+                new
+                {
+                    user_id = userId,
+                    current_password_hash = currentPasswordHash,
+                    new_password_hash = newPasswordHash
+                });
+        }
+
+
 
         // Store refresh token - FIXED: Uses function
         public async Task<Guid> StoreRefreshTokenAsync(
@@ -255,16 +439,30 @@ namespace KeiroGenesis.API.Services
         private readonly Repositories.AuthRepository _repo;
         private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
+        private readonly IEmailProvider _email;
+
+
 
         public AuthService(
             Repositories.AuthRepository repo,
             IConfiguration config,
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger,
+            IEmailProvider email)
         {
+
             _repo = repo;
             _config = config;
             _logger = logger;
+            _email = email;
+
+
+
+
         }
+
+
+
+
 
         // Hash password using BCrypt
         private string HashPassword(string password)
@@ -276,6 +474,376 @@ namespace KeiroGenesis.API.Services
         private bool VerifyPassword(string password, string passwordHash)
         {
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);
+        }
+
+        public async Task<ForgotPasswordResponse> ForgotPasswordAsync(
+    string email,
+    string? ipAddress = null,
+    string? userAgent = null)
+        {
+            try
+            {
+                // ✅ Use YOUR existing method (line 541):
+                var resetToken = GenerateRefreshToken();
+
+                // ✅ Use YOUR existing method (line 550):
+                var tokenHash = HashRefreshToken(resetToken);
+
+                // Create reset token in database
+                var result = await _repo.CreatePasswordResetTokenAsync(
+                    email,
+                    tokenHash,
+                    ipAddress,
+                    userAgent);
+
+                // Always return success (don't reveal if email exists - security best practice)
+                if (result != null && result.token_created == true)
+                {
+                    // Create reset link
+                    var resetLink = $"{_config["App:BaseUrl"]}/reset-password?token={resetToken}";
+
+                    // Get username from result
+                    string username = result.username ?? "User";
+
+                    // Send email asynchronously (don't wait for it)
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await _email.SendPasswordResetEmailAsync(
+                                email,
+                                username,
+                                resetLink);
+
+                            _logger.LogInformation(
+                                "Password reset email sent to {Email}",
+                                email);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(
+                                ex,
+                                "Failed to send password reset email to {Email}",
+                                email);
+                        }
+                    });
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        "Password reset requested for non-existent email: {Email}",
+                        email);
+                }
+
+                // Always return success (security: don't reveal if email exists)
+                return new ForgotPasswordResponse
+                {
+                    Success = true,
+                    Message = "If your email exists in our system, you will receive a password reset link shortly."
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ForgotPasswordAsync for email {Email}", email);
+
+                return new ForgotPasswordResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while processing your request. Please try again later."
+                };
+            }
+        }
+
+        // ============================================================
+        // 2. VALIDATE RESET TOKEN
+        // ============================================================
+
+        public async Task<ValidateResetTokenResponse> ValidateResetTokenAsync(string token)
+        {
+            try
+            {
+                // ✅ Use YOUR existing method (line 550):
+                var tokenHash = HashRefreshToken(token);
+
+                var result = await _repo.ValidateResetTokenAsync(tokenHash);
+
+                if (result == null)
+                {
+                    return new ValidateResetTokenResponse
+                    {
+                        Success = false,
+                        IsValid = false,
+                        Message = "Invalid token"
+                    };
+                }
+
+                bool isValid = result.is_valid == true;
+                string message = result.message ?? (isValid ? "Token is valid" : "Token is invalid");
+
+                return new ValidateResetTokenResponse
+                {
+                    Success = true,
+                    IsValid = isValid,
+                    Message = message
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error validating reset token");
+
+                return new ValidateResetTokenResponse
+                {
+                    Success = false,
+                    IsValid = false,
+                    Message = "An error occurred while validating the token"
+                };
+            }
+        }
+
+        // ============================================================
+        // 3. RESET PASSWORD
+        // ============================================================
+
+        public async Task<ResetPasswordResponse> ResetPasswordAsync(
+            string token,
+            string newPassword)
+        {
+            try
+            {
+                // Validate password strength
+                if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 8)
+                {
+                    return new ResetPasswordResponse
+                    {
+                        Success = false,
+                        Message = "Password must be at least 8 characters long"
+                    };
+                }
+
+                // ✅ Use YOUR existing methods:
+                var tokenHash = HashRefreshToken(token);      // Line 550
+                var newPasswordHash = HashPassword(newPassword); // Line 461
+
+                // Reset password
+                var result = await _repo.ResetPasswordWithTokenAsync(tokenHash, newPasswordHash);
+
+                if (result == null || result.success != true)
+                {
+                    string message = result?.message ?? "Failed to reset password";
+
+                    return new ResetPasswordResponse
+                    {
+                        Success = false,
+                        Message = message
+                    };
+                }
+
+                // Send password changed notification email asynchronously
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        string email = result.email ?? "";
+                        string username = result.username ?? "User";
+
+                        if (!string.IsNullOrEmpty(email))
+                        {
+                            await _email.SendPasswordChangedNotificationAsync(email, username);
+
+                            _logger.LogInformation(
+                                "Password changed notification sent to {Email}",
+                                email);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(
+                            ex,
+                            "Failed to send password changed notification");
+                    }
+                });
+
+                _logger.LogInformation(
+                    "Password reset successful for user {UserId}",
+                    (Guid)result.user_id);
+
+                return new ResetPasswordResponse
+                {
+                    Success = true,
+                    Message = "Your password has been reset successfully. You can now login with your new password."
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ResetPasswordAsync");
+
+                return new ResetPasswordResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while resetting your password. Please try again."
+                };
+            }
+        }
+
+        // ============================================================
+        // 4. FORGOT USERNAME
+        // ============================================================
+
+        public async Task<ForgotUsernameResponse> ForgotUsernameAsync(string email)
+        {
+            try
+            {
+                var result = await _repo.GetUsernameByEmailAsync(email);
+
+                // Always return success (don't reveal if email exists - security)
+                if (result != null && result.found == true)
+                {
+                    string username = result.username ?? "";
+                    string firstName = result.first_name ?? username;
+
+                    // Send username reminder email asynchronously
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await _email.SendForgotUsernameEmailAsync(email, username);
+
+                            _logger.LogInformation(
+                                "Username reminder sent to {Email}",
+                                email);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(
+                                ex,
+                                "Failed to send username reminder to {Email}",
+                                email);
+                        }
+                    });
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        "Username reminder requested for non-existent email: {Email}",
+                        email);
+                }
+
+                // Always return success (security: don't reveal if email exists)
+                return new ForgotUsernameResponse
+                {
+                    Success = true,
+                    Message = "If your email exists in our system, you will receive a username reminder shortly."
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ForgotUsernameAsync for email {Email}", email);
+
+                return new ForgotUsernameResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while processing your request. Please try again later."
+                };
+            }
+        }
+
+        // ============================================================
+        // 5. CHANGE PASSWORD (AUTHENTICATED)
+        // ============================================================
+
+        public async Task<ChangePasswordResponse> ChangePasswordAsync(
+            Guid userId,
+            string currentPassword,
+            string newPassword)
+        {
+            try
+            {
+                // Validate new password
+                if (string.IsNullOrWhiteSpace(newPassword) || newPassword.Length < 8)
+                {
+                    return new ChangePasswordResponse
+                    {
+                        Success = false,
+                        Message = "New password must be at least 8 characters long"
+                    };
+                }
+
+                // Check if current and new passwords are the same
+                if (currentPassword == newPassword)
+                {
+                    return new ChangePasswordResponse
+                    {
+                        Success = false,
+                        Message = "New password must be different from current password"
+                    };
+                }
+
+                // ✅ Use YOUR existing method (line 461):
+                var currentPasswordHash = HashPassword(currentPassword);
+                var newPasswordHash = HashPassword(newPassword);
+
+                // Change password
+                var result = await _repo.ChangePasswordAsync(
+                    userId,
+                    currentPasswordHash,
+                    newPasswordHash);
+
+                if (result == null || result.success != true)
+                {
+                    string message = result?.message ?? "Current password is incorrect";
+
+                    return new ChangePasswordResponse
+                    {
+                        Success = false,
+                        Message = message
+                    };
+                }
+
+                // Send password changed notification email asynchronously
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        string email = result.email ?? "";
+                        string username = result.username ?? "User";
+
+                        if (!string.IsNullOrEmpty(email))
+                        {
+                            await _email.SendPasswordChangedNotificationAsync(email, username);
+
+                            _logger.LogInformation(
+                                "Password changed notification sent to {Email}",
+                                email);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(
+                            ex,
+                            "Failed to send password changed notification");
+                    }
+                });
+
+                _logger.LogInformation(
+                    "Password changed successfully for user {UserId}",
+                    userId);
+
+                return new ChangePasswordResponse
+                {
+                    Success = true,
+                    Message = "Your password has been changed successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in ChangePasswordAsync for user {UserId}", userId);
+
+                return new ChangePasswordResponse
+                {
+                    Success = false,
+                    Message = "An error occurred while changing your password. Please try again."
+                };
+            }
         }
 
 
@@ -486,7 +1054,7 @@ namespace KeiroGenesis.API.Services
             try
             {
                 // Get user
-                var user = await _repo.GetUserByEmailAsync(request.Email);
+                var user = await _repo.Login(request.Email);
 
                 if (user == null)
                 {

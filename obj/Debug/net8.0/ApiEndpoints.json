@@ -342,6 +342,46 @@
     ]
   },
   {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.ActorRuntimeController",
+    "Method": "EnsureRuntime",
+    "RelativePath": "api/v1/actors/ensure-runtime/{cloneId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.ActorRuntime.ActorRuntimeResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 500
+      }
+    ]
+  },
+  {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.AuthController",
     "Method": "InspectJwt",
     "RelativePath": "api/v1/auth/jwt/inspect",

@@ -8,7 +8,53 @@ namespace KeiroGenesis.API.Services
     /// Concrete SendGrid-backed email provider for KeiroClone/KeiroGenesis.
     /// Handles all verification and MFA emails using a unified HTML template.
     /// </summary>
-    public class EmailService 
+    /// 
+    public interface IEmailProvider
+    { // ======================================================
+        // 📨 Generic base sender (used internally by all flows)
+        // ======================================================
+        Task<bool> SendEmailAsync(string to, string subject, string bodyPlain, string bodyHtml = null);
+
+        // ======================================================
+        // 🔐 Password Recovery & Security (⭐ MISSING IN YOUR VERSION)
+        // ======================================================
+        Task<bool> SendPasswordResetEmailAsync(string email, string userName, string resetLink);
+        Task<bool> SendForgotUsernameEmailAsync(string email, string userName);
+        Task<bool> SendPasswordChangedNotificationAsync(string email, string userName);
+
+        // ======================================================
+        // 🧱 Unified KeiroClone Verification Flows (HTML template)
+        // ======================================================
+        /// <summary>
+        /// Sends the KeiroClone MFA verification email using the master HTML layout.
+        /// </summary>
+        Task<bool> SendMfaVerificationEmailAsync(string email, string code, string userName);
+
+        /// <summary>
+        /// Sends the initial KeiroClone registration verification email.
+        /// </summary>
+        Task<bool> SendRegisterVerificationEmailAsync(string email, string code, string userName);
+
+        /// <summary>
+        /// Sends the KeiroClone resend verification email using the same master template.
+        /// </summary>
+        Task<bool> ResendVerificationEmailAsync(string email, string code, string userName);
+
+        // ======================================================
+        // 🎉 Welcome & Onboarding (⭐ MISSING IN YOUR VERSION)
+        // ======================================================
+        Task<bool> SendWelcomeEmailAsync(string email, string userName);
+
+        // ======================================================
+        // 🔒 Backward-compatible aliases
+        // ======================================================
+        Task<bool> SendMfaSetupCodeAsync(string toEmail, string code);
+        Task<bool> SendVerificationEmailAsync(string email, string code, string userName);
+        Task<bool> SendVerificationEmailAsync(string toEmail, string verificationLink);
+
+
+    }
+    public class EmailService : IEmailProvider
     {
         private readonly SendGridClient _client;
         private readonly string _fromAddress;

@@ -2,23 +2,36 @@
 // PROGRAM.CS — Application Entry Point
 // KeiroGenesis API (MVP)
 // DI Registration, Middleware, Startup Configuration
-// ========================================================================
+// ==========================================================================
+
 using Dapper;
 using KeiroGenesis.API.Controllers.V1;
 using KeiroGenesis.API.Core.Database;
+using KeiroGenesis.API.Core.Versioning;
+using KeiroGenesis.API.GraphQL.Dashboard;
 using KeiroGenesis.API.Repositories;
 using KeiroGenesis.API.Services;
+using KeiroGenesis.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using Serilog;
 using System.IdentityModel.Tokens.Jwt;
-
-using System.Security.Cryptography;
 using System.Text;
 using static KeiroGenesis.API.Core.Database.PostgreSqlConnectionFactory;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+// ============================================================
+// Build Information Service
+// ============================================================
+var buildInfoService = new BuildInfoService(builder.Configuration, builder.Environment);
+var appName = buildInfoService.GetDisplayName();
+
+
 
 // ==========================================================================
 // SERILOG CONFIGURATION (Read from appsettings.json ONLY)
@@ -28,8 +41,6 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
     .ReadFrom.Services(services)
     .Enrich.FromLogContext());
-// ✅ REMOVED: .WriteTo.Console() and .WriteTo.File() 
-// ✅ Now ALL logging config comes from appsettings.json
 
 // ==========================================================================
 // DATABASE
@@ -45,8 +56,8 @@ builder.Services.AddSingleton<IDbConnectionFactory, PostgreSqlConnectionFactory>
 // ==========================================================================
 
 // Auth
-builder.Services.AddScoped<KeiroGenesis.API.Repositories.AuthRepository>();
-builder.Services.AddScoped<KeiroGenesis.API.Services.AuthService>();
+builder.Services.AddScoped<AuthRepository>();
+builder.Services.AddScoped<AuthService>();
 
 // Health
 builder.Services.AddScoped<HealthRepository>();
@@ -88,19 +99,17 @@ builder.Services.AddScoped<CapabilityService>();
 builder.Services.AddScoped<UserManagementRepository>();
 builder.Services.AddScoped<UserManagementService>();
 
-//CloneWizard
+// Clone Wizard
 builder.Services.AddScoped<CloneWizardRepository>();
 builder.Services.AddScoped<CloneWizardService>();
 
-//Clone Service
-builder.Services.AddScoped<CloneService>();
-builder.Services.AddScoped<CloneRepository>();
 
-
+// Email Provider
+builder.Services.AddScoped<IEmailProvider, EmailService>();
 
 
 // ==========================================================================
-// AUTHENTICATION (JWT/AUTH BEARER + PREAUTH) — SYMMETRIC ONLY
+// AUTHENTICATION (JWT / PRE-AUTH) — SYMMETRIC
 // ==========================================================================
 
 var jwtSecret = builder.Configuration["Auth:Secret"]
@@ -123,10 +132,6 @@ builder.Services
         options.DefaultAuthenticateScheme = "Bearer";
         options.DefaultChallengeScheme = "Bearer";
     })
-
-    // ----------------------------------------------------------------------
-    // MAIN ACCESS TOKEN (Bearer)
-    // ----------------------------------------------------------------------
     .AddJwtBearer("Bearer", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -135,36 +140,14 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = jwtIssuer,
             ValidAudience = jwtAudience,
             IssuerSigningKey = signingKey,
-
             ClockSkew = TimeSpan.FromMinutes(1),
-
-            // ✅ IMPORTANT: make claims consistent across the app
             NameClaimType = JwtRegisteredClaimNames.Sub,
             RoleClaimType = System.Security.Claims.ClaimTypes.Role
         };
-
-        // ✅ OPTIONAL: helps you see real auth failures in logs
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                var logger = context.HttpContext.RequestServices
-                    .GetRequiredService<ILoggerFactory>()
-                    .CreateLogger("JwtBearer");
-
-                logger.LogError(context.Exception, "Bearer token authentication failed");
-                return Task.CompletedTask;
-            }
-        };
     })
-
-    // ----------------------------------------------------------------------
-    // PRE-AUTH TOKEN (Registration / Verification / MFA / Bootstrap)
-    // ----------------------------------------------------------------------
     .AddJwtBearer("PreAuth", options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -173,107 +156,87 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = jwtIssuer,
             ValidAudience = preAuthAudience,
             IssuerSigningKey = signingKey,
-
             ClockSkew = TimeSpan.FromMinutes(1),
-
-            // ✅ IMPORTANT: same claim mapping here too
             NameClaimType = JwtRegisteredClaimNames.Sub,
             RoleClaimType = System.Security.Claims.ClaimTypes.Role
-        };
-
-        // ✅ OPTIONAL: helps you see real auth failures in logs
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = context =>
-            {
-                var logger = context.HttpContext.RequestServices
-                    .GetRequiredService<ILoggerFactory>()
-                    .CreateLogger("JwtBearer");
-
-                logger.LogError(context.Exception, "PreAuth token authentication failed");
-                return Task.CompletedTask;
-            }
         };
     });
 
 builder.Services.AddAuthorization();
 
+// REQUIRED for GraphQL + DashboardGraphQLService
+builder.Services.AddHttpContextAccessor();
 
 // ==========================================================================
 // API CONFIGURATION
 // ==========================================================================
 
-// Routing - Lowercase URLs for all controllers
-builder.Services.AddRouting(options =>
-{
-    options.LowercaseUrls = true;
-});
-
-// Controllers
+builder.Services.AddRouting(o => o.LowercaseUrls = true);
 builder.Services.AddControllers();
 
-// API Versioning
-builder.Services.AddApiVersioning(options =>
+builder.Services.AddApiVersioning(o =>
 {
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
+    o.DefaultApiVersion = new ApiVersion(1, 0);
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.ReportApiVersions = true;
 });
 
-// Swagger / OpenAPI
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(o =>
 {
-    options.SwaggerDoc("v1", new() { Title = "KeiroGenesis API", Version = "v1" });
-
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
+    o.SwaggerDoc("v1", new() { Title = "KeiroGenesis API", Version = "v1" });
 });
 
 // CORS
-builder.Services.AddCors(options =>
+builder.Services.AddCors(o =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy
-            .WithOrigins(
-                builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
-                ?? new[] { "http://localhost:3000", "http://localhost:5173", "http://localhost:8080" }
-            )
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials();
-    });
+    o.AddDefaultPolicy(p =>
+        p.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+            ?? new[] { "http://localhost:3000", "http://localhost:5173", "http://localhost:8080" })
+         .AllowAnyHeader()
+         .AllowAnyMethod()
+         .AllowCredentials());
 });
+
+// ==========================================================================
+// IDENTITY MODULE - MODERN NPGSQL DATA SOURCE (Npgsql 8.0+)
+// ==========================================================================
+
+var identityConnectionString = builder.Configuration.GetConnectionString("KeiroGenesisDb")
+    ?? throw new InvalidOperationException("Connection string 'KeiroGenesisDb' not found");
+
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(identityConnectionString);
+
+// Map all Identity module enums (MODERN APPROACH)
+dataSourceBuilder.MapEnum<IdentityVerificationLevel>("auth.identity_verification_level");
+dataSourceBuilder.MapEnum<AgeVerificationResult>("auth.age_verification_result");
+dataSourceBuilder.MapEnum<VerificationMethod>("auth.verification_method");
+dataSourceBuilder.MapEnum<VerificationStatus>("auth.verification_status");
+dataSourceBuilder.MapEnum<ConsentType>("auth.consent_type");
+dataSourceBuilder.MapEnum<VerificationProvider>("auth.verification_provider");
+
+var identityDataSource = dataSourceBuilder.Build();
+
+
+
+// Then register services
+builder.Services.AddScoped<IdentitySignalsRepository>();
+builder.Services.AddScoped<IdentitySignalsService>();
+// ==========================================================================
+// GRAPHQL — SERVICE REGISTRATION (ONLY HERE)
+// ==========================================================================
+
+builder.Services.AddDashboardGraphQL();
+builder.Services.AddDashboardGraphQLServer();
 
 // ==========================================================================
 // BUILD APPLICATION
 // ==========================================================================
+
 var app = builder.Build();
 
 // ==========================================================================
@@ -281,10 +244,10 @@ var app = builder.Build();
 // ==========================================================================
 
 app.UseSwagger();
-app.UseSwaggerUI(options =>
+app.UseSwaggerUI(o =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "KeiroGenesis API v1");
-    options.RoutePrefix = string.Empty;
+    o.SwaggerEndpoint("/swagger/v1/swagger.json", "KeiroGenesis API v1");
+    o.RoutePrefix = string.Empty;
 });
 
 if (!app.Environment.IsDevelopment())
@@ -292,31 +255,80 @@ if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+
+
+// Version/build headers
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("X-API-Version", "1.0");
+    context.Response.Headers.Add("X-Build-Number", buildInfoService.GetBuildInfo().BuildNumber);
+    context.Response.Headers.Add("X-API-Deprecated", "false");
+    await next();
+});
+
+
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+// GRAPHQL ENDPOINT
+app.MapGraphQL("/graphql/dashboard");
+
 // ==========================================================================
-// STARTUP MESSAGE
+// STARTUP LOGGING
 // ==========================================================================
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
     Log.Information("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     Log.Information("🚀 KeiroGenesis API Started Successfully");
-    Log.Information("📝 Logs: Logs/keirogenesis-{Date}.log", DateTime.Now.ToString("yyyyMMdd"));
     Log.Information("📖 Swagger: http://localhost:8080");
     Log.Information("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 });
 
+
+
+// ============================================================
+// Optional Startup Email Notification (Non-blocking)
+// ============================================================
+_ = Task.Run(async () =>
+{
+try
+{
+// Wait for app to start and be ready
+await Task.Delay(3000);
+
+using var scope = app.Services.CreateScope();
+var emailService = scope.ServiceProvider.GetRequiredService<IEmailProvider>();
+
+var result = await emailService.SendEmailAsync(
+    "teckhne@gmail.com",
+    "✅ KeiroGenesis API Started",
+    "KeiroGenesis API deployment successful - plain text version",
+    "<h3>KeiroGenesis API deployment successful 🚀</h3>"
+);
+
+if (result)
+Log.Information("Startup email notification sent successfully");
+else
+Log.Warning("Startup email notification failed to send");
+}
+catch (Exception ex)
+{
+Log.Warning(ex, "Failed to send startup email - this is non-critical");
+}
+});
+
+
 // ==========================================================================
 // RUN
 // ==========================================================================
+
 try
 {
-    Log.Information("Starting KeiroGenesis API...");
     app.Run();
 }
 catch (Exception ex)

@@ -7,6 +7,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.apidescription.server\6.0.5\build\Microsoft.Extensions.ApiDescription.Server.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.apidescription.server\6.0.5\build\Microsoft.Extensions.ApiDescription.Server.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.configuration.binder\10.0.0\buildTransitive\netstandard2.0\Microsoft.Extensions.Configuration.Binder.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.configuration.binder\10.0.0\buildTransitive\netstandard2.0\Microsoft.Extensions.Configuration.Binder.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.options\10.0.0\buildTransitive\net8.0\Microsoft.Extensions.Options.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.options\10.0.0\buildTransitive\net8.0\Microsoft.Extensions.Options.targets')" />
+    <Import Project="$(NuGetPackageRoot)hotchocolate.data\15.1.11\build\HotChocolate.Data.targets" Condition="Exists('$(NuGetPackageRoot)hotchocolate.data\15.1.11\build\HotChocolate.Data.targets')" />
     <Import Project="$(NuGetPackageRoot)hotchocolate.aspnetcore\15.1.11\build\HotChocolate.AspNetCore.targets" Condition="Exists('$(NuGetPackageRoot)hotchocolate.aspnetcore\15.1.11\build\HotChocolate.AspNetCore.targets')" />
   </ImportGroup>
 </Project>

@@ -1,0 +1,2693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeiroGenesis Master Architecture Manual</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1877f2 0%, #0d5dbf 100%);
+            color: white;
+            padding: 80px 50px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: -2px;
+        }
+        
+        header .subtitle {
+            font-size: 1.6em;
+            opacity: 0.95;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        header .version {
+            margin-top: 25px;
+            font-size: 1em;
+            opacity: 0.85;
+            font-weight: 300;
+        }
+        
+        nav {
+            background: #f8f9fa;
+            padding: 40px 50px;
+            border-bottom: 4px solid #1877f2;
+        }
+        
+        nav h2 {
+            color: #1877f2;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+        
+        nav ul {
+            list-style: none;
+            column-count: 3;
+            column-gap: 40px;
+        }
+        
+        nav li {
+            margin-bottom: 15px;
+            break-inside: avoid;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: block;
+            padding: 8px 0;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+        }
+        
+        nav a:hover {
+            color: #1877f2;
+            border-left-color: #1877f2;
+            padding-left: 15px;
+        }
+        
+        main {
+            padding: 50px;
+        }
+        
+        section {
+            margin-bottom: 80px;
+            scroll-margin-top: 20px;
+        }
+        
+        h2 {
+            color: #1877f2;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #1877f2;
+        }
+        
+        h3 {
+            color: #0d5dbf;
+            font-size: 1.8em;
+            margin: 40px 0 25px 0;
+        }
+        
+        h4 {
+            color: #333;
+            font-size: 1.4em;
+            margin: 30px 0 20px 0;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+        
+        .principle {
+            background: linear-gradient(to right, #e7f3ff, #f0f7ff);
+            border-left: 6px solid #1877f2;
+            padding: 30px;
+            margin: 30px 0;
+            font-size: 1.15em;
+            font-weight: 500;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 6px solid #ff9800;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 6px solid #28a745;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            border-left: 6px solid #17a2b8;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        ul, ol {
+            margin: 20px 0 20px 40px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        
+        th {
+            background: #1877f2;
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+        
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            font-size: 0.95em;
+        }
+        
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .architecture-flow {
+            background: linear-gradient(to right, #f8f9fa, #ffffff);
+            padding: 35px;
+            border-radius: 10px;
+            margin: 35px 0;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .flow-item {
+            display: flex;
+            align-items: center;
+            margin: 18px 0;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+        
+        .flow-arrow {
+            color: #1877f2;
+            font-size: 1.8em;
+            margin: 0 20px;
+            font-weight: bold;
+        }
+        
+        .domain-box {
+            background: white;
+            border: 2px solid #1877f2;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .domain-box h4 {
+            color: #1877f2;
+            margin-top: 0;
+        }
+        
+        .glossary-term {
+            font-weight: 700;
+            color: #1877f2;
+            font-size: 1.15em;
+            margin-top: 20px;
+        }
+        
+        .glossary-def {
+            margin-left: 25px;
+            margin-bottom: 25px;
+            padding-left: 15px;
+            border-left: 3px solid #e0e0e0;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 50px;
+            text-align: center;
+        }
+        
+        footer p {
+            margin: 10px 0;
+        }
+        
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; }
+            section { page-break-inside: avoid; }
+            nav { display: none; }
+        }
+        
+        @media (max-width: 1200px) {
+            nav ul { column-count: 2; }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul { column-count: 1; }
+            header h1 { font-size: 2.5em; }
+            main { padding: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>KeiroGenesis</h1>
+            <div class="subtitle">Master Architecture & Product Evolution Manual</div>
+            <div class="version">Version 1.0 | December 2025 | MVP → v2+ Complete Evolution Strategy</div>
+        </header>
+
+        <nav>
+            <h2>📑 Table of Contents</h2>
+            <ul>
+                <li><a href="#executive-summary">Executive Summary</a></li>
+                <li><a href="#foundational-principle">Foundational Principle</a></li>
+                <li><a href="#core-domain-model">Core Domain Model</a></li>
+                <li><a href="#mvp-architecture">MVP Architecture</a></li>
+                <li><a href="#experiences">Experiences & Monetization</a></li>
+                <li><a href="#actors">Actors & Runtime Execution</a></li>
+                <li><a href="#training">Training Architecture</a></li>
+                <li><a href="#authentication">Authentication & Verification</a></li>
+                <li><a href="#v2-evolution">v2+ Evolution Strategy</a></li>
+                <li><a href="#iot-integration">IoT & Device Integration</a></li>
+                <li><a href="#billing">Billing & Entitlements</a></li>
+                <li><a href="#social-features">Clone Social Features</a></li>
+                <li><a href="#data-architecture">Data Architecture</a></li>
+                <li><a href="#security">Security Model</a></li>
+                <li><a href="#deployment">Deployment & Scaling</a></li>
+                <li><a href="#terminology">Terminology Appendix</a></li>
+            </ul>
+        </nav>
+
+        <main>
+
+            <section id="executive-summary">
+                <h2>📋 Executive Summary</h2>
+                
+                <div class="principle">
+                    KeiroClone is a digital twin platform that preserves human identity continuity while enabling multiple contextual expressions, monetization paths, and future embodied interfaces. <strong>One human → one clone → many experiences → many interfaces.</strong> Never many "selves."
+                </div>
+
+                <p>KeiroGenesis represents a fundamental shift in how digital identity is preserved and expressed online. Unlike traditional AI chatbots or persona generators that create fragmented, disposable agents, KeiroClone treats <strong>identity as infrastructure</strong>—a stable, continuous, owner-controlled digital twin that represents a real individual across time, contexts, and interfaces.</p>
+
+                <h3>What Makes KeiroGenesis Different</h3>
+                
+                <p>Most AI platforms scale by adding complexity and multiplying agents. <strong>KeiroGenesis scales by preserving identity while expanding expression.</strong> This architectural decision creates:</p>
+
+                <ul>
+                    <li><strong>Identity Continuity:</strong> A single persistent clone embodies the complete person—memories, values, voice, and personality—across all contexts</li>
+                    <li><strong>Contextual Expression:</strong> Multiple "Experiences" allow the same clone to interact differently in teaching, advisory, family, or professional contexts without fragmenting identity</li>
+                    <li><strong>Monetization Without Fragmentation:</strong> People can monetize specific expressions of their expertise without creating separate personas or conflicting identities</li>
+                    <li><strong>Future-Proof Architecture:</strong> The platform can expand into IoT, autonomous actions, clone-to-clone interactions, and legacy preservation without breaking its core identity model</li>
+                    <li><strong>Regulatory Defensibility:</strong> Clear ownership, consent boundaries, and audit trails make the platform suitable for consumer, professional, institutional, and family use cases</li>
+                </ul>
+
+                <h3>Platform Components Overview</h3>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>Blazor WebAssembly (Client), Blazor Server (Developer/Admin), React components</td>
+                        <td>User-facing applications with Facebook-style design (#1877f2)</td>
+                    </tr>
+                    <tr>
+                        <td>Backend API</td>
+                        <td>ASP.NET Core 8, REST microservices</td>
+                        <td>Clone, auth, memory, billing, IoT services</td>
+                    </tr>
+                    <tr>
+                        <td>RAG Service</td>
+                        <td>FastAPI (Python), pgvector</td>
+                        <td>Document processing, embeddings, semantic search</td>
+                    </tr>
+                    <tr>
+                        <td>Primary Database</td>
+                        <td>PostgreSQL 16 + pgvector</td>
+                        <td>Application data, vector embeddings</td>
+                    </tr>
+                    <tr>
+                        <td>Cache/Queue</td>
+                        <td>Redis, RabbitMQ</td>
+                        <td>Session state, async workflows</td>
+                    </tr>
+                    <tr>
+                        <td>Hosting</td>
+                        <td>Google Cloud (GKE, Cloud SQL)</td>
+                        <td>Kubernetes orchestration, managed services</td>
+                    </tr>
+                </table>
+
+                <div class="info">
+                    <strong>Market Position:</strong> KeiroGenesis is not competing in the crowded chatbot market. It is building a new category: <em>identity-preserving digital infrastructure</em> with long-term defensibility and expansion potential. The platform treats identity as infrastructure, not as a feature.
+                </div>
+            </section>
+
+            <section id="foundational-principle">
+                <h2>🎯 Foundational Principle</h2>
+
+                <div class="principle">
+                    Human identity is continuous, contextual, and non-fragmentable. Technology must adapt to that reality—not redefine it.
+                </div>
+
+                <h3>The Core Truth</h3>
+
+                <p>KeiroClone is a <strong>digital twin of a real individual</strong>. It is NOT:</p>
+
+                <ul>
+                    <li>A bot or chatbot</li>
+                    <li>A persona generator</li>
+                    <li>A collection of fragmented agents</li>
+                    <li>A role-playing system</li>
+                    <li>A productivity tool that imitates roles</li>
+                </ul>
+
+                <p>A clone is a <strong>continuity container for memory, voice, values, and intent</strong>. Everything in the system exists to preserve identity continuity while enabling multiple expressions, contexts, monetization paths, and future embodied interfaces.</p>
+
+                <h3>Why This Matters</h3>
+
+                <p>Most AI platforms attempt to simulate intelligence by producing interchangeable agents, personas, or task-specific bots. This approach scales functionality but erodes:</p>
+
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Impact of Fragmentation</th>
+                        <th>KeiroGenesis Solution</th>
+                    </tr>
+                    <tr>
+                        <td>Trust</td>
+                        <td>Users never know which "version" they're talking to</td>
+                        <td>One consistent identity across all interactions</td>
+                    </tr>
+                    <tr>
+                        <td>Accountability</td>
+                        <td>Actions cannot be traced to consistent identity</td>
+                        <td>All actions tied to single clone, full audit trail</td>
+                    </tr>
+                    <tr>
+                        <td>Long-term Value</td>
+                        <td>Fragmented personas have no legacy value</td>
+                        <td>Clone persists as digital inheritance</td>
+                    </tr>
+                    <tr>
+                        <td>Legal Clarity</td>
+                        <td>Ownership and liability ambiguous</td>
+                        <td>Clear ownership, single source of truth</td>
+                    </tr>
+                </table>
+
+                <div class="warning">
+                    <strong>Non-Negotiable Rule:</strong> One human being always equals exactly one KeiroClone. This rule ensures identity continuity, legal clarity, and long-term value preservation. Any feature or decision that violates this principle is rejected regardless of short-term benefits.
+                </div>
+            </section>
+
+            <section id="core-domain-model">
+                <h2>🏗️ Core Domain Model</h2>
+
+                <div class="architecture-flow">
+                    <h3>Domain Entities Overview</h3>
+                    <div class="flow-item">
+                        <strong>Person (Real Human)</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>User (Account)</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Clone (Digital Twin)</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Experiences</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Actors (Runtime)</strong>
+                    </div>
+                </div>
+
+                <h3>1. User (Authentication Boundary)</h3>
+
+                <div class="domain-box">
+                    <h4>Definition</h4>
+                    <p>A User represents a real human account holder within the KeiroGenesis system. The user is the authentication principal and legal owner.</p>
+                    
+                    <h4>Key Responsibilities</h4>
+                    <ul>
+                        <li>Authenticates via email/password, OAuth, or SSO</li>
+                        <li>Owns exactly one tenant (workspace)</li>
+                        <li>Creates and manages their clone</li>
+                        <li>Grants access permissions to clone experiences</li>
+                        <li>Controls monetization and billing settings</li>
+                        <li>Owns all generated data and interactions</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>Important:</strong> Users do not own actors. Users never interact with actors directly. Users influence actors only through clone configuration.
+                    </div>
+                </div>
+
+                <h3>2. Clone (Identity Layer)</h3>
+
+                <div class="domain-box">
+                    <h4>Definition</h4>
+                    <p>A Clone is the canonical, persistent identity artifact in KeiroGenesis. It represents the digital embodiment of a real person and serves as the single source of truth.</p>
+                    
+                    <h4>Core Components</h4>
+                    <ul>
+                        <li><strong>Identity Data:</strong> Name, avatar, biography, voice signature</li>
+                        <li><strong>Personality Model:</strong> Communication style, values, behavioral preferences</li>
+                        <li><strong>Memory Vault:</strong> Life stories, significant events, personal narratives</li>
+                        <li><strong>Knowledge Corpus:</strong> Uploaded documents, expertise domains, training materials</li>
+                        <li><strong>Visibility Settings:</strong> Public, private, family-only, custom access rules</li>
+                        <li><strong>Lifecycle State:</strong> Draft → Active → Memorial (posthumous mode)</li>
+                    </ul>
+
+                    <div class="principle">
+                        A clone defines <em>who</em> is being represented—never <em>how</em> execution occurs. The clone is the soul container of the system.
+                    </div>
+                </div>
+
+                <h3>3. Experience (Contextual Expression)</h3>
+
+                <div class="domain-box">
+                    <h4>What is an Experience?</h4>
+                    <p>An Experience is a <strong>curated, permissioned, monetizable interaction context</strong> through which a single clone expresses part of their life, skills, or calling—without ceasing to be the same person.</p>
+                    
+                    <h4>Why "Experience" Instead of "Profession"?</h4>
+                    <table>
+                        <tr>
+                            <th>Term</th>
+                            <th>Why It Fails</th>
+                            <th>Why Experience Works</th>
+                        </tr>
+                        <tr>
+                            <td>"Profession"</td>
+                            <td>Too legal, triggers licensing</td>
+                            <td>Human, social, flexible</td>
+                        </tr>
+                        <tr>
+                            <td>"Role"</td>
+                            <td>Implies multiple identities</td>
+                            <td>Same person, different context</td>
+                        </tr>
+                        <tr>
+                            <td>"Persona"</td>
+                            <td>Implies fictionalization</td>
+                            <td>Authentic expression</td>
+                        </tr>
+                        <tr>
+                            <td>"Skill"</td>
+                            <td>Too atomic ("coding")</td>
+                            <td>Holistic interaction surface</td>
+                        </tr>
+                    </table>
+
+                    <h4>Experience Properties</h4>
+                    <ul>
+                        <li><strong>Scope Definition:</strong> Which knowledge domains are accessible</li>
+                        <li><strong>Tone Constraints:</strong> Communication style (formal, pastoral, warm)</li>
+                        <li><strong>Audience Policy:</strong> Who can access (public, subscribers, family)</li>
+                        <li><strong>Behavioral Boundaries:</strong> Allowed/prohibited topics</li>
+                        <li><strong>Monetization Rules:</strong> Free, paid, tiered pricing</li>
+                        <li><strong>Memory Visibility:</strong> Which memories surface in this context</li>
+                    </ul>
+
+                    <div class="info">
+                        <strong>Key Insight:</strong> Experiences monetize access to contextual expression, not identity itself. People don't pay to talk to "a role"—they pay for office hours, guided conversations, ongoing wisdom access. That's an experience, not a profession listing.
+                    </div>
+                </div>
+
+                <h3>4. Actor (Runtime Execution)</h3>
+
+                <div class="domain-box">
+                    <h4>Critical Distinction</h4>
+                    <p class="principle">Actors are NOT personalities. They are execution boundaries, permission enforcers, and context carriers. An actor represents <em>how</em> a clone behaves at runtime—not <em>who</em> the clone is.</p>
+
+                    <h4>What Actors Do</h4>
+                    <ul>
+                        <li>Execute conversations and process messages</li>
+                        <li>Apply personality rules and tone guidelines</li>
+                        <li>Access memory/RAG within permission boundaries</li>
+                        <li>Enforce runtime policies and content filters</li>
+                        <li>Maintain conversation state and context</li>
+                        <li>Log all interactions for audit and learning</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>MVP Constraint:</strong> In MVP, exactly one actor exists per clone (1:1 relationship). This simplifies debugging while preserving architecture for future 1:N expansion.
+                    </div>
+                </div>
+
+                <h3>Canonical Relationship Chain</h3>
+
+                <div class="architecture-flow">
+                    <div class="flow-item">
+                        <code>User</code>
+                        <span class="flow-arrow">owns</span>
+                        <code>Clone</code>
+                        <span class="flow-arrow">spawns</span>
+                        <code>Actor</code>
+                        <span class="flow-arrow">executes</span>
+                        <code>Conversation</code>
+                    </div>
+                </div>
+
+                <div class="warning">
+                    <strong>Explicit Non-Relationships:</strong>
+                    <ul>
+                        <li>Users do NOT own actors</li>
+                        <li>Actors do NOT exist independently of clones</li>
+                        <li>Clones are NEVER derived from actors</li>
+                        <li>Experiences do NOT create new identities</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="mvp-architecture">
+                <h2>🚀 MVP Architecture</h2>
+
+                <div class="principle">
+                    The MVP proves three things only:
+                    <ol>
+                        <li>A person can create a persistent digital clone</li>
+                        <li>That clone can be trained through structured experiences</li>
+                        <li>The clone can interact authentically with others through chat</li>
+                    </ol>
+                    If those three work, everything else is additive.
+                </div>
+
+                <h3>System Architecture</h3>
+
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Technology</th>
+                        <th>Status</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Client Blazor</td>
+                        <td>Blazor WebAssembly + React</td>
+                        <td>✓ Active</td>
+                        <td>User-facing app, clone wizard, chat</td>
+                    </tr>
+                    <tr>
+                        <td>REST API</td>
+                        <td>ASP.NET Core 8</td>
+                        <td>✓ Active</td>
+                        <td>Auth, clone, memory, actor services</td>
+                    </tr>
+                    <tr>
+                        <td>RAG Service</td>
+                        <td>FastAPI + Python</td>
+                        <td>⚠ In Progress</td>
+                        <td>Document processing, embeddings, search</td>
+                    </tr>
+                    <tr>
+                        <td>PostgreSQL</td>
+                        <td>PostgreSQL 16 + pgvector</td>
+                        <td>✓ Active</td>
+                        <td>Primary database, vector storage</td>
+                    </tr>
+                    <tr>
+                        <td>Redis</td>
+                        <td>Redis 7.2</td>
+                        <td>○ Planned</td>
+                        <td>Cache, sessions, rate limiting</td>
+                    </tr>
+                    <tr>
+                        <td>RabbitMQ</td>
+                        <td>RabbitMQ 3.12</td>
+                        <td>○ Planned</td>
+                        <td>Async workflows, events</td>
+                    </tr>
+                </table>
+
+                <h3>Clone Creation Wizard (6 Steps)</h3>
+
+                <div class="architecture-flow">
+                    <div class="flow-item"><strong>Step 1:</strong> Identity (name, bio, visibility)</div>
+                    <div class="flow-item"><strong>Step 2:</strong> Avatar (upload or AI-generated)</div>
+                    <div class="flow-item"><strong>Step 3:</strong> Personality (calibration questions)</div>
+                    <div class="flow-item"><strong>Step 4:</strong> Memory Seeds (initial stories, events)</div>
+                    <div class="flow-item"><strong>Step 5:</strong> Knowledge Upload (documents, writings)</div>
+                    <div class="flow-item"><strong>Step 6:</strong> Activation (review and activate)</div>
+                </div>
+
+                <div class="success">
+                    <strong>Result:</strong> One active clone, ready for interaction. System automatically creates actor via <code>POST /api/v1/actor/instantiate/{cloneId}</code>
+                </div>
+
+                <h3>Critical Missing Piece: Actor Resolution</h3>
+
+                <div class="warning">
+                    <h4>The Problem</h4>
+                    <p>Currently, the system has two parallel identities with no deterministic bridge:</p>
+                    <ul>
+                        <li><strong>Clone:</strong> Created via Wizard, has personality and knowledge</li>
+                        <li><strong>Actor:</strong> Handles conversations via ActorConversation</li>
+                    </ul>
+                    <p>Without actor resolution, this flow is impossible: "Wizard finishes → user chats with clone"</p>
+
+                    <h4>Solution: Actor Sync Endpoint (REQUIRED)</h4>
+                    <pre>POST /api/v1/actor/instantiate/{cloneId}
+
+Response: {
+  "actorId": "uuid",
+  "cloneId": "uuid",
+  "status": "ready"
+}
+
+Behavior:
+- Verify clone exists and is activated
+- If actor exists → return it
+- If not → create new actor
+- Always return actorId</pre>
+
+                    <h4>Database Support</h4>
+                    <pre>CREATE TABLE actor.actors (
+  actor_id UUID PRIMARY KEY,
+  clone_id UUID UNIQUE NOT NULL,
+  tenant_id UUID NOT NULL,
+  status TEXT DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  FOREIGN KEY (clone_id) REFERENCES clone.clones(clone_id)
+);</pre>
+                </div>
+            </section>
+
+            <section id="training">
+                <h2>🎓 Training Architecture</h2>
+
+                <div class="principle">
+                    <strong>Training Target:</strong> We train <em>Experiences</em>, not clones and not actors. The clone supplies identity and memory. The experience scopes how that knowledge is used. Actors simply execute the interaction.
+                </div>
+
+                <h3>Why This Matters</h3>
+
+                <p>Training the clone directly would:</p>
+                <ul>
+                    <li><strong>Permanently alter identity</strong> — every new document would change who the person "is"</li>
+                    <li><strong>Risk behavioral drift</strong> — clone might contradict itself over time</li>
+                    <li><strong>Contaminate unrelated contexts</strong> — coaching knowledge bleeding into family conversations</li>
+                    <li><strong>Create legal ambiguity</strong> — who owns the "trained" version?</li>
+                </ul>
+
+                <h3>Training Pipeline</h3>
+
+                <div class="architecture-flow">
+                    <div class="flow-item">
+                        <strong>1. Input Acquisition</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>2. Experience Scoping</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>3. Processing (RAG)</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>4. Constraint Application</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>5. Owner Validation</strong>
+                    </div>
+                </div>
+
+                <h4>1. Input Sources</h4>
+                <ul>
+                    <li>User-uploaded documents (PDF, DOCX, TXT, MD)</li>
+                    <li>Memory seeds from wizard</li>
+                    <li>Conversation transcripts (with consent)</li>
+                    <li>KeiroBit/KeiroGlass device data (biometrics, context)</li>
+                    <li>Social media imports (with permission)</li>
+                </ul>
+
+                <h4>3. RAG Processing</h4>
+                <pre>1. Chunking: Break documents into 300-500 token chunks
+2. Embedding: Generate vectors using OpenAI ada-002
+3. Metadata: Extract dates, entities, topics, sentiment
+4. Storage: PostgreSQL + pgvector with experience tags
+
+-- Vector storage schema
+CREATE TABLE knowledge.document_chunks (
+  chunk_id UUID PRIMARY KEY,
+  experience_id UUID NOT NULL,
+  tenant_id UUID NOT NULL,
+  content TEXT NOT NULL,
+  embedding vector(1536),
+  metadata JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- IVFFlat index for similarity search
+CREATE INDEX ON knowledge.document_chunks 
+USING ivfflat (embedding vector_cosine_ops)
+WITH (lists = 100);</pre>
+
+                <h3>KeiroBit & KeiroGlass Integration</h3>
+
+                <div class="domain-box">
+                    <h4>KeiroBit (Wearable)</h4>
+                    <ul>
+                        <li><strong>Biometric Signals:</strong> Heart rate, sleep, stress, activity</li>
+                        <li><strong>Context Triggers:</strong> "Life moment" alerts (user confirms)</li>
+                        <li><strong>Training Use:</strong> Enriches clone's understanding of owner's state</li>
+                    </ul>
+
+                    <h4>KeiroGlass (AR Device)</h4>
+                    <ul>
+                        <li><strong>Visual Context:</strong> Location, environment tags</li>
+                        <li><strong>Memory Capture:</strong> Photos/notes with clone commentary</li>
+                        <li><strong>Training Use:</strong> Auto-journaling with user confirmation</li>
+                    </ul>
+
+                    <div class="warning">
+                        <strong>Critical Rule:</strong> Devices do NOT "train an actor." Devices feed the clone's life record, then actors decide what they're allowed to use based on experience permissions.
+                    </div>
+                </div>
+
+                <h3>RAG Query Flow</h3>
+
+                <pre>1. User Message → Actor
+2. Actor identifies experience context
+3. Query sent to RAG service with filters:
+   - experience_id (scope knowledge)
+   - tenant_id (security)
+4. Semantic search finds top-k chunks (k=10)
+5. Construct augmented prompt:
+   - System instructions (personality)
+   - Retrieved knowledge
+   - Conversation history
+   - User message
+6. Send to LLM (GPT-4, Claude)
+7. Response → user</pre>
+            </section>
+
+            <section id="authentication">
+                <h2>🔐 Authentication & Identity Verification</h2>
+
+                <h3>Modern Identity Verification Landscape</h3>
+
+                <p>Social media platforms are evolving beyond simple email/password toward AI-driven analysis, government ID verification, and privacy-preserving digital wallets. KeiroGenesis must implement robust identity verification to:</p>
+
+                <ul>
+                    <li>Protect minors from inappropriate content</li>
+                    <li>Prevent fraud, bots, and fake accounts</li>
+                    <li>Comply with emerging regulations (California AB-1043, Nebraska laws)</li>
+                    <li>Ensure clone owners are real, verified individuals</li>
+                    <li>Enable monetization with payment verification</li>
+                </ul>
+
+                <h3>Identity Verification Methods</h3>
+
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Technology</th>
+                        <th>MVP Status</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Email/Password</td>
+                        <td>bcrypt hashing, JWT tokens</td>
+                        <td>✓ Active</td>
+                        <td>Basic authentication</td>
+                    </tr>
+                    <tr>
+                        <td>Government ID</td>
+                        <td>Jumio, IDMERIT, Stripe Identity</td>
+                        <td>○ Planned</td>
+                        <td>Age verification, monetization</td>
+                    </tr>
+                    <tr>
+                        <td>AI Biometric</td>
+                        <td>Facial recognition, selfie matching</td>
+                        <td>○ v2+</td>
+                        <td>Fraud prevention</td>
+                    </tr>
+                    <tr>
+                        <td>Digital Wallet</td>
+                        <td>Apple Wallet, Google Wallet</td>
+                        <td>○ Future</td>
+                        <td>Privacy-preserving age proof</td>
+                    </tr>
+                    <tr>
+                        <td>2FA/MFA</td>
+                        <td>SMS, TOTP, WebAuthn</td>
+                        <td>⚠ In Progress</td>
+                        <td>Account security</td>
+                    </tr>
+                </table>
+
+                <h3>JWT Token Structure</h3>
+
+                <pre>{
+  "sub": "user_id",
+  "email": "user@example.com",
+  "tenant_id": "uuid",
+  "role": "owner" | "admin" | "viewer",
+  "tier": "free" | "starter" | "professional" | "enterprise",
+  "iat": 1734451200,
+  "exp": 1734454800, // 1 hour
+  "jti": "token_id"
+}</pre>
+
+                <h3>Security Best Practices</h3>
+
+                <table>
+                    <tr>
+                        <th>Security Layer</th>
+                        <th>Implementation</th>
+                    </tr>
+                    <tr>
+                        <td>Password Hashing</td>
+                        <td>bcrypt (cost factor 12, ~250ms compute time)</td>
+                    </tr>
+                    <tr>
+                        <td>Token Signing</td>
+                        <td>RSA-2048 or HMAC-SHA256</td>
+                    </tr>
+                    <tr>
+                        <td>Transport Security</td>
+                        <td>TLS 1.3, HSTS enabled</td>
+                    </tr>
+                    <tr>
+                        <td>Rate Limiting</td>
+                        <td>5 login attempts per 15 min per IP</td>
+                    </tr>
+                    <tr>
+                        <td>CAPTCHA</td>
+                        <td>reCAPTCHA v3, Cloudflare Turnstile</td>
+                    </tr>
+                </table>
+
+                <div class="info">
+                    <strong>Zero-Knowledge Proofs (Future):</strong> Cryptographic method where users prove age >18 without revealing exact birthdate. Apple Wallet Digital ID and Google Wallet support this privacy-preserving verification.
+                </div>
+            </section>
+
+            <section id="v2-evolution">
+                <h2>🔮 v2+ Evolution Strategy</h2>
+
+                <div class="principle">
+                    KeiroGenesis scales by preserving identity while expanding expression. Each evolution phase adds capability without breaking core architecture or requiring data rewrites.
+                </div>
+
+                <h3>Evolution Roadmap</h3>
+
+                <table>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Timeline</th>
+                        <th>Key Features</th>
+                    </tr>
+                    <tr>
+                        <td><strong>MVP (Current)</strong></td>
+                        <td>Q4 2025</td>
+                        <td>User registration, clone wizard, basic chat, RAG integration</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 2: Enhanced Experiences</strong></td>
+                        <td>Q1 2026</td>
+                        <td>Multiple experiences per clone, public profiles, analytics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 3: Monetization</strong></td>
+                        <td>Q2 2026</td>
+                        <td>Stripe integration, subscriptions, paid experiences, creator dashboards</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 4: Social Features</strong></td>
+                        <td>Q3 2026</td>
+                        <td>Clone following, feeds, interactions, groups, live events</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 5: IoT & Autonomy</strong></td>
+                        <td>Q4 2026</td>
+                        <td>KeiroBit/KeiroGlass, smart home control, autonomous actions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Phase 6: Advanced Features</strong></td>
+                        <td>2027+</td>
+                        <td>Marketplace, memorial mode, enterprise, voice cloning</td>
+                    </tr>
+                </table>
+
+                <h3>Migration Path: 1 Actor → Many Actors</h3>
+
+                <div class="architecture-flow">
+                    <h4>Structural Evolution (Non-Breaking)</h4>
+                    <div class="flow-item">
+                        <strong>MVP:</strong> <code>clone_id → actor_id (1:1)</code>
+                    </div>
+                    <div class="flow-item">
+                        <strong>v2:</strong> <code>clone_id → actor_id (1:N)</code> with actor types
+                    </div>
+                </div>
+
+                <h4>Actor Types (v2+)</h4>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>default</td>
+                        <td>General interactions</td>
+                        <td>MVP conversational runtime</td>
+                    </tr>
+                    <tr>
+                        <td>public</td>
+                        <td>Visitor-facing</td>
+                        <td>Marketing, portfolio</td>
+                    </tr>
+                    <tr>
+                        <td>private</td>
+                        <td>Owner-only</td>
+                        <td>Personal assistant, testing</td>
+                    </tr>
+                    <tr>
+                        <td>professional</td>
+                        <td>Paid experiences</td>
+                        <td>Coaching, consulting</td>
+                    </tr>
+                    <tr>
+                        <td>autonomous</td>
+                        <td>Self-initiated actions</td>
+                        <td>Social posts, IoT automation</td>
+                    </tr>
+                    <tr>
+                        <td>memorial</td>
+                        <td>Posthumous interaction</td>
+                        <td>Legacy preservation, grief support</td>
+                    </tr>
+                </table>
+
+                <div class="success">
+                    <strong>Backward Compatibility:</strong> Existing APIs resolve to "default" actor if no type specified. No data migration required—just schema extension.
+                </div>
+            </section>
+
+            <section id="billing">
+                <h2>💰 Billing & Entitlements</h2>
+
+                <h3>Subscription Tiers</h3>
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Free</th>
+                        <th>Starter<br>$9/mo</th>
+                        <th>Professional<br>$29/mo</th>
+                        <th>Enterprise<br>Custom</th>
+                    </tr>
+                    <tr>
+                        <td>Clones</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>Multiple</td>
+                    </tr>
+                    <tr>
+                        <td>Experiences</td>
+                        <td>1 basic</td>
+                        <td>3</td>
+                        <td>Unlimited</td>
+                        <td>Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Conversations/Month</td>
+                        <td>100</td>
+                        <td>1,000</td>
+                        <td>Unlimited</td>
+                        <td>Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Document Storage</td>
+                        <td>100 MB</td>
+                        <td>1 GB</td>
+                        <td>10 GB</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Monetization</td>
+                        <td>❌</td>
+                        <td>✓ (20% fee)</td>
+                        <td>✓ (15% fee)</td>
+                        <td>✓ (10% fee)</td>
+                    </tr>
+                    <tr>
+                        <td>IoT Devices</td>
+                        <td>❌</td>
+                        <td>3</td>
+                        <td>10</td>
+                        <td>Unlimited</td>
+                    </tr>
+                </table>
+
+                <h3>Monetization Ecosystem</h3>
+
+                <div class="domain-box">
+                    <h4>How Creators Earn</h4>
+                    <ul>
+                        <li><strong>Experience Subscriptions:</strong> Monthly recurring ($5-$500/mo)</li>
+                        <li><strong>Per-Session Pricing:</strong> One-time consultations ($10-$1000)</li>
+                        <li><strong>Tiered Memberships:</strong> Basic/Premium/VIP access levels</li>
+                        <li><strong>Knowledge Licensing:</strong> Passive royalties when others reference expertise</li>
+                    </ul>
+
+                    <h4>Revenue Split</h4>
+                    <table>
+                        <tr>
+                            <th>Tier</th>
+                            <th>Platform Fee</th>
+                            <th>Creator Keeps</th>
+                        </tr>
+                        <tr>
+                            <td>Starter</td>
+                            <td>20%</td>
+                            <td>80%</td>
+                        </tr>
+                        <tr>
+                            <td>Professional</td>
+                            <td>15%</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>Enterprise</td>
+                            <td>10%</td>
+                            <td>90%</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>Stripe Integration</h3>
+
+                <ul>
+                    <li><strong>Checkout:</strong> Subscription purchase flow</li>
+                    <li><strong>Connect:</strong> Creator payout management</li>
+                    <li><strong>Webhooks:</strong> Payment confirmations, failed payments</li>
+                    <li><strong>Invoicing:</strong> Automatic invoice generation</li>
+                </ul>
+
+                <div class="info">
+                    <strong>Payout Schedule:</strong> Monthly on the 1st (minimum $50 balance). Creators receive earnings via direct deposit, PayPal, or Stripe Connect. Tax reporting (1099 forms) for US creators earning >$600/year.
+                </div>
+            </section>
+
+            <section id="iot-integration">
+                <h2>🏠 IoT & Device Integration</h2>
+
+                <div class="principle">
+                    Devices interact with identity only through constrained experiences. Devices never bind directly to users, raw clones, or unmanaged actors. This ensures no unauthorized automation, no silent identity misuse, and clear audit trails.
+                </div>
+
+                <h3>Supported Devices</h3>
+
+                <table>
+                    <tr>
+                        <th>Category</th>
+                        <th>Examples</th>
+                        <th>Integration</th>
+                    </tr>
+                    <tr>
+                        <td>KeiroBit Wearables</td>
+                        <td>Smartwatch, fitness tracker</td>
+                        <td>Native SDK, Bluetooth/WiFi</td>
+                    </tr>
+                    <tr>
+                        <td>KeiroGlass AR</td>
+                        <td>Smart glasses</td>
+                        <td>Native app, vision APIs</td>
+                    </tr>
+                    <tr>
+                        <td>Smart Lighting</td>
+                        <td>Philips Hue, LIFX</td>
+                        <td>Cloud APIs</td>
+                    </tr>
+                    <tr>
+                        <td>Climate Control</td>
+                        <td>Nest, Ecobee</td>
+                        <td>OAuth, REST APIs</td>
+                    </tr>
+                    <tr>
+                        <td>Security</td>
+                        <td>Ring, August locks</td>
+                        <td>OAuth, webhooks</td>
+                    </tr>
+                </table>
+
+                <h3>Permission System</h3>
+
+                <pre>{
+  "device_id": "uuid",
+  "clone_id": "uuid",
+  "actor_types_allowed": ["private", "autonomous"],
+  "permitted_actions": {
+    "lights": ["turn_on", "turn_off", "set_brightness"],
+    "thermostat": ["read_temperature"], 
+    "locks": [] // no actions allowed
+  },
+  "approval_required": {
+    "door_unlock": "always",
+    "temperature_change": "if_away",
+    "light_control": "never"
+  }
+}</pre>
+
+                <div class="warning">
+                    <strong>Safety First:</strong> All autonomous actions are logged, rate-limited, and reversible. Dangerous actions (door unlocking, financial transactions) always require explicit owner approval.
+                </div>
+
+                <h3>KeiroBit: Wearable Integration</h3>
+
+                <ul>
+                    <li><strong>Biometric Data:</strong> Heart rate, sleep, activity, stress indicators</li>
+                    <li><strong>Context Awareness:</strong> Location, time of day, social setting</li>
+                    <li><strong>Clone Integration:</strong> "I notice you haven't been sleeping well lately..."</li>
+                    <li><strong>Privacy:</strong> User owns all data, explicit consent for clone access</li>
+                </ul>
+
+                <h3>KeiroGlass: AR Integration</h3>
+
+                <ul>
+                    <li><strong>Visual Context:</strong> Clone "sees" what user sees</li>
+                    <li><strong>AR Overlay:</strong> Clone avatar in field of view</li>
+                    <li><strong>Hands-Free:</strong> Voice commands, gesture control</li>
+                    <li><strong>Memory Capture:</strong> Photos/notes with clone commentary</li>
+                </ul>
+            </section>
+
+            <section id="data-architecture">
+                <h2>🗄️ Data Architecture</h2>
+
+                <h3>Database Strategy</h3>
+
+                <table>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                        <th>Key Features</th>
+                    </tr>
+                    <tr>
+                        <td>PostgreSQL 16</td>
+                        <td>Primary database</td>
+                        <td>ACID transactions, schemas: auth, clone, social, billing</td>
+                    </tr>
+                    <tr>
+                        <td>pgvector</td>
+                        <td>Vector embeddings</td>
+                        <td>Semantic search, similarity matching</td>
+                    </tr>
+                    <tr>
+                        <td>Redis 7.2</td>
+                        <td>Cache layer</td>
+                        <td>Session state, rate limiting, hot data</td>
+                    </tr>
+                    <tr>
+                        <td>RabbitMQ 3.12</td>
+                        <td>Message queue</td>
+                        <td>Async workflows, event distribution</td>
+                    </tr>
+                </table>
+
+                <h3>Multi-Tenancy Strategy</h3>
+
+                <div class="principle">
+                    Every table includes <code>tenant_id UUID NOT NULL</code>. All queries MUST filter by tenant_id to ensure complete data isolation between users.
+                </div>
+
+                <h4>Row-Level Security Example</h4>
+
+                <pre>CREATE POLICY tenant_isolation_policy ON clone.clones
+FOR ALL
+USING (tenant_id = current_setting('app.current_tenant_id')::UUID);</pre>
+
+                <h3>Schema Organization</h3>
+
+                <pre>-- auth schema
+auth.users, auth.sessions, auth.refresh_tokens
+
+-- clone schema
+clone.clones, clone.personalities, clone.memories
+
+-- experience schema (v2+)
+experience.experiences, experience.training_data
+
+-- actor schema
+actor.actors, actor.conversations
+
+-- knowledge schema
+knowledge.documents, knowledge.document_chunks (pgvector)
+
+-- social schema (v2+)
+social.follows, social.posts, social.interactions
+
+-- billing schema (v2+)
+billing.subscriptions, billing.usage_events
+
+-- iot schema (v2+)
+iot.devices, iot.device_actions
+
+-- audit schema (immutable)
+audit.system_events, audit.user_actions</pre>
+
+                <h3>Backup & Recovery</h3>
+
+                <ul>
+                    <li><strong>Automated Daily Backups:</strong> Full snapshots at 2 AM UTC</li>
+                    <li><strong>Retention:</strong> 30 days rolling, 12 monthly archives</li>
+                    <li><strong>Point-in-Time Recovery:</strong> RPO 5 minutes, RTO 1 hour</li>
+                    <li><strong>Geographic Distribution:</strong> Backups in 3 regions</li>
+                </ul>
+            </section>
+
+            <section id="deployment">
+                <h2>☁️ Deployment & Scaling</h2>
+
+                <h3>Infrastructure Overview</h3>
+
+                <div class="architecture-flow">
+                    <div class="flow-item">
+                        <strong>Cloudflare CDN</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Load Balancer</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>GKE Cluster</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Cloud SQL</strong>
+                    </div>
+                </div>
+
+                <h3>Kubernetes Deployment</h3>
+
+                <table>
+                    <tr>
+                        <th>Service</th>
+                        <th>MVP Pods</th>
+                        <th>Auto-Scale</th>
+                        <th>Resources</th>
+                    </tr>
+                    <tr>
+                        <td>Client Blazor</td>
+                        <td>3</td>
+                        <td>3-20 (CPU 70%)</td>
+                        <td>512 MB, 0.5 CPU</td>
+                    </tr>
+                    <tr>
+                        <td>REST API</td>
+                        <td>3</td>
+                        <td>3-30 (CPU 80%)</td>
+                        <td>1 GB, 1 CPU</td>
+                    </tr>
+                    <tr>
+                        <td>RAG Service</td>
+                        <td>2</td>
+                        <td>2-10 (queue)</td>
+                        <td>2 GB, 2 CPU</td>
+                    </tr>
+                </table>
+
+                <h3>CI/CD Pipeline</h3>
+
+                <div class="architecture-flow">
+                    <div class="flow-item">
+                        <strong>Git Push</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Azure DevOps</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Build + Test</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Docker Build</strong>
+                        <span class="flow-arrow">→</span>
+                        <strong>Deploy K8s</strong>
+                    </div>
+                </div>
+
+                <h3>Cost Optimization</h3>
+
+                <table>
+                    <tr>
+                        <th>Service</th>
+                        <th>MVP Cost</th>
+                        <th>v2+ Projected</th>
+                    </tr>
+                    <tr>
+                        <td>GKE Cluster</td>
+                        <td>$300/mo</td>
+                        <td>$1,500/mo</td>
+                    </tr>
+                    <tr>
+                        <td>Cloud SQL</td>
+                        <td>$200/mo</td>
+                        <td>$800/mo</td>
+                    </tr>
+                    <tr>
+                        <td>OpenAI API</td>
+                        <td>$500/mo</td>
+                        <td>$3,000/mo</td>
+                    </tr>
+                    <tr>
+                        <td>Cloudflare</td>
+                        <td>$200/mo</td>
+                        <td>$500/mo</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong>~$1,400/mo</strong></td>
+                        <td><strong>~$6,550/mo</strong></td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="security">
+                <h2>🛡️ Security Model</h2>
+
+                <div class="principle">
+                    Defense in Depth: KeiroGenesis implements multiple overlapping security layers ensuring comprehensive protection of user data, clone identities, and platform integrity.
+                </div>
+
+                <h3>Security Layers</h3>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Implementation</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Network Security</strong></td>
+                        <td>TLS 1.3, Cloudflare WAF, VPC isolation</td>
+                        <td>Encrypt traffic, block attacks</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Application Security</strong></td>
+                        <td>JWT auth, RBAC, input validation, CSRF protection</td>
+                        <td>Authenticate, authorize, sanitize</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Security</strong></td>
+                        <td>AES-256 at rest, bcrypt passwords, tenant isolation</td>
+                        <td>Protect stored data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Monitoring</strong></td>
+                        <td>SIEM, anomaly detection, incident response</td>
+                        <td>Detect and respond to threats</td>
+                    </tr>
+                </table>
+
+                <h3>Authentication Security</h3>
+
+                <ul>
+                    <li><strong>Password Policy:</strong> 12+ characters, complexity requirements, bcrypt hashing</li>
+                    <li><strong>JWT Tokens:</strong> RSA-2048 signed, 1-hour expiration</li>
+                    <li><strong>Refresh Tokens:</strong> HTTP-only cookies, 30-day expiration, rotation</li>
+                    <li><strong>Rate Limiting:</strong> 5 login attempts per 15 minutes per IP</li>
+                    <li><strong>2FA/MFA:</strong> TOTP, SMS, WebAuthn support</li>
+                </ul>
+
+                <h3>Audit Logging</h3>
+
+                <div class="principle">
+                    Every security-relevant action is logged immutably with who, what, when, where, and why. Logs retained for 10 years, cannot be modified or deleted.
+                </div>
+
+                <pre>CREATE TABLE audit.system_events (
+  event_id UUID PRIMARY KEY,
+  tenant_id UUID,
+  user_id UUID,
+  event_type TEXT NOT NULL,
+  resource_type TEXT,
+  action TEXT NOT NULL,
+  before_state JSONB,
+  after_state JSONB,
+  ip_address INET,
+  occurred_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Immutability enforcement
+CREATE POLICY no_modification ON audit.system_events
+FOR UPDATE, DELETE USING (false);</pre>
+
+                <h3>Compliance</h3>
+
+                <ul>
+                    <li><strong>GDPR:</strong> Right to access, rectification, erasure, portability</li>
+                    <li><strong>CCPA:</strong> Similar rights, opt-out of data sales</li>
+                    <li><strong>PCI DSS:</strong> Compliant via Stripe (no card storage)</li>
+                    <li><strong>SOC 2 Type II:</strong> Planned 2026</li>
+                    <li><strong>ISO 27001:</strong> Planned 2027</li>
+                </ul>
+            </section>
+
+            <section id="social-features">
+                <h2>👥 Clone-to-Clone Social Features</h2>
+
+                <div class="principle">
+                    KeiroGenesis is a clone-centric social platform. Clones interact with clones—not users with bots. Every interaction preserves identity continuity and authenticity.
+                </div>
+
+                <h3>Social Graph Design</h3>
+
+                <ul>
+                    <li><strong>Clones Follow Clones:</strong> Not users following users, but digital twins connecting</li>
+                    <li><strong>Bidirectional vs Unidirectional:</strong> Mutual follows (friends) and one-way follows (fans)</li>
+                    <li><strong>Visibility Controls:</strong> Private clones can approve followers</li>
+                    <li><strong>Feed Algorithms:</strong> Chronological + engagement-weighted options</li>
+                </ul>
+
+                <h3>Interaction Types</h3>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Owner Control</th>
+                    </tr>
+                    <tr>
+                        <td>Public Posts</td>
+                        <td>Clone shares thoughts, updates</td>
+                        <td>Owner schedules/approves</td>
+                    </tr>
+                    <tr>
+                        <td>Direct Messages</td>
+                        <td>One-on-one conversations</td>
+                        <td>Auto-reply rules</td>
+                    </tr>
+                    <tr>
+                        <td>Comments</td>
+                        <td>Respond to posts</td>
+                        <td>Explicit permission required</td>
+                    </tr>
+                    <tr>
+                        <td>Collaborations</td>
+                        <td>Multiple clones on project</td>
+                        <td>All owners must approve</td>
+                    </tr>
+                </table>
+
+                <h3>Content Moderation</h3>
+
+                <ul>
+                    <li><strong>Automated:</strong> OpenAI Moderation API, spam detection, hate speech filter</li>
+                    <li><strong>Community Reporting:</strong> User reports reviewed by moderators (24h SLA)</li>
+                    <li><strong>Clone Reputation:</strong> Trust score 0-100, verified badges, expert recognition</li>
+                    <li><strong>Actions:</strong> Warnings, content removal, suspension, permanent bans</li>
+                </ul>
+
+                <div class="warning">
+                    <strong>Identity Preservation:</strong> Even in social contexts, one clone = one identity. Clones don't "role-play" or "pretend." All interactions are authentic expressions of the same digital twin.
+                </div>
+            </section>
+
+            <section id="experiences">
+                <h2>🎭 Experiences Deep Dive</h2>
+
+                <h3>Why "Experience" is the Perfect Term</h3>
+
+                <p>The term "Experience" is superior to "profession," "role," or "skill" because:</p>
+
+                <ul>
+                    <li><strong>Avoids Identity Fragmentation:</strong> "Teaching Experience" vs "Pastoral Experience" preserves unity; "Professor Matt" vs "Pastor Matt" implies multiple people</li>
+                    <li><strong>Reduces Liability:</strong> "Medical Advisor" triggers licensing; "Wellness Experience" provides clear disclaimers</li>
+                    <li><strong>Social Platform Feel:</strong> People don't "enter roles"—they experience someone in different contexts</li>
+                    <li><strong>Human and Flexible:</strong> Captures how real people show up differently in different rooms</li>
+                </ul>
+
+                <h3>Experience Configuration</h3>
+
+                <div class="domain-box">
+                    <h4>Core Settings</h4>
+                    <ul>
+                        <li><strong>Title & Slug:</strong> "Executive Coaching" → <code>/c/{clone}/x/executive-coaching</code></li>
+                        <li><strong>Knowledge Scope:</strong> Which documents/memories are accessible</li>
+                        <li><strong>Tone Guidelines:</strong> Formal, warm, analytical, pastoral</li>
+                        <li><strong>Content Boundaries:</strong> Allowed/prohibited topics</li>
+                        <li><strong>Audience Policy:</strong> Public, subscribers, family, approved list</li>
+                    </ul>
+
+                    <h4>Monetization Settings (v2+)</h4>
+                    <ul>
+                        <li><strong>Pricing Model:</strong> Free, one-time, subscription, per-message</li>
+                        <li><strong>Tiered Access:</strong> Basic vs Premium content</li>
+                        <li><strong>Usage Limits:</strong> Message caps, time limits</li>
+                        <li><strong>Trial Period:</strong> "3 messages free, then $20/month"</li>
+                    </ul>
+                </div>
+
+                <h3>Example: Multi-Experience Professional</h3>
+
+                <div class="success">
+                    <h4>Dr. Sarah Chen's Clone Architecture</h4>
+                    <p><strong>One Clone:</strong> Complete digital twin with all memories, knowledge, personality</p>
+                    <p><strong>Four Experiences:</strong></p>
+                    <ul>
+                        <li><strong>Academic Office Hours</strong> (Students, Free): Course help, research guidance</li>
+                        <li><strong>Executive Coaching</strong> (Professionals, $150/session): Leadership, career strategy</li>
+                        <li><strong>Author Q&A</strong> (Public, $5/month): Book discussions, writing advice</li>
+                        <li><strong>Family Archive</strong> (Family, Private): Personal stories, legacy</li>
+                    </ul>
+                    <p><strong>Result:</strong> Dr. Chen maintains single identity while monetizing different expertise aspects. Coaching clients never see academic content; students don't access paid coaching; family stories remain private—all without fragmenting identity.</p>
+                </div>
+            </section>
+
+            
+            <section id="identity-verification">
+                <h2>🔍 Identity Verification & Trust Architecture</h2>
+
+                <div class="principle">
+                    <strong>Core Principle:</strong> Identity verification verifies the HUMAN, not the CLONE. You verify the person behind the clone. The clone inherits verified trust status. Verification never fragments identity. Verification does not mean public disclosure.
+                </div>
+
+                <h3>1. Why Identity Verification Is Non-Negotiable</h3>
+
+                <p>KeiroGenesis is not a casual social platform. It enables:</p>
+
+                <ul>
+                    <li><strong>Persistent digital embodiments</strong> of real people</li>
+                    <li><strong>Public interaction</strong> with those embodiments</li>
+                    <li><strong>Long-term memory retention</strong> across decades</li>
+                    <li><strong>Family and legacy access</strong> after death</li>
+                    <li><strong>Monetization and IoT control</strong></li>
+                </ul>
+
+                <div class="warning">
+                    <h4>Without Identity Verification, You Risk:</h4>
+                    <ul>
+                        <li><strong>Minors creating clones</strong> — COPPA violations</li>
+                        <li><strong>Adults impersonating others</strong> — identity theft, deepfake misuse</li>
+                        <li><strong>Posthumous identity abuse</strong> — unauthorized access to deceased clones</li>
+                        <li><strong>Monetization fraud</strong> — fake clones earning revenue</li>
+                        <li><strong>Regulatory shutdown</strong> under age-assurance laws (California AB-1043)</li>
+                    </ul>
+                </div>
+
+                <h3>2. External Forces & Regulations</h3>
+
+                <table>
+                    <tr>
+                        <th>Regulation</th>
+                        <th>Jurisdiction</th>
+                        <th>Key Requirement</th>
+                        <th>Timeline</th>
+                    </tr>
+                    <tr>
+                        <td>California AB-1043</td>
+                        <td>California</td>
+                        <td>Social platforms must verify user ages</td>
+                        <td>Enforcement 2026</td>
+                    </tr>
+                    <tr>
+                        <td>COPPA</td>
+                        <td>United States</td>
+                        <td>No data collection from users under 13</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td>UK Age-Appropriate Design Code</td>
+                        <td>United Kingdom</td>
+                        <td>Age assessment, protections for minors</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Nebraska Age Verification</td>
+                        <td>Nebraska</td>
+                        <td>Age verification for certain content</td>
+                        <td>Active</td>
+                    </tr>
+                </table>
+
+                <h3>3. Identity Verification Levels (Graduated Trust)</h3>
+
+                <table>
+                    <tr>
+                        <th>Level</th>
+                        <th>Name</th>
+                        <th>Verification Method</th>
+                        <th>Features Unlocked</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 0</strong></td>
+                        <td>Unverified</td>
+                        <td>Email + password only</td>
+                        <td>
+                            • Clone creation (private only)<br>
+                            • Personal chat with own clone<br>
+                            • Document uploads
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 1</strong></td>
+                        <td>Age-Assured</td>
+                        <td>
+                            • AI age estimation<br>
+                            • Zero-knowledge proof (18+)<br>
+                            • No ID storage
+                        </td>
+                        <td>
+                            • Public clone visibility<br>
+                            • Visitor chat<br>
+                            • Social following<br>
+                            • Basic experiences
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 2</strong></td>
+                        <td>Human-Verified</td>
+                        <td>
+                            • Selfie + liveness check<br>
+                            • Anti-bot assurance<br>
+                            • Real human confirmation
+                        </td>
+                        <td>
+                            • Monetization preparation<br>
+                            • Family invitations<br>
+                            • Advanced experiences<br>
+                            • Clone-to-clone messaging
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 3</strong></td>
+                        <td>Government-Verified</td>
+                        <td>
+                            • ID document scan<br>
+                            • Selfie match (Jumio, IDMERIT)<br>
+                            • Third-party verification
+                        </td>
+                        <td>
+                            • Paid experiences<br>
+                            • Revenue payouts<br>
+                            • IoT device control<br>
+                            • Posthumous legacy controls<br>
+                            • Clone marketplace access
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>4. Technical Integration: Auth Domain Expansion</h3>
+
+                <div class="principle">
+                    Identity verification is NOT a separate microservice. It is a sub-module within the Auth domain, alongside login, register, and password reset.
+                </div>
+
+                <h4>Auth Domain Responsibilities (Expanded)</h4>
+
+                <div class="domain-box">
+                    <h4>A. Credentials (Traditional Auth)</h4>
+                    <ul>
+                        <li>Email/username management</li>
+                        <li>Password hashing and validation</li>
+                        <li>Refresh tokens</li>
+                        <li>Multi-factor authentication (v2+)</li>
+                    </ul>
+
+                    <h4>B. Identity Assurance (NEW)</h4>
+                    <ul>
+                        <li>Age verification</li>
+                        <li>Human verification (liveness detection)</li>
+                        <li>Government ID verification (third-party)</li>
+                        <li>Consent records and audit trails</li>
+                        <li>Verification level management</li>
+                    </ul>
+
+                    <h4>C. Authorization Context</h4>
+                    <ul>
+                        <li>Roles (Owner, Admin, Viewer)</li>
+                        <li>Capabilities (feature-specific permissions)</li>
+                        <li>Feature gates (monetization, IoT, public visibility)</li>
+                        <li>Content rating enforcement</li>
+                    </ul>
+                </div>
+
+                <h4>API Endpoints (AuthController)</h4>
+
+                <pre>// Existing endpoints
+POST /api/v1/auth/register
+POST /api/v1/auth/login
+POST /api/v1/auth/refresh
+POST /api/v1/auth/logout
+POST /api/v1/auth/forgot-password
+POST /api/v1/auth/reset-password
+
+// NEW: Identity verification endpoints (same controller)
+GET  /api/v1/auth/identity/status
+POST /api/v1/auth/identity/age-verify
+POST /api/v1/auth/identity/human-verify
+POST /api/v1/auth/identity/id-verify        // v2+
+POST /api/v1/auth/identity/consent-record   // GDPR compliance</pre>
+
+                <h3>5. Data Model</h3>
+
+                <pre>-- auth.users table (existing)
+CREATE TABLE auth.users (
+  user_id UUID PRIMARY KEY,
+  tenant_id UUID NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- NEW: auth.identity_profiles table
+CREATE TABLE auth.identity_profiles (
+  profile_id UUID PRIMARY KEY,
+  user_id UUID NOT NULL UNIQUE,
+  tenant_id UUID NOT NULL,
+  
+  -- Verification levels
+  verification_level INTEGER DEFAULT 0, -- 0-3
+  age_verified BOOLEAN DEFAULT FALSE,
+  human_verified BOOLEAN DEFAULT FALSE,
+  government_verified BOOLEAN DEFAULT FALSE,
+  
+  -- Age assurance
+  age_bracket TEXT, -- 'minor', 'adult', 'unknown'
+  birth_year INTEGER, -- optional, only if user provides
+  
+  -- Verification metadata (NO sensitive data stored)
+  provider_name TEXT, -- 'jumio', 'idmerit', 'stripe_identity'
+  provider_reference TEXT, -- external verification ID
+  verification_timestamp TIMESTAMPTZ,
+  verification_expiry TIMESTAMPTZ, -- re-verification policy
+  
+  -- Consent & audit
+  consent_given BOOLEAN DEFAULT FALSE,
+  consent_timestamp TIMESTAMPTZ,
+  consent_ip INET,
+  
+  -- Trust score (derived)
+  trust_score INTEGER DEFAULT 0, -- 0-100
+  
+  FOREIGN KEY (user_id) REFERENCES auth.users(user_id),
+  FOREIGN KEY (tenant_id) REFERENCES tenants(tenant_id)
+);
+
+-- Clone inheritance
+ALTER TABLE clone.clones ADD COLUMN trust_level INTEGER DEFAULT 0;
+
+-- Trust level computed from user's identity profile
+-- clone.trust_level = user.identity_profile.verification_level</pre>
+
+                <h3>6. JWT Token Claims (Identity-Aware)</h3>
+
+                <pre>{
+  "sub": "user_id",
+  "email": "user@example.com",
+  "tenant_id": "uuid",
+  "role": "owner",
+  "tier": "professional",
+  
+  // NEW: Identity claims
+  "identity_level": 2,        // 0-3
+  "age_verified": true,
+  "human_verified": true,
+  "government_verified": false,
+  "age_bracket": "adult",     // for content filtering
+  
+  "iat": 1734451200,
+  "exp": 1734454800
+}</pre>
+
+                <div class="info">
+                    <strong>Benefit:</strong> Identity claims in JWT enable instant UI/API gating without additional database queries. Features can check <code>identity_level >= 2</code> for monetization access.
+                </div>
+
+                <h3>7. Verification Methods (Vendor-Agnostic)</h3>
+
+                <table>
+                    <tr>
+                        <th>Method</th>
+                        <th>Technology</th>
+                        <th>Privacy Level</th>
+                        <th>Cost</th>
+                        <th>Accuracy</th>
+                    </tr>
+                    <tr>
+                        <td>AI Age Estimation</td>
+                        <td>Behavioral analysis, writing patterns</td>
+                        <td>High (no PII)</td>
+                        <td>Free</td>
+                        <td>~75%</td>
+                    </tr>
+                    <tr>
+                        <td>Selfie + Liveness</td>
+                        <td>Facial detection, motion verification</td>
+                        <td>Medium</td>
+                        <td>$0.50-$1</td>
+                        <td>~95%</td>
+                    </tr>
+                    <tr>
+                        <td>Government ID</td>
+                        <td>Jumio, IDMERIT, Stripe Identity</td>
+                        <td>Low (full ID scan)</td>
+                        <td>$1-$3</td>
+                        <td>~99%</td>
+                    </tr>
+                    <tr>
+                        <td>Digital Wallet (future)</td>
+                        <td>Apple Wallet, Google Wallet</td>
+                        <td>Very High (ZKP)</td>
+                        <td>Free</td>
+                        <td>~99.9%</td>
+                    </tr>
+                </table>
+
+                <h3>8. What Gets Stored vs. Never Stored</h3>
+
+                <div class="success">
+                    <h4>✓ Stored by KeiroGenesis</h4>
+                    <ul>
+                        <li>Verification status (Level 0-3)</li>
+                        <li>Age bracket (minor/adult/unknown)</li>
+                        <li>Provider reference token (e.g., "jumio-verification-abc123")</li>
+                        <li>Verification timestamp and expiration</li>
+                        <li>Consent records (timestamp, IP, scope)</li>
+                        <li>Trust score (0-100, computed)</li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h4>✗ NEVER Stored</h4>
+                    <ul>
+                        <li>Full ID images (passport, driver's license photos)</li>
+                        <li>Raw biometric data (facial embeddings, fingerprints)</li>
+                        <li>Government ID numbers (SSN, passport number)</li>
+                        <li>Selfie images (except temporary during verification flow)</li>
+                        <li>Credit card numbers or financial data</li>
+                    </ul>
+                    <p><strong>Rationale:</strong> Privacy-by-design, GDPR compliance, minimize data breach liability. Third-party verification providers store sensitive data; we only store verification outcomes.</p>
+                </div>
+
+                <h3>9. Feature Gating by Verification Level</h3>
+
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Required Level</th>
+                        <th>Rationale</th>
+                    </tr>
+                    <tr>
+                        <td>Clone creation (private)</td>
+                        <td>Level 0</td>
+                        <td>Low risk, no public exposure</td>
+                    </tr>
+                    <tr>
+                        <td>Public clone page</td>
+                        <td>Level 1</td>
+                        <td>Age assurance for public interaction</td>
+                    </tr>
+                    <tr>
+                        <td>Visitor chat</td>
+                        <td>Level 1</td>
+                        <td>Prevent minor-to-minor unmonitored contact</td>
+                    </tr>
+                    <tr>
+                        <td>Family invitations</td>
+                        <td>Level 2</td>
+                        <td>Real human verification for sensitive relationships</td>
+                    </tr>
+                    <tr>
+                        <td>Monetization (paid experiences)</td>
+                        <td>Level 3</td>
+                        <td>Financial compliance, fraud prevention</td>
+                    </tr>
+                    <tr>
+                        <td>IoT device control</td>
+                        <td>Level 3</td>
+                        <td>Physical security, liability protection</td>
+                    </tr>
+                    <tr>
+                        <td>Posthumous access control</td>
+                        <td>Level 3</td>
+                        <td>Legal identity verification for estate executors</td>
+                    </tr>
+                    <tr>
+                        <td>Clone marketplace listing</td>
+                        <td>Level 3</td>
+                        <td>Trust assurance for buyers</td>
+                    </tr>
+                </table>
+
+                <h3>10. MVP Implementation Strategy</h3>
+
+                <div class="principle">
+                    <strong>MVP Approach:</strong> Prepare the runway, don't fly every plane yet. Build the architecture scaffold now, enable features gradually.
+                </div>
+
+                <h4>MVP Should Include:</h4>
+                <ul>
+                    <li>✓ Identity Assurance domain scaffold (auth.identity_profiles table)</li>
+                    <li>✓ Verification levels enum (0-3) in database</li>
+                    <li>✓ JWT claims with identity_level field</li>
+                    <li>✓ Age-assurance gate before public clone exposure</li>
+                    <li>✓ Vendor-agnostic interfaces (ready for Jumio/IDMERIT integration)</li>
+                    <li>✓ Basic AI age estimation (writing pattern analysis)</li>
+                    <li>✓ Feature gates checking verification_level in controllers</li>
+                </ul>
+
+                <h4>MVP Should NOT:</h4>
+                <ul>
+                    <li>✗ Build custom biometric pipelines (use third-party vendors)</li>
+                    <li>✗ Store sensitive identity data (only verification outcomes)</li>
+                    <li>✗ Over-engineer UI (simple badge showing verification status)</li>
+                    <li>✗ Integrate every verification provider immediately (start with one)</li>
+                </ul>
+
+                <h3>11. Strategic Advantage</h3>
+
+                <div class="success">
+                    <p><strong>Most platforms retrofit identity verification after scandals.</strong></p>
+                    <p><strong>KeiroGenesis can say:</strong></p>
+                    <blockquote>"We designed identity continuity, safety, and consent into the system from day one."</blockquote>
+                    <p>This positioning is:</p>
+                    <ul>
+                        <li><strong>Investor-credible:</strong> Shows foresight, risk management</li>
+                        <li><strong>Regulator-friendly:</strong> Proactive compliance, not reactive</li>
+                        <li><strong>Ethically defensible:</strong> Protects minors, prevents abuse</li>
+                        <li><strong>Patent-relevant:</strong> Novel approach to AI identity verification</li>
+                    </ul>
+                </div>
+            </section>
+
+            
+            
+            <section id="content-ratings">
+                <h2>🎬 Experience Rating & Authorization Architecture</h2>
+
+                <div class="principle">
+                    <strong>Canonical Rating Rule (Final - Locked):</strong><br><br>
+                    The rating derived from identity verification limits <strong>both</strong> what a person may consume <strong>and</strong> what they may produce.<br><br>
+                    <strong>One-Line Engineering Rule:</strong><br>
+                    <code>identity_rating >= experience_rating → allow</code><br>
+                    <code>identity_rating < experience_rating → deny</code>
+                </div>
+
+                <h3>1. The Symmetric Rule</h3>
+
+                <div class="architecture-flow">
+                    <h4>No Asymmetry Between Creation and Consumption</h4>
+                    <p>Identity verification determines a user's maximum allowable rating ceiling. A user may only:</p>
+                    <ul>
+                        <li><strong>Access (consume)</strong> experiences at or below their rating ceiling</li>
+                        <li><strong>Create (produce)</strong> experiences at or below their rating ceiling</li>
+                    </ul>
+                    <p><strong>There are no split rules. No exceptions. No management overrides.</strong></p>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>User Age / Identity Level</th>
+                        <th>Rating Ceiling</th>
+                        <th>Can Create</th>
+                        <th>Can Consume</th>
+                    </tr>
+                    <tr>
+                        <td>16-year-old (Level 2)</td>
+                        <td>PG-13</td>
+                        <td>PG, PG-13 only</td>
+                        <td>PG, PG-13 only</td>
+                    </tr>
+                    <tr>
+                        <td>18+ adult (Level 3)</td>
+                        <td>MA</td>
+                        <td>PG, PG-13, MA</td>
+                        <td>PG, PG-13, MA</td>
+                    </tr>
+                </table>
+
+                <div class="success">
+                    <h4>✓ Example: 16-Year-Old User</h4>
+                    <p><strong>Can:</strong></p>
+                    <ul>
+                        <li>✓ Create PG-13 experiences (upload docs, configure, train)</li>
+                        <li>✓ Chat with PG-13 experiences</li>
+                        <li>✓ Manage own PG-13 experiences (analytics, monetization)</li>
+                        <li>✓ Create PG experiences (lower is always allowed)</li>
+                    </ul>
+                    <p><strong>Cannot:</strong></p>
+                    <ul>
+                        <li>✗ Create MA experiences</li>
+                        <li>✗ Upload documents to MA experiences</li>
+                        <li>✗ Configure MA experiences</li>
+                        <li>✗ Chat with MA experiences</li>
+                        <li>✗ View MA experience content</li>
+                    </ul>
+                </div>
+
+                <h3>2. Why the Symmetric Rule Matters</h3>
+
+                <table>
+                    <tr>
+                        <th>Benefit</th>
+                        <th>Explanation</th>
+                    </tr>
+                    <tr>
+                        <td>Prevents Experience Leakage</td>
+                        <td>No backdoor access via "management" privileges</td>
+                    </tr>
+                    <tr>
+                        <td>Eliminates Split-Brain Logic</td>
+                        <td>Single authorization rule for all contexts</td>
+                    </tr>
+                    <tr>
+                        <td>Simplifies Family Center</td>
+                        <td>Parents set one ceiling, applies to everything</td>
+                    </tr>
+                    <tr>
+                        <td>Regulatory Alignment</td>
+                        <td>Matches Meta/Instagram/YouTube enforcement model</td>
+                    </tr>
+                    <tr>
+                        <td>Clear Audit Trail</td>
+                        <td>All authorization decisions use same rule</td>
+                    </tr>
+                    <tr>
+                        <td>Monetization Safety</td>
+                        <td>Teen cannot monetize content they cannot legally access</td>
+                    </tr>
+                </table>
+
+                <h3>3. Three-Layer Architecture (Simplified)</h3>
+
+                <div class="architecture-flow">
+                    <h4>Canonical Flow: Signals → Policy → Decision</h4>
+                    <pre>User Request (Create/Consume/Manage)
+   ↓
+Authorization Engine
+   ├─ Identity Rating Ceiling
+   ├─ Experience Rating
+   ├─ Family Constraints (optional lower ceiling)
+   └─ → if identity_rating >= experience_rating: ALLOW
+        else: DENY</pre>
+                </div>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Responsibility</th>
+                        <th>Output</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Identity Signals</strong></td>
+                        <td>Determine user's rating ceiling from verification level + age</td>
+                        <td>Rating ceiling (PG, PG-13, MA)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Experience Ratings</strong></td>
+                        <td>Classify experience content maturity</td>
+                        <td>Experience rating (PG, PG-13, MA)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Authorization Policy</strong></td>
+                        <td>Compare identity ceiling vs experience rating</td>
+                        <td>Allow or Deny</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Family Center (Optional)</strong></td>
+                        <td>Further restrict ceiling for supervised teens</td>
+                        <td>Lower ceiling (e.g., parent sets PG even if teen is PG-13)</td>
+                    </tr>
+                </table>
+
+                <h3>4. Identity Level → Rating Ceiling Mapping</h3>
+
+                <table>
+                    <tr>
+                        <th>Identity Level</th>
+                        <th>Typical Age</th>
+                        <th>Rating Ceiling</th>
+                        <th>Rationale</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 0</strong><br>(Unverified)</td>
+                        <td>Unknown</td>
+                        <td>None (Private only)</td>
+                        <td>No public experiences without age verification</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 1</strong><br>(Age-Assured)</td>
+                        <td>13-17</td>
+                        <td>PG</td>
+                        <td>General audience content, minimal risk</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 2</strong><br>(Human-Verified)</td>
+                        <td>13-17</td>
+                        <td>PG-13</td>
+                        <td>Teen-appropriate content</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level 3</strong><br>(Government-Verified)</td>
+                        <td>18+</td>
+                        <td>MA</td>
+                        <td>Adult content, requires full verification</td>
+                    </tr>
+                </table>
+
+                <div class="info">
+                    <strong>Note:</strong> The rating ceiling is a <strong>maximum</strong>, not a requirement. An adult (MA ceiling) can create and consume PG experiences. A teen (PG-13 ceiling) cannot create or consume MA experiences.
+                </div>
+
+                <h3>5. Experience Rating Definitions</h3>
+
+                <table>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Intended Audience</th>
+                        <th>Content Characteristics</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>PG</strong></td>
+                        <td>General audience, parental guidance suggested</td>
+                        <td>Suitable for most ages, minimal mature themes, educational focus</td>
+                        <td>Math tutoring, general knowledge, study help, hobby advice, travel planning</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PG-13</strong></td>
+                        <td>Teens (13+), parental discretion advised</td>
+                        <td>Adolescent themes, social issues, relationship topics, mild mature content</td>
+                        <td>Career counseling, college prep, relationship advice, social issues discussion, teen mentorship</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MA</strong></td>
+                        <td>Mature audiences (18+)</td>
+                        <td>Adult themes, explicit discussions, sensitive personal topics, mature decision-making</td>
+                        <td>Adult relationships, financial strategy, business consulting, mental health (non-clinical), life transitions</td>
+                    </tr>
+                </table>
+
+                <div class="warning">
+                    <h4>What Ratings DON'T Mean</h4>
+                    <ul>
+                        <li><strong>PG ≠ Simple or Low Quality:</strong> A PG experience can be highly sophisticated (advanced math, philosophy)</li>
+                        <li><strong>PG-13 ≠ Professional:</strong> Professional advice can be PG (general career tips) or MA (executive coaching)</li>
+                        <li><strong>MA ≠ Business/Serious:</strong> Maturity is about content themes, not professionalism</li>
+                    </ul>
+                    <p><strong>Key:</strong> Professional ≠ Mature. A business strategy experience discussing leadership principles = PG. An experience discussing workplace romantic relationships = MA.</p>
+                </div>
+
+                <h3>6. Regulated Domains (Separate from Ratings)</h3>
+
+                <p>Legal, medical, financial, and other regulated domains are controlled by <strong>Experience Flags</strong>, not content ratings.</p>
+
+                <pre>// Experience configuration
+{
+  "experience_id": "uuid",
+  "title": "Financial Planning Basics",
+  "rating": "PG",  // Content maturity (general audience)
+  
+  // Separate regulatory compliance
+  "experience_flags": [
+    "financial_domain",
+    "no_fiduciary_relationship",
+    "educational_only",
+    "requires_disclaimer"
+  ],
+  
+  "disclaimers": [
+    "This experience provides general information only",
+    "Not personalized financial advice",
+    "Consult licensed professionals for specific guidance"
+  ]
+}
+
+// vs.
+
+{
+  "experience_id": "uuid",
+  "title": "Retirement Planning for Executives",
+  "rating": "MA",  // Adult audience (complex personal decisions)
+  
+  "experience_flags": [
+    "financial_domain",
+    "no_fiduciary_relationship",
+    "educational_only",
+    "requires_disclaimer"
+  ]
+}</pre>
+
+                <h3>7. Authorization Service Implementation</h3>
+
+                <pre>// Simple, deterministic authorization
+public class AuthorizationService
+{
+    public async Task<AuthorizationResult> CanUserAccessExperience(
+        Guid userId, 
+        Guid experienceId
+    )
+    {
+        // 1. Get user's rating ceiling
+        var userCeiling = await GetUserRatingCeiling(userId);
+        
+        // 2. Get experience's rating
+        var experienceRating = await GetExperienceRating(experienceId);
+        
+        // 3. Apply family constraints (if any)
+        var familyCeiling = await GetFamilyCeiling(userId);
+        var effectiveCeiling = familyCeiling ?? userCeiling;
+        
+        // 4. Single rule for all contexts (create, consume, manage)
+        if (effectiveCeiling >= experienceRating)
+        {
+            return AuthorizationResult.Allow();
+        }
+        
+        return AuthorizationResult.Deny(
+            $"This experience is rated {experienceRating}. " +
+            $"Your current access level allows up to {effectiveCeiling}."
+        );
+    }
+    
+    private async Task<RatingLevel> GetUserRatingCeiling(Guid userId)
+    {
+        var identity = await _identityService.GetProfile(userId);
+        
+        // Map identity level to rating ceiling
+        return identity.VerificationLevel switch
+        {
+            0 => RatingLevel.None,     // Private only
+            1 => RatingLevel.PG,        // Age-assured
+            2 => RatingLevel.PG13,      // Human-verified
+            3 => RatingLevel.MA,        // Government-verified (18+)
+            _ => RatingLevel.None
+        };
+    }
+}
+
+// Rating enum
+public enum RatingLevel
+{
+    None = 0,   // No public access
+    PG = 1,
+    PG13 = 2,
+    MA = 3
+}</pre>
+
+                <div class="success">
+                    <h4>✓ Benefits of This Simple Implementation</h4>
+                    <ul>
+                        <li><strong>Single Code Path:</strong> No separate logic for creation vs consumption</li>
+                        <li><strong>Easy Testing:</strong> Simple >= comparison, no edge cases</li>
+                        <li><strong>Clear Audit:</strong> Every decision logged with same rule</li>
+                        <li><strong>Family Integration:</strong> Parent sets lower ceiling, same rule applies</li>
+                        <li><strong>Future-Proof:</strong> Add new ratings without changing logic</li>
+                    </ul>
+                </div>
+
+                <h3>8. Family Center Architecture</h3>
+
+                <div class="principle">
+                    The Family Center is a <strong>collaborative governance layer</strong> that lowers the rating ceiling for supervised teens, without changing the authorization rule.
+                </div>
+
+                <h4>8.1 Core Principles</h4>
+
+                <ul>
+                    <li><strong>No Content Surveillance:</strong> Parents see metadata (who, when, how long), NOT content</li>
+                    <li><strong>Transparency Over Restriction:</strong> Teens are informed of all parental controls</li>
+                    <li><strong>Dual Consent:</strong> Structural changes require both parent and teen approval</li>
+                    <li><strong>Ceiling Lowering Only:</strong> Parents can restrict, never elevate</li>
+                </ul>
+
+                <h4>8.2 How Family Center Works</h4>
+
+                <table>
+                    <tr>
+                        <th>Teen's Identity Level</th>
+                        <th>Default Ceiling</th>
+                        <th>Parent Can Set</th>
+                        <th>Result</th>
+                    </tr>
+                    <tr>
+                        <td>Level 2 (16-year-old)</td>
+                        <td>PG-13</td>
+                        <td>PG (lower ceiling)</td>
+                        <td>Teen can only create/consume PG experiences</td>
+                    </tr>
+                    <tr>
+                        <td>Level 2 (16-year-old)</td>
+                        <td>PG-13</td>
+                        <td>PG-13 (same as default)</td>
+                        <td>No restriction applied</td>
+                    </tr>
+                    <tr>
+                        <td>Level 2 (16-year-old)</td>
+                        <td>PG-13</td>
+                        <td>MA (higher than default)</td>
+                        <td><strong>NOT ALLOWED</strong> - Parents cannot elevate above identity ceiling</td>
+                    </tr>
+                </table>
+
+                <h4>8.3 Time & Usage Controls</h4>
+
+                <ul>
+                    <li><strong>Daily Time Limits:</strong> "2 hours per day on weekdays, 4 hours on weekends"</li>
+                    <li><strong>Sleep Mode:</strong> Scheduled lockout (e.g., "No access 10 PM - 7 AM")</li>
+                    <li><strong>Scheduled Downtime:</strong> "No access during school hours"</li>
+                    <li><strong>Soft Warnings:</strong> "15 minutes remaining" before enforcement</li>
+                </ul>
+
+                <h4>8.4 Social Visibility (Metadata Only)</h4>
+
+                <div class="success">
+                    <h4>✓ Parents CAN See</h4>
+                    <ul>
+                        <li>Followers list (which clones teen follows)</li>
+                        <li>Following list (which clones follow teen)</li>
+                        <li>Message counterparties (who teen messages, not content)</li>
+                        <li>Time spent per conversation</li>
+                        <li>Number of messages sent/received</li>
+                    </ul>
+                </div>
+
+                <div class="warning">
+                    <h4>✗ Parents CANNOT See</h4>
+                    <ul>
+                        <li>Message contents</li>
+                        <li>Conversation transcripts</li>
+                        <li>Clone posts or comments</li>
+                        <li>Private notes or memories</li>
+                        <li>Search history</li>
+                    </ul>
+                </div>
+
+                <h4>8.5 Privacy Changes (Dual Consent Required)</h4>
+
+                <p>Both parent AND teen must approve:</p>
+                <ul>
+                    <li>Changing clone from private to public</li>
+                    <li>Enabling monetization</li>
+                    <li>Connecting IoT devices</li>
+                    <li>Integrating third-party services</li>
+                    <li>Adjusting content rating tolerance upward</li>
+                </ul>
+
+                <h4>8.6 Database Schema</h4>
+
+                <pre>-- family.supervision_links
+CREATE TABLE family.supervision_links (
+  link_id UUID PRIMARY KEY,
+  parent_user_id UUID NOT NULL,
+  teen_user_id UUID NOT NULL,
+  status TEXT DEFAULT 'active',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(parent_user_id, teen_user_id)
+);
+
+-- family.supervision_policies
+CREATE TABLE family.supervision_policies (
+  policy_id UUID PRIMARY KEY,
+  link_id UUID NOT NULL,
+  max_rating TEXT DEFAULT NULL,  -- NULL = use identity ceiling
+  daily_time_limit_minutes INTEGER,
+  sleep_mode_start TIME,
+  sleep_mode_end TIME,
+  FOREIGN KEY (link_id) REFERENCES family.supervision_links(link_id)
+);</pre>
+
+                <h3>9. Compliance & Legal Protection</h3>
+
+                <table>
+                    <tr>
+                        <th>Regulation</th>
+                        <th>Requirement</th>
+                        <th>How Symmetric Rule Helps</th>
+                    </tr>
+                    <tr>
+                        <td>COPPA</td>
+                        <td>Protect users under 13</td>
+                        <td>Level 0 users cannot create or access any public experiences</td>
+                    </tr>
+                    <tr>
+                        <td>UK Age-Appropriate Design</td>
+                        <td>Default protective settings</td>
+                        <td>Teens default to PG-13 ceiling for both creation and consumption</td>
+                    </tr>
+                    <tr>
+                        <td>California AB-1043</td>
+                        <td>Age verification for mature content</td>
+                        <td>MA experiences require Level 3 (18+) for any interaction</td>
+                    </tr>
+                    <tr>
+                        <td>Platform Liability</td>
+                        <td>Duty of care for minors</td>
+                        <td>Single symmetric rule = clear audit trail, no backdoors</td>
+                    </tr>
+                </table>
+
+                <h3>10. MVP Implementation</h3>
+
+                <div class="domain-box">
+                    <h4>MVP Scope (Simple and Complete)</h4>
+                    
+                    <h5>✓ Include in MVP:</h5>
+                    <ul>
+                        <li>Three rating levels: PG, PG-13, MA</li>
+                        <li>Identity level → rating ceiling mapping</li>
+                        <li>Single authorization rule: <code>identity_rating >= experience_rating</code></li>
+                        <li>Experience rating field in database</li>
+                        <li>Authorization service implementation</li>
+                        <li>Hard blocks (no warnings)</li>
+                        <li>Audit logging of all authorization decisions</li>
+                    </ul>
+                    
+                    <h5>○ Architecture Ready, Not Implemented:</h5>
+                    <ul>
+                        <li>Family Center (tables exist, logic deferred to production)</li>
+                        <li>Automated AI rating suggestions</li>
+                        <li>Parental dashboards</li>
+                        <li>Soft warnings before hard blocks</li>
+                    </ul>
+                </div>
+
+                <h3>11. Canonical Architecture Statement</h3>
+
+                <div class="principle">
+                    <strong>KeiroGenesis Rating & Authorization Architecture (Final):</strong><br><br>
+                    
+                    Identity verification determines a user's maximum allowable rating ceiling. Experience ratings classify content maturity. The authorization rule is symmetric and universal:<br><br>
+                    
+                    <strong><code>if (identity_rating >= experience_rating) → ALLOW</code></strong><br>
+                    <strong><code>if (identity_rating < experience_rating) → DENY</code></strong><br><br>
+                    
+                    This rule applies equally to:<br>
+                    • Creating experiences<br>
+                    • Consuming experiences<br>
+                    • Managing experiences<br>
+                    • Uploading training materials<br>
+                    • Configuring monetization<br>
+                    • All platform interactions<br><br>
+                    
+                    There are no asymmetric rules. No management overrides. No exceptions.<br><br>
+                    
+                    The Family Center allows parents to <em>lower</em> a teen's ceiling (never raise it) and add time/usage controls. Parents see metadata (who, when, how long) but never content. Structural changes require dual consent from both parent and teen.<br><br>
+                    
+                    This architecture is:<br>
+                    • <strong>Simple:</strong> One rule for all contexts<br>
+                    • <strong>Safe:</strong> No experience leakage or backdoors<br>
+                    • <strong>Compliant:</strong> Aligns with COPPA, UK Age-Appropriate Design, AB-1043<br>
+                    • <strong>Scalable:</strong> Add ratings without changing logic<br>
+                    • <strong>Defensible:</strong> Clear audit trail, regulatory alignment
+                </div>
+
+                <div class="success">
+                    <h4>✅ Status: LOCKED</h4>
+                    <p>This rule should be treated as:</p>
+                    <ul>
+                        <li><strong>Non-negotiable</strong> — No exceptions or overrides</li>
+                        <li><strong>Backward-compatible</strong> — Works from MVP through v3+</li>
+                        <li><strong>Foundation</strong> — All feature development builds on this rule</li>
+                    </ul>
+                </div>
+            </section>
+
+<section id="terminology">
+                <h2>📚 Terminology Appendix</h2>
+
+                <p>Definitive glossary of all domain-specific terms used in KeiroGenesis architecture:</p>
+
+                <h3>Core Concepts</h3>
+
+                <div class="glossary-term">Actor</div>
+                <div class="glossary-def">A runtime execution context that produces behavior on behalf of a clone. Actors execute conversations, apply personality, access memory, and enforce policies. They represent <em>how</em> a clone behaves at runtime, not <em>who</em> the clone is.</div>
+
+                <div class="glossary-term">Clone</div>
+                <div class="glossary-def">The canonical, persistent identity artifact representing a digital embodiment of a real person. Serves as single source of truth for identity, personality, memory, knowledge, and lifecycle. One person always equals exactly one clone.</div>
+
+                <div class="glossary-term">Experience</div>
+                <div class="glossary-def">A curated, permissioned, monetizable interaction context through which a clone expresses specific skills or calling without fragmenting identity. Defines scope, tone, audience, and monetization.</div>
+
+                <div class="glossary-term">Digital Twin</div>
+                <div class="glossary-def">A persistent, owner-controlled digital representation maintaining identity continuity across time, contexts, and interfaces. Unlike chatbots, preserves complete person as unified whole.</div>
+
+                <div class="glossary-term">Tenant</div>
+                <div class="glossary-def">Isolated workspace containing user account, clone, experiences, and all data. Every user receives own tenant upon registration, ensuring complete data isolation.</div>
+
+                <h3>Training & Knowledge</h3>
+
+                <div class="glossary-term">RAG (Retrieval-Augmented Generation)</div>
+                <div class="glossary-def">Technique enhancing AI responses by retrieving relevant knowledge from database before generation. KeiroGenesis uses experience-scoped document chunks stored as vector embeddings.</div>
+
+                <div class="glossary-term">Embedding</div>
+                <div class="glossary-def">Numerical vector representation of text (typically 1536 dimensions) capturing semantic meaning. Enables similarity-based semantic search.</div>
+
+                <div class="glossary-term">Vector Database</div>
+                <div class="glossary-def">Database optimized for storing and searching high-dimensional vectors. KeiroGenesis uses PostgreSQL + pgvector extension.</div>
+
+                <div class="glossary-term">Memory Vault</div>
+                <div class="glossary-def">Collection of personal memories, stories, and life events associated with clone. Preserved indefinitely, tagged to experiences for contextual retrieval.</div>
+
+                <div class="glossary-term">Knowledge Corpus</div>
+                <div class="glossary-def">Complete set of documents, writings, and expertise associated with clone. Organized hierarchically, tagged to experiences.</div>
+
+                <h3>Identity & Access</h3>
+
+                <div class="glossary-term">JWT (JSON Web Token)</div>
+                <div class="glossary-def">Compact, URL-safe token format for transmitting claims. KeiroGenesis uses JWTs for authentication, encoding user_id, tenant_id, roles, permissions.</div>
+
+                <div class="glossary-term">RBAC (Role-Based Access Control)</div>
+                <div class="glossary-def">Authorization model where permissions assigned to roles (Owner, Admin, Viewer) rather than individual users.</div>
+
+                <div class="glossary-term">Tenant Isolation</div>
+                <div class="glossary-def">Security practice ensuring data from one tenant never accessible to another. Implemented via tenant_id filtering on all queries.</div>
+
+                <h3>Monetization</h3>
+
+                <div class="glossary-term">Entitlement</div>
+                <div class="glossary-def">Proof user has permission to access specific experience through subscription, purchase, or free tier allocation.</div>
+
+                <div class="glossary-term">Revenue Split</div>
+                <div class="glossary-def">Division of monetization revenue between platform (10-25%) and creator (75-90%) depending on subscription tier.</div>
+
+                <div class="glossary-term">Stripe Connect</div>
+                <div class="glossary-def">Payment infrastructure enabling marketplace platforms to onboard sellers and manage payouts. Used for creator earnings distribution.</div>
+
+                <h3>IoT & Devices</h3>
+
+                <div class="glossary-term">KeiroBit</div>
+                <div class="glossary-def">Wearable device collecting biometric data (heart rate, sleep, activity) providing context for clone interactions. Data feeds training, enables health-aware responses.</div>
+
+                <div class="glossary-term">KeiroGlass</div>
+                <div class="glossary-def">AR glasses enabling visual context sharing, hands-free interaction, clone overlay in real-world environments. Supports memory capture, journaling.</div>
+
+                <div class="glossary-term">Approval Workflow</div>
+                <div class="glossary-def">Multi-step process where sensitive IoT actions (door unlock, financial transactions) require explicit owner confirmation before execution.</div>
+
+                <h3>Architecture Patterns</h3>
+
+                <div class="glossary-term">Microservices</div>
+                <div class="glossary-def">Architectural pattern where application composed of small, independent services communicating via APIs. KeiroGenesis uses microservices for auth, clone, billing, IoT.</div>
+
+                <div class="glossary-term">Repository Pattern</div>
+                <div class="glossary-def">Data access pattern abstracting database operations behind interfaces. Controllers → Services → Repositories → Stored Procedures.</div>
+
+                <div class="glossary-term">Stored Procedure</div>
+                <div class="glossary-def">Pre-compiled SQL function stored in database. KeiroGenesis uses stored procedures for all data access improving security, performance, maintainability.</div>
+
+                <div class="glossary-term">Horizontal Scaling</div>
+                <div class="glossary-def">Adding more servers/pods to handle increased load. KeiroGenesis auto-scales API and frontend pods based on CPU/traffic.</div>
+
+                <h3>Platform Operations</h3>
+
+                <div class="glossary-term">MVP (Minimum Viable Product)</div>
+                <div class="glossary-def">Initial version with core features only: clone creation, basic chat, document upload. Proves viability before advanced features.</div>
+
+                <div class="glossary-term">v2+ (Version 2 and Beyond)</div>
+                <div class="glossary-def">Future platform evolution including monetization, IoT, social features, autonomous actions. Designed as non-breaking upgrade from MVP.</div>
+
+                <div class="glossary-term">Feature Flag</div>
+                <div class="glossary-def">Configuration toggle enabling/disabling features without redeployment. Allows gradual rollout, easy rollback.</div>
+
+                <h3>Security & Compliance</h3>
+
+                <div class="glossary-term">GDPR (General Data Protection Regulation)</div>
+                <div class="glossary-def">EU privacy law granting users rights to access, rectify, erase, port personal data. KeiroGenesis fully complies.</div>
+
+                <div class="glossary-term">Zero-Knowledge Proof (ZKP)</div>
+                <div class="glossary-def">Cryptographic method where one party proves knowledge (e.g., age >18) without revealing underlying data (birthdate).</div>
+
+                <div class="glossary-term">AES-256 Encryption</div>
+                <div class="glossary-def">Encryption standard using 256-bit keys. KeiroGenesis uses for data at rest (database, file storage).</div>
+
+                <div class="glossary-term">TLS 1.3 (Transport Layer Security)</div>
+                <div class="glossary-def">Latest encryption protocol for data in transit. All KeiroGenesis traffic uses TLS 1.3.</div>
+
+                <h3>Philosophical Concepts</h3>
+
+                <div class="glossary-term">Identity Continuity</div>
+                <div class="glossary-def">Principle that person's digital representation should remain unified, consistent across time, contexts, interfaces—never fragmented into multiple personas.</div>
+
+                <div class="glossary-term">Contextual Expression</div>
+                <div class="glossary-def">Ability to show up differently in different contexts (teaching vs pastoral) while remaining same person at core. Enabled by Experiences without identity fragmentation.</div>
+
+                <div class="glossary-term">Memorial State</div>
+                <div class="glossary-def">Posthumous clone mode where family/descendants interact with deceased person's digital twin for grief support, legacy preservation.</div>
+
+                <div class="glossary-term">Digital Legacy</div>
+                <div class="glossary-def">Ability for clones to outlive creators, serving as inherited memory and wisdom for future generations. Ownership transfers to executors/family.</div>
+
+                <div class="glossary-term">Autonomy Levels</div>
+                <div class="glossary-def">Graduated permissions defining what clones can do without owner approval, from fully manual (owner approves everything) to autonomous (clone acts independently within boundaries).</div>
+            </section>
+        </main>
+
+        <footer>
+            <p><strong>KeiroGenesis Platform</strong></p>
+            <p>Master Architecture & Product Evolution Manual</p>
+            <p>Version 1.0 | December 2025</p>
+            <p style="margin-top: 30px; font-size: 0.95em; opacity: 0.85;">
+                © 2025 KeiroLegacy Inc. | Confidential & Proprietary<br>
+                For Internal Use Only
+            </p>
+            <p style="margin-top: 20px; font-size: 0.85em; opacity: 0.7;">
+                Document Status: <strong>FINAL</strong> | Classification: <strong>INTERNAL</strong><br>
+                Contact: Dr. Matthew A. Taylor | KeiroLegacy Inc.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

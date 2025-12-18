@@ -11,7 +11,13 @@ namespace KeiroGenesis.API.GraphQL.Dashboard
             return services;
         }
 
-        
+        public static IRequestExecutorBuilder AddDashboardGraphQLServer(this IServiceCollection services)
+        {
+            return services
+                .AddGraphQLServer()
+                .AddAuthorization()
+                .AddQueryType<DashboardQuery>();
+        }
     }
 
 }

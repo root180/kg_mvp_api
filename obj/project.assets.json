@@ -228,6 +228,25 @@
           "build/HotChocolate.AspNetCore.targets": {}
         }
       },
+      "HotChocolate.AspNetCore.Authorization/15.1.11": {
+        "type": "package",
+        "dependencies": {
+          "HotChocolate": "15.1.11"
+        },
+        "compile": {
+          "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "HotChocolate.Authorization/15.1.11": {
         "type": "package",
         "dependencies": {
@@ -259,6 +278,31 @@
           "lib/net8.0/HotChocolate.CostAnalysis.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "HotChocolate.Data/15.1.11": {
+        "type": "package",
+        "dependencies": {
+          "GreenDonut.Data": "15.1.11",
+          "GreenDonut.Data.Abstractions": "15.1.11",
+          "GreenDonut.Data.Primitives": "15.1.11",
+          "HotChocolate.Execution": "15.1.11",
+          "HotChocolate.Execution.Projections": "15.1.11",
+          "HotChocolate.Types.CursorPagination": "15.1.11"
+        },
+        "compile": {
+          "lib/net8.0/HotChocolate.Data.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Data.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/HotChocolate.Data.props": {},
+          "build/HotChocolate.Data.targets": {}
         }
       },
       "HotChocolate.Execution/15.1.11": {
@@ -739,6 +783,25 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.OpenApi/8.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.OpenApi": "1.4.3"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
         "type": "package",
@@ -2190,6 +2253,25 @@
         "strawberryshake-signet.png"
       ]
     },
+    "HotChocolate.AspNetCore.Authorization/15.1.11": {
+      "sha512": "f4tyFyV2Hmovf2VQ8E3RUNJxbWMFVPx/waYXxMYDqx9Psog1hpJlElvaJoSQo4P+hQS7l+FJGAu2CaNTfUp2rA==",
+      "type": "package",
+      "path": "hotchocolate.aspnetcore.authorization/15.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "hotchocolate.aspnetcore.authorization.15.1.11.nupkg.sha512",
+        "hotchocolate.aspnetcore.authorization.nuspec",
+        "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net8.0/HotChocolate.AspNetCore.Authorization.xml",
+        "lib/net9.0/HotChocolate.AspNetCore.Authorization.dll",
+        "lib/net9.0/HotChocolate.AspNetCore.Authorization.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
     "HotChocolate.Authorization/15.1.11": {
       "sha512": "7DTy1DStC1DcTvHzbSx/LEh1y4X4XK/aTwCcGlTAdLuEUAUFN3nV90xqE6ZBlyAKF3BetP/mgRwV3HaBSTlniw==",
       "type": "package",
@@ -2225,6 +2307,27 @@
         "lib/net8.0/HotChocolate.CostAnalysis.xml",
         "lib/net9.0/HotChocolate.CostAnalysis.dll",
         "lib/net9.0/HotChocolate.CostAnalysis.xml",
+        "strawberryshake-signet.png"
+      ]
+    },
+    "HotChocolate.Data/15.1.11": {
+      "sha512": "HTlBGEwQdLu8BQTS9oRvOBD4SRsTZvkcS7IUVCsfP53fpbaE+wNwWXPIwnoheg+qJuCsG5PmsUd2Ec13/FdqXw==",
+      "type": "package",
+      "path": "hotchocolate.data/15.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/HotChocolate.Data.props",
+        "build/HotChocolate.Data.targets",
+        "greendonut-signet.png",
+        "hotchocolate-signet.png",
+        "hotchocolate.data.15.1.11.nupkg.sha512",
+        "hotchocolate.data.nuspec",
+        "lib/net8.0/HotChocolate.Data.dll",
+        "lib/net8.0/HotChocolate.Data.xml",
+        "lib/net9.0/HotChocolate.Data.dll",
+        "lib/net9.0/HotChocolate.Data.xml",
         "strawberryshake-signet.png"
       ]
     },
@@ -2772,6 +2875,21 @@
         "lib/netcoreapp3.1/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.xml",
         "microsoft.aspnetcore.mvc.versioning.apiexplorer.5.1.0.nupkg.sha512",
         "microsoft.aspnetcore.mvc.versioning.apiexplorer.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.OpenApi/8.0.0": {
+      "sha512": "T4mwMvPSOYAp+KeQ4xO8H2rxpiOMJ9W/7yBBkUTMp96AHtGlPN4s7hbax2tM61LxTY775JKL4fiv5grn41EHXw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.openapi/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.AspNetCore.OpenApi.dll",
+        "lib/net8.0/Microsoft.AspNetCore.OpenApi.xml",
+        "microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
@@ -4835,9 +4953,16 @@
     "net8.0": [
       "BCrypt.Net-Next >= 4.0.3",
       "Dapper >= 2.1.35",
+      "HotChocolate >= 15.1.11",
       "HotChocolate.AspNetCore >= 15.1.11",
+      "HotChocolate.AspNetCore.Authorization >= 15.1.11",
+      "HotChocolate.Authorization >= 15.1.11",
+      "HotChocolate.Data >= 15.1.11",
+      "HotChocolate.Execution >= 15.1.11",
+      "HotChocolate.Types >= 15.1.11",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.8",
       "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer >= 5.1.0",
+      "Microsoft.AspNetCore.OpenApi >= 8.0.0",
       "Microsoft.Data.SqlClient >= 6.1.3",
       "Npgsql >= 8.0.3",
       "Pgvector >= 0.3.0",
@@ -4858,11 +4983,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\KeiroGenesis.API.csproj",
+      "projectUniqueName": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git2\\KeiroGenesis.API.csproj",
       "projectName": "KeiroGenesis.API",
-      "projectPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\KeiroGenesis.API.csproj",
+      "projectPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git2\\KeiroGenesis.API.csproj",
       "packagesPath": "C:\\Users\\ai365\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api\\obj\\",
+      "outputPath": "C:\\Users\\ai365\\Source\\Repos\\kg_mvp_api_git2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4911,7 +5036,31 @@
             "target": "Package",
             "version": "[2.1.35, )"
           },
+          "HotChocolate": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
           "HotChocolate.AspNetCore": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.AspNetCore.Authorization": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.Authorization": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.Data": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.Execution": {
+            "target": "Package",
+            "version": "[15.1.11, )"
+          },
+          "HotChocolate.Types": {
             "target": "Package",
             "version": "[15.1.11, )"
           },
@@ -4922,6 +5071,10 @@
           "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": {
             "target": "Package",
             "version": "[5.1.0, )"
+          },
+          "Microsoft.AspNetCore.OpenApi": {
+            "target": "Package",
+            "version": "[8.0.0, )"
           },
           "Microsoft.Data.SqlClient": {
             "target": "Package",

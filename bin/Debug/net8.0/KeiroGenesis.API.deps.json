@@ -10,9 +10,16 @@
         "dependencies": {
           "BCrypt.Net-Next": "4.0.3",
           "Dapper": "2.1.35",
+          "HotChocolate": "15.1.11",
           "HotChocolate.AspNetCore": "15.1.11",
+          "HotChocolate.AspNetCore.Authorization": "15.1.11",
+          "HotChocolate.Authorization": "15.1.11",
+          "HotChocolate.Data": "15.1.11",
+          "HotChocolate.Execution": "15.1.11",
+          "HotChocolate.Types": "15.1.11",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8",
           "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": "5.1.0",
+          "Microsoft.AspNetCore.OpenApi": "8.0.0",
           "Microsoft.Data.SqlClient": "6.1.3",
           "Npgsql": "8.0.3",
           "Pgvector": "0.3.0",
@@ -184,6 +191,17 @@
           }
         }
       },
+      "HotChocolate.AspNetCore.Authorization/15.1.11": {
+        "dependencies": {
+          "HotChocolate": "15.1.11"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.AspNetCore.Authorization.dll": {
+            "assemblyVersion": "15.1.11.0",
+            "fileVersion": "15.1.11.0"
+          }
+        }
+      },
       "HotChocolate.Authorization/15.1.11": {
         "dependencies": {
           "HotChocolate.Execution": "15.1.11"
@@ -202,6 +220,22 @@
         },
         "runtime": {
           "lib/net8.0/HotChocolate.CostAnalysis.dll": {
+            "assemblyVersion": "15.1.11.0",
+            "fileVersion": "15.1.11.0"
+          }
+        }
+      },
+      "HotChocolate.Data/15.1.11": {
+        "dependencies": {
+          "GreenDonut.Data": "15.1.11",
+          "GreenDonut.Data.Abstractions": "15.1.11",
+          "GreenDonut.Data.Primitives": "15.1.11",
+          "HotChocolate.Execution": "15.1.11",
+          "HotChocolate.Execution.Projections": "15.1.11",
+          "HotChocolate.Types.CursorPagination": "15.1.11"
+        },
+        "runtime": {
+          "lib/net8.0/HotChocolate.Data.dll": {
             "assemblyVersion": "15.1.11.0",
             "fileVersion": "15.1.11.0"
           }
@@ -537,6 +571,17 @@
           "lib/net6.0/Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll": {
             "assemblyVersion": "5.1.0.0",
             "fileVersion": "5.1.8270.41534"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.OpenApi/8.0.0": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.14"
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53112"
           }
         }
       },
@@ -1401,6 +1446,13 @@
       "path": "hotchocolate.aspnetcore/15.1.11",
       "hashPath": "hotchocolate.aspnetcore.15.1.11.nupkg.sha512"
     },
+    "HotChocolate.AspNetCore.Authorization/15.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-f4tyFyV2Hmovf2VQ8E3RUNJxbWMFVPx/waYXxMYDqx9Psog1hpJlElvaJoSQo4P+hQS7l+FJGAu2CaNTfUp2rA==",
+      "path": "hotchocolate.aspnetcore.authorization/15.1.11",
+      "hashPath": "hotchocolate.aspnetcore.authorization.15.1.11.nupkg.sha512"
+    },
     "HotChocolate.Authorization/15.1.11": {
       "type": "package",
       "serviceable": true,
@@ -1414,6 +1466,13 @@
       "sha512": "sha512-YV2KIX5Gnlo/Q1uevoTngwnIXxrx5dN62T0ym8J/tkNeva+MI9YgIaf2LqMguhexYDTChlDArLpk4sDhxjAfoA==",
       "path": "hotchocolate.costanalysis/15.1.11",
       "hashPath": "hotchocolate.costanalysis.15.1.11.nupkg.sha512"
+    },
+    "HotChocolate.Data/15.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HTlBGEwQdLu8BQTS9oRvOBD4SRsTZvkcS7IUVCsfP53fpbaE+wNwWXPIwnoheg+qJuCsG5PmsUd2Ec13/FdqXw==",
+      "path": "hotchocolate.data/15.1.11",
+      "hashPath": "hotchocolate.data.15.1.11.nupkg.sha512"
     },
     "HotChocolate.Execution/15.1.11": {
       "type": "package",
@@ -1610,6 +1669,13 @@
       "sha512": "sha512-p45pSXCJPbx+p9gFNNQPUC547KpqP5cRJke6aygq/M7UzCrJNmJNqD+65pIpY4muYbINqlgrC47h1oc0WbuP1g==",
       "path": "microsoft.aspnetcore.mvc.versioning.apiexplorer/5.1.0",
       "hashPath": "microsoft.aspnetcore.mvc.versioning.apiexplorer.5.1.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.OpenApi/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-T4mwMvPSOYAp+KeQ4xO8H2rxpiOMJ9W/7yBBkUTMp96AHtGlPN4s7hbax2tM61LxTY775JKL4fiv5grn41EHXw==",
+      "path": "microsoft.aspnetcore.openapi/8.0.0",
+      "hashPath": "microsoft.aspnetcore.openapi.8.0.0.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/8.0.0": {
       "type": "package",

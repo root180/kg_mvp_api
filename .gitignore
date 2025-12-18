@@ -10,3 +10,8 @@
 /appsettings.Development.json
 /appsettings.Production.json
 /appsettings.json
+/ConnectedServices
+/.idea
+/.vscode
+/.history
+/obj

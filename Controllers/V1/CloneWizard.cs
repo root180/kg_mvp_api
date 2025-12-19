@@ -200,6 +200,80 @@ namespace KeiroGenesis.API.Repositories
 
             return result.FirstOrDefault();
         }
+
+        /// <summary>
+        /// Get clone capabilities (Step 5)
+        /// </summary>
+        public async Task<dynamic?> GetCloneCapabilitiesAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            IEnumerable<dynamic> result = await conn.QueryAsync(@"
+                SELECT capabilities, wizard_step
+                FROM clone.clones
+                WHERE clone_id = @clone_id
+                  AND tenant_id = @tenant_id
+                  AND user_id = @user_id
+                  AND deleted_at IS NULL
+            ", new { clone_id = cloneId, tenant_id = tenantId, user_id = userId });
+
+            return result.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Save clone capabilities (Step 5)
+        /// </summary>
+        public async Task<bool> SaveCloneCapabilitiesAsync(
+            Guid tenantId, Guid userId, Guid cloneId, string capabilitiesJson)
+        {
+            using var conn = _db.CreateConnection();
+
+            var rows = await conn.ExecuteAsync(@"
+                UPDATE clone.clones
+                SET capabilities = @capabilities::jsonb,
+                    wizard_step = GREATEST(wizard_step, 5),
+                    updated_at = NOW()
+                WHERE clone_id = @clone_id
+                  AND tenant_id = @tenant_id
+                  AND user_id = @user_id
+                  AND deleted_at IS NULL
+            ", new
+            {
+                clone_id = cloneId,
+                tenant_id = tenantId,
+                user_id = userId,
+                capabilities = capabilitiesJson
+            });
+
+            return rows > 0;
+        }
+
+        /// <summary>
+        /// Finalize clone (Step 6 - Activate)
+        /// </summary>
+        public async Task<bool> FinalizeCloneAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            var rows = await conn.ExecuteAsync(@"
+                UPDATE clone.clones
+                SET status = 'active',
+                    wizard_step = 6,
+                    wizard_completed_at = NOW(),
+                    updated_at = NOW()
+                WHERE clone_id = @clone_id
+                  AND tenant_id = @tenant_id
+                  AND user_id = @user_id
+                  AND deleted_at IS NULL
+                  AND wizard_step >= 5
+            ", new { clone_id = cloneId, tenant_id = tenantId, user_id = userId });
+
+            return rows > 0;
+        }
+
+
     }
 }
 #endregion
@@ -686,10 +760,179 @@ namespace KeiroGenesis.API.Services
             }
         }
 
-     
-       
-    }
+        /// <summary>
+        /// Get clone capabilities (Step 5)
+        /// </summary>
+        public async Task<WizardResponse> GetCapabilitiesAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            try
+            {
+                // Verify ownership
+                bool isOwner = await _repo.CloneBelongsToUserAsync(tenantId, userId, cloneId);
+                if (!isOwner)
+                {
+                    _logger.LogWarning("User {UserId} attempted to access clone {CloneId} without ownership",
+                        userId, cloneId);
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "You do not have permission to access this clone",
+                        ErrorCode = "UNAUTHORIZED"
+                    };
+                }
 
+                // Get capabilities from database
+                var capabilities = await _repo.GetCloneCapabilitiesAsync(tenantId, userId, cloneId);
+
+                if (capabilities == null)
+                {
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "Clone not found"
+                    };
+                }
+
+                return new WizardResponse
+                {
+                    Success = true,
+                    Message = "Capabilities retrieved successfully",
+                    CloneId = cloneId,
+                    CurrentStep = capabilities.wizard_step,
+                    Data = capabilities.capabilities
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting capabilities for clone {CloneId}", cloneId);
+                return new WizardResponse
+                {
+                    Success = false,
+                    Message = "Failed to get capabilities: " + ex.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Save clone capabilities (Step 5)
+        /// </summary>
+        public async Task<WizardResponse> SaveCapabilitiesAsync(
+            Guid tenantId, Guid userId, Guid cloneId, Step5Request request)
+        {
+            try
+            {
+                // Verify ownership
+                bool isOwner = await _repo.CloneBelongsToUserAsync(tenantId, userId, cloneId);
+                if (!isOwner)
+                {
+                    _logger.LogWarning("User {UserId} attempted to modify clone {CloneId} without ownership",
+                        userId, cloneId);
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "You do not have permission to modify this clone",
+                        ErrorCode = "UNAUTHORIZED"
+                    };
+                }
+
+                // Serialize capabilities to JSON
+                var capabilitiesJson = System.Text.Json.JsonSerializer.Serialize(request.Capabilities);
+
+                // Save capabilities to database
+                bool saved = await _repo.SaveCloneCapabilitiesAsync(
+                    tenantId, userId, cloneId, capabilitiesJson);
+
+                if (!saved)
+                {
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "Failed to save capabilities"
+                    };
+                }
+
+                return new WizardResponse
+                {
+                    Success = true,
+                    Message = "Capabilities saved successfully. Ready to finalize!",
+                    CloneId = cloneId,
+                    CurrentStep = 5
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving capabilities for clone {CloneId}", cloneId);
+                return new WizardResponse
+                {
+                    Success = false,
+                    Message = "Failed to save capabilities: " + ex.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Finalize clone (Step 6)
+        /// </summary>
+        public async Task<WizardResponse> FinalizeCloneAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            try
+            {
+                // Verify ownership
+                bool isOwner = await _repo.CloneBelongsToUserAsync(tenantId, userId, cloneId);
+                if (!isOwner)
+                {
+                    _logger.LogWarning("User {UserId} attempted to finalize clone {CloneId} without ownership",
+                        userId, cloneId);
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "You do not have permission to finalize this clone",
+                        ErrorCode = "UNAUTHORIZED"
+                    };
+                }
+
+                // Finalize clone in database (changes status to 'active')
+                bool finalized = await _repo.FinalizeCloneAsync(tenantId, userId, cloneId);
+
+                if (!finalized)
+                {
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = "Failed to finalize clone. Make sure all previous steps are complete."
+                    };
+                }
+
+                _logger.LogInformation("Clone {CloneId} finalized successfully", cloneId);
+
+                return new WizardResponse
+                {
+                    Success = true,
+                    Message = "🎉 Clone finalized successfully! Your clone is now active and ready to use.",
+                    CloneId = cloneId,
+                    CurrentStep = 6
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error finalizing clone {CloneId}", cloneId);
+                return new WizardResponse
+                {
+                    Success = false,
+                    Message = "Failed to finalize clone: " + ex.Message
+                };
+            }
+        }
+
+
+
+
+    }
+    #endregion
+    // ==========================================================================
+    #region API Models
     // Request/Response Models
     public class Step1Request
     {
@@ -740,6 +983,10 @@ namespace KeiroGenesis.API.Services
     {
         [JsonPropertyName("documents")]
         public DocumentInfo[] Documents { get; set; } = Array.Empty<DocumentInfo>();
+
+        [JsonPropertyName("capabilities")]
+        public object Capabilities { get; set; } = new { };
+
     }
 
     public class DocumentInfo
@@ -770,7 +1017,15 @@ namespace KeiroGenesis.API.Services
 
         [JsonPropertyName("data")]
         public object? Data { get; set; }
-    }
+
+        [JsonPropertyName("cloneId")]
+        public Guid? CloneId { get; set; }
+
+        [JsonPropertyName("currentStep")]
+        public int? CurrentStep { get; set;
+
+
+        }
 }
 #endregion
 
@@ -987,7 +1242,84 @@ namespace KeiroGenesis.API.Controllers.V1
         }
 
         //Helper: Get tenant ID from claims
+        /// <summary>
+        /// Get clone capabilities (Step 5)
+        /// </summary>
+        [HttpGet("{cloneId}/capabilities")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetCapabilities(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
 
+            _logger.LogInformation("Getting capabilities for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.GetCapabilitiesAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Set/update clone capabilities (Step 5)
+        /// </summary>
+        [HttpPost("{cloneId}/capabilities")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> SetCapabilities(Guid cloneId, [FromBody] Services.Step5Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Setting capabilities for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.SaveCapabilitiesAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Finalize clone (Step 6)
+        /// </summary>
+        [HttpPost("{cloneId}/Finalize")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> FinalizeClone(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Finalizing clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.FinalizeCloneAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+            }
 
     }
 }

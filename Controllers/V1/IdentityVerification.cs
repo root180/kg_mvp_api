@@ -260,7 +260,9 @@ namespace KeiroGenesis.Identity
         LivenessSelfie = 3,
         GovernmentID = 4,
         DigitalWalletID = 5,
-        ThirdPartyKYC = 6
+        ThirdPartyKYC = 6,
+        AgeVerification = 7,     
+        HumanVerification = 8   
     }
 
     public enum VerificationStatus
@@ -271,7 +273,8 @@ namespace KeiroGenesis.Identity
         Failed = 3,
         Expired = 4,
         ManuallyApproved = 5,
-        ManuallyRejected = 6
+        ManuallyRejected = 6,
+        Success = 7
     }
 
     public enum AgeVerificationResult
@@ -293,7 +296,7 @@ namespace KeiroGenesis.Identity
 
     public enum VerificationProvider
     {
-        Internal = 0,
+        MVPMock = 0,
         Jumio = 1,
         IDMERIT = 2,
         Onfido = 3,
@@ -301,6 +304,9 @@ namespace KeiroGenesis.Identity
         StripeIdentity = 5,
         Custom = 99
     }
+
+
+
 
     public enum IdentityGatedFeature
     {
@@ -382,7 +388,7 @@ namespace KeiroGenesis.API.Repositories
 {
     using KeiroGenesis.Identity;
 
-    public class IdentitySignalsRepository
+    public partial class IdentitySignalsRepository
     {
         private readonly NpgsqlDataSource _dataSource;
 
@@ -530,10 +536,11 @@ namespace KeiroGenesis.API.Repositories
 
 namespace KeiroGenesis.API.Services
 {
-    using KeiroGenesis.API.Repositories;
-    using KeiroGenesis.Identity;
+    using global::KeiroGenesis.API.Repositories;
+    using global::KeiroGenesis.Identity;
+  
 
-    public class IdentitySignalsService
+    public partial class IdentitySignalsService
     {
         private readonly IdentitySignalsRepository _repo;
         private readonly ILogger<IdentitySignalsService> _logger;
@@ -688,7 +695,7 @@ namespace KeiroGenesis.API.Controllers.V1
     [ApiController]
     [Route("api/v1/auth/identity")]
     [Produces("application/json")]
-    public class IdentitySignalsController : ControllerBase
+    public partial class IdentitySignalsController : ControllerBase
     {
         private readonly IdentitySignalsService _service;
         private readonly ILogger<IdentitySignalsController> _logger;

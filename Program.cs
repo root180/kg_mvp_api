@@ -10,9 +10,11 @@ using KeiroGenesis.API.Core.Database;
 using KeiroGenesis.API.Core.Versioning;
 using KeiroGenesis.API.GraphQL.Dashboard;
 using KeiroGenesis.API.Repositories;
+using KeiroGenesis.API.Security;
 using KeiroGenesis.API.Services;
 using KeiroGenesis.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
@@ -94,6 +96,9 @@ builder.Services.AddScoped<RagService>();
 // Capability
 builder.Services.AddScoped<CapabilityRepository>();
 builder.Services.AddScoped<CapabilityService>();
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, CapabilityPolicyProvider>();
+builder.Services.AddScoped<IAuthorizationHandler, CapabilityAuthorizationHandler>();
 
 // Management
 builder.Services.AddScoped<UserManagementRepository>();
@@ -106,6 +111,7 @@ builder.Services.AddScoped<CloneWizardService>();
 
 // Email Provider
 builder.Services.AddScoped<IEmailProvider, EmailService>();
+
 
 
 // ==========================================================================
@@ -206,7 +212,7 @@ builder.Services.AddCors(o =>
 // IDENTITY MODULE - MODERN NPGSQL DATA SOURCE (Npgsql 8.0+)
 // ==========================================================================
 
-var identityConnectionString = builder.Configuration.GetConnectionString("KeiroGenesisDb")
+var identityConnectionString = builder.Configuration.GetConnectionString("PostgreSQL")
     ?? throw new InvalidOperationException("Connection string 'KeiroGenesisDb' not found");
 
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(identityConnectionString);
@@ -222,6 +228,8 @@ dataSourceBuilder.MapEnum<VerificationProvider>("auth.verification_provider");
 var identityDataSource = dataSourceBuilder.Build();
 
 
+// Register as singleton 
+builder.Services.AddSingleton(identityDataSource);
 
 // Then register services
 builder.Services.AddScoped<IdentitySignalsRepository>();

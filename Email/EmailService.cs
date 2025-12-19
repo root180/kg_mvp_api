@@ -15,6 +15,9 @@ namespace KeiroGenesis.API.Services
         // ======================================================
         Task<bool> SendEmailAsync(string to, string subject, string bodyPlain, string bodyHtml = null);
 
+        Task<bool> SendEmailVerificationAsync(string toEmail, string username, string verificationCode);
+        Task<bool> SendEmailChangeNotificationAsync(string toEmail, string username, string newEmail);
+
         // ======================================================
         // 🔐 Password Recovery & Security (⭐ MISSING IN YOUR VERSION)
         // ======================================================
@@ -53,6 +56,7 @@ namespace KeiroGenesis.API.Services
         Task<bool> SendVerificationEmailAsync(string toEmail, string verificationLink);
 
 
+
     }
     public class EmailService : IEmailProvider
     {
@@ -69,7 +73,8 @@ namespace KeiroGenesis.API.Services
             _config = config;
             _logger = logger;
 
-            var apiKey = config["Email:SendGridApiKey"] ?? Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+            var apiKey = config["Email:SENDGRID_API_KEY"] ?? Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+
             if (string.IsNullOrWhiteSpace(apiKey))
                 throw new InvalidOperationException("SendGrid API key is missing.");
 
@@ -380,6 +385,194 @@ namespace KeiroGenesis.API.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "❌ Failed to send forgot-username email to {Email}", email);
+                return false;
+            }
+        }
+
+        // ============================================================
+        // EMAIL UPDATE FEATURE - Verification Code
+        // ============================================================
+
+        public async Task<bool> SendEmailVerificationAsync(
+            string toEmail,
+            string username,
+            string verificationCode)
+        {
+            try
+            {
+                var subject = "Verify Your New Email Address";
+
+                var plainTextBody = $@"
+Hello {username},
+
+You recently requested to change your email address. To complete this change, please use the verification code below:
+
+Verification Code: {verificationCode}
+
+This code will expire in 24 hours.
+
+If you did not request this change, please ignore this email and your email address will remain unchanged.
+
+Best regards,
+KeiroClone Security Team
+";
+
+                var htmlBody = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background-color: #4F46E5; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
+        .content {{ background-color: #f9f9f9; padding: 30px; border-radius: 0 0 5px 5px; }}
+        .code-box {{ 
+            background-color: #fff; 
+            border: 2px dashed #4F46E5; 
+            padding: 20px; 
+            text-align: center; 
+            font-size: 32px; 
+            font-weight: bold; 
+            letter-spacing: 5px; 
+            margin: 20px 0; 
+            border-radius: 5px;
+        }}
+        .warning {{ background-color: #FEF3C7; padding: 15px; border-left: 4px solid #F59E0B; margin: 20px 0; }}
+        .footer {{ text-align: center; color: #666; font-size: 12px; margin-top: 20px; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>✉️ Verify Your New Email</h1>
+        </div>
+        <div class='content'>
+            <p>Hello <strong>{username}</strong>,</p>
+            
+            <p>You recently requested to change your email address. To complete this change, please use the verification code below:</p>
+            
+            <div class='code-box'>
+                {verificationCode}
+            </div>
+            
+            <p>This code will expire in <strong>24 hours</strong>.</p>
+            
+            <div class='warning'>
+                <strong>⚠️ Security Notice:</strong> If you did not request this change, please ignore this email. Your email address will remain unchanged.
+            </div>
+            
+            <p>For your security, never share this code with anyone.</p>
+            
+            <p>Best regards,<br>
+            <strong>KeiroClone Security Team</strong></p>
+        </div>
+        <div class='footer'>
+            <p>This is an automated message. Please do not reply to this email.</p>
+        </div>
+    </div>
+</body>
+</html>
+";
+
+                return await SendEmailAsync(toEmail, subject, plainTextBody, htmlBody);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send email verification to {Email}", toEmail);
+                return false;
+            }
+        }
+
+        // ============================================================
+        // EMAIL UPDATE FEATURE - Change Notification
+        // ============================================================
+
+        public async Task<bool> SendEmailChangeNotificationAsync(
+            string toEmail,
+            string username,
+            string newEmail)
+        {
+            try
+            {
+                var subject = "⚠️ Email Address Change Request";
+
+                var plainTextBody = $@"
+Hello {username},
+
+We're writing to inform you that a request has been made to change the email address associated with your KeiroClone account.
+
+Current Email: {toEmail}
+New Email: {newEmail}
+
+If you made this request, no further action is needed. The new email address must be verified before the change takes effect.
+
+If you DID NOT make this request, your account may be compromised. Please:
+1. Change your password immediately
+2. Contact our support team
+
+Best regards,
+KeiroClone Security Team
+";
+
+                var htmlBody = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+        .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
+        .header {{ background-color: #DC2626; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }}
+        .content {{ background-color: #f9f9f9; padding: 30px; border-radius: 0 0 5px 5px; }}
+        .info-box {{ background-color: #fff; padding: 15px; border: 1px solid #ddd; margin: 20px 0; border-radius: 5px; }}
+        .alert {{ background-color: #FEE2E2; padding: 15px; border-left: 4px solid #DC2626; margin: 20px 0; }}
+        .footer {{ text-align: center; color: #666; font-size: 12px; margin-top: 20px; }}
+        strong {{ color: #DC2626; }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>⚠️ Email Change Request</h1>
+        </div>
+        <div class='content'>
+            <p>Hello <strong>{username}</strong>,</p>
+            
+            <p>We're writing to inform you that a request has been made to change the email address associated with your KeiroClone account.</p>
+            
+            <div class='info-box'>
+                <p><strong>Current Email:</strong> {toEmail}</p>
+                <p><strong>New Email:</strong> {newEmail}</p>
+            </div>
+            
+            <p>If you made this request, <strong>no further action is needed</strong>. The new email address must be verified before the change takes effect.</p>
+            
+            <div class='alert'>
+                <p><strong>⚠️ SECURITY ALERT</strong></p>
+                <p>If you <strong>DID NOT</strong> make this request, your account may be compromised. Please take the following steps immediately:</p>
+                <ol>
+                    <li>Change your password</li>
+                    <li>Review your account activity</li>
+                    <li>Contact our support team</li>
+                </ol>
+            </div>
+            
+            <p>Best regards,<br>
+            <strong>KeiroClone Security Team</strong></p>
+        </div>
+        <div class='footer'>
+            <p>This is an automated security notification. Please do not reply to this email.</p>
+            <p>If you need assistance, contact: support@keiroclone.com</p>
+        </div>
+    </div>
+</body>
+</html>
+";
+
+                return await SendEmailAsync(toEmail, subject, plainTextBody, htmlBody);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send email change notification to {Email}", toEmail);
                 return false;
             }
         }

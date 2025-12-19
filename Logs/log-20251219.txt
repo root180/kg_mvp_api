@@ -1,0 +1,24 @@
+2025-12-19 12:51:06.824 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-19 12:51:06.973 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-19 12:51:06.974 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-19 12:51:06.975 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-19 12:51:06.976 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-19 12:51:10.323 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "POST api/v1/clonewizard/{cloneId}/activate" for actions - KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController.Activate (KeiroGenesis.API),KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController.FinalizeClone (KeiroGenesis.API). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.PrepareGenerateOperation(IGrouping`2 group)
+   at System.Linq.Enumerable.SelectEnumerableIterator`2.MoveNext()
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperationsAsync(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository, Func`3 operationsGenerator)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePathsAsync(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwaggerAsync(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-19 12:51:10.504 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-19 12:51:10.509 -05:00 [Warning] Startup email notification failed to send
+2025-12-19 12:54:04.381 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-19 12:54:04.702 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-19 12:54:04.705 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-19 12:54:04.705 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-19 12:54:04.708 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-19 12:54:07.808 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-19 12:54:07.812 -05:00 [Warning] Startup email notification failed to send

@@ -138,7 +138,8 @@ namespace KeiroGenesis.API.DTOs.ActorConversation
 
 namespace KeiroGenesis.API.Services
 {
-    using KeiroGenesis.API.DTOs.ActorConversation;
+    using global::KeiroGenesis.API.DTOs.ActorConversation;
+   
 
     public class ActorConversationService
     {

@@ -1155,10 +1155,10 @@ namespace KeiroGenesis.API.Controllers.V1
             };
         }
 
-        [HttpGet("profile")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]           
-       private Guid GetCurrentUserId()
+   
+
+
+        private Guid GetCurrentUserId()
         {
             var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                      ?? User.FindFirst("sub")?.Value;

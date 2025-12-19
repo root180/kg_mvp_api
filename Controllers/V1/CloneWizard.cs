@@ -1034,292 +1034,292 @@ namespace KeiroGenesis.API.Services
 // ==========================================================================
 namespace KeiroGenesis.API.Controllers.V1
 {
-        [Route("api/v1/clonewizard")]
-        [Authorize]
-        public class CloneWizardController : ControllerBase
+    [Route("api/v1/clonewizard")]
+    [Authorize]
+    public class CloneWizardController : ControllerBase
+    {
+        private readonly Services.CloneWizardService _service;
+        private readonly ILogger<CloneWizardController> _logger;
+
+        public CloneWizardController(
+            Services.CloneWizardService service,
+            ILogger<CloneWizardController> logger)
         {
-            private readonly Services.CloneWizardService _service;
-            private readonly ILogger<CloneWizardController> _logger;
-
-            public CloneWizardController(
-                Services.CloneWizardService service,
-                ILogger<CloneWizardController> logger)
-            {
-                _service = service;
-                _logger = logger;
-            }
-
-            private Guid GetTenantId()
-            {
-                string? claim = User.FindFirst("tenant_id")?.Value;
-                if (claim == null || !Guid.TryParse(claim, out Guid tenantId))
-                    throw new UnauthorizedAccessException("Invalid tenant claim");
-                return tenantId;
-            }
-
-            private Guid GetCurrentUserId()
-            {
-                string? claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                             ?? User.FindFirst("sub")?.Value;
-                if (claim == null || !Guid.TryParse(claim, out Guid userId))
-                    throw new UnauthorizedAccessException("Invalid user claim");
-                return userId;
-            }
-
-            /// <summary>
-            /// Create draft clone (Step 1)
-            /// </summary>
-            [HttpPost]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            public async Task<IActionResult> Create([FromBody] Services.Step1Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Creating clone for user {UserId}", userId);
-
-                Services.WizardResponse result = await _service.CreateCloneDraftAsync(tenantId, userId, request);
-
-                if (!result.Success)
-                    return BadRequest(result);
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Update avatar (Step 2)
-            /// </summary>
-            [HttpPut("{cloneId}/avatar")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> UpdateAvatar(Guid cloneId, [FromBody] Services.Step2Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Updating avatar for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.UpdateAvatarAsync(tenantId, userId, cloneId, request);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Configure personality (Step 3)
-            /// </summary>
-            [HttpPut("{cloneId}/personality")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> SavePersonality(Guid cloneId, [FromBody] Services.Step3Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Saving personality for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.SavePersonalityAsync(tenantId, userId, cloneId, request);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Add memory seeds (Step 4)
-            /// </summary>
-            [HttpPost("{cloneId}/memories")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> AddMemories(Guid cloneId, [FromBody] Services.Step4Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Adding memories for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.AddMemoriesAsync(tenantId, userId, cloneId, request);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Upload knowledge documents (Step 5 - metadata only)
-            /// </summary>
-            [HttpPost("{cloneId}/knowledge")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> UploadKnowledge(Guid cloneId, [FromBody] Services.Step5Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Uploading knowledge for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.UploadKnowledgeAsync(tenantId, userId, cloneId, request);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Activate clone (Step 6)
-            /// </summary>
-            [HttpPost("{cloneId}/activate")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> Activate(Guid cloneId)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Activating clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.ActivateCloneAsync(tenantId, userId, cloneId);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Get wizard status (resume wizard)
-            /// </summary>
-            [HttpGet("{cloneId}")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(403)]
-            [ProducesResponseType(404)]
-            public async Task<IActionResult> GetStatus(Guid cloneId)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                Services.WizardResponse result = await _service.GetWizardStatusAsync(tenantId, userId, cloneId);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return NotFound(result);
-                }
-
-                return Ok(result);
-            }
-
-            //Helper: Get tenant ID from claims
-            /// <summary>
-            /// Get clone capabilities (Step 5)
-            /// </summary>
-            [HttpGet("{cloneId}/capabilities")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(403)]
-            [ProducesResponseType(404)]
-            public async Task<IActionResult> GetCapabilities(Guid cloneId)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Getting capabilities for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.GetCapabilitiesAsync(tenantId, userId, cloneId);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return NotFound(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Set/update clone capabilities (Step 5)
-            /// </summary>
-            [HttpPost("{cloneId}/capabilities")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> SetCapabilities(Guid cloneId, [FromBody] Services.Step5Request request)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Setting capabilities for clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.SaveCapabilitiesAsync(tenantId, userId, cloneId, request);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
-
-            /// <summary>
-            /// Finalize clone (Step 6)
-            /// </summary>
-            [HttpPost("{cloneId}/Activate")]
-            [ProducesResponseType(200)]
-            [ProducesResponseType(400)]
-            [ProducesResponseType(403)]
-            public async Task<IActionResult> FinalizeClone(Guid cloneId)
-            {
-                Guid tenantId = GetTenantId();
-                Guid userId = GetCurrentUserId();
-
-                _logger.LogInformation("Finalizing clone {CloneId}", cloneId);
-
-                Services.WizardResponse result = await _service.FinalizeCloneAsync(tenantId, userId, cloneId);
-
-                if (!result.Success)
-                {
-                    if (result.ErrorCode == "UNAUTHORIZED")
-                        return StatusCode(403, result);
-                    return BadRequest(result);
-                }
-
-                return Ok(result);
-            }
+            _service = service;
+            _logger = logger;
         }
+
+        private Guid GetTenantId()
+        {
+            string? claim = User.FindFirst("tenant_id")?.Value;
+            if (claim == null || !Guid.TryParse(claim, out Guid tenantId))
+                throw new UnauthorizedAccessException("Invalid tenant claim");
+            return tenantId;
+        }
+
+        private Guid GetCurrentUserId()
+        {
+            string? claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                         ?? User.FindFirst("sub")?.Value;
+            if (claim == null || !Guid.TryParse(claim, out Guid userId))
+                throw new UnauthorizedAccessException("Invalid user claim");
+            return userId;
+        }
+
+        /// <summary>
+        /// Create draft clone (Step 1)
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Create([FromBody] Services.Step1Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Creating clone for user {UserId}", userId);
+
+            Services.WizardResponse result = await _service.CreateCloneDraftAsync(tenantId, userId, request);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update avatar (Step 2)
+        /// </summary>
+        [HttpPut("{cloneId}/avatar")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> UpdateAvatar(Guid cloneId, [FromBody] Services.Step2Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Updating avatar for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.UpdateAvatarAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Configure personality (Step 3)
+        /// </summary>
+        [HttpPut("{cloneId}/personality")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> SavePersonality(Guid cloneId, [FromBody] Services.Step3Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Saving personality for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.SavePersonalityAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Add memory seeds (Step 4)
+        /// </summary>
+        [HttpPost("{cloneId}/memories")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> AddMemories(Guid cloneId, [FromBody] Services.Step4Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Adding memories for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.AddMemoriesAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Upload knowledge documents (Step 5 - metadata only)
+        /// </summary>
+        [HttpPost("{cloneId}/knowledge")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> UploadKnowledge(Guid cloneId, [FromBody] Services.Step5Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Uploading knowledge for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.UploadKnowledgeAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Activate clone (Step 6)
+        /// </summary>
+        [HttpPost("{cloneId}/activate")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> Activate(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Activating clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.ActivateCloneAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get wizard status (resume wizard)
+        /// </summary>
+        [HttpGet("{cloneId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetStatus(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            Services.WizardResponse result = await _service.GetWizardStatusAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
+        //Helper: Get tenant ID from claims
+        /// <summary>
+        /// Get clone capabilities (Step 5)
+        /// </summary>
+        [HttpGet("{cloneId}/capabilities")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetCapabilities(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Getting capabilities for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.GetCapabilitiesAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Set/update clone capabilities (Step 5)
+        /// </summary>
+        [HttpPost("{cloneId}/capabilities")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> SetCapabilities(Guid cloneId, [FromBody] Services.Step5Request request)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Setting capabilities for clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.SaveCapabilitiesAsync(tenantId, userId, cloneId, request);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Finalize clone (Step 6)
+        /// </summary>
+        [HttpPost("{cloneId}/Finalize")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> FinalizeClone(Guid cloneId)
+        {
+            Guid tenantId = GetTenantId();
+            Guid userId = GetCurrentUserId();
+
+            _logger.LogInformation("Finalizing clone {CloneId}", cloneId);
+
+            Services.WizardResponse result = await _service.FinalizeCloneAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+            {
+                if (result.ErrorCode == "UNAUTHORIZED")
+                    return StatusCode(403, result);
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+            }
 
     }
 }

@@ -985,7 +985,59 @@
         }
       }
     },
-    "/api/v1/capability/check": {
+    "/api/v1/capabilities/entitlements": {
+      "get": {
+        "tags": [
+          "Capability"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntitlementBundle"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntitlementBundle"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntitlementBundle"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/capabilities/check/{capabilityCode}": {
       "get": {
         "tags": [
           "Capability"
@@ -993,7 +1045,8 @@
         "parameters": [
           {
             "name": "capabilityCode",
-            "in": "query",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -1002,6 +1055,29 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -1589,6 +1665,110 @@
         }
       }
     },
+    "/api/v1/clonewizard/{cloneId}/capabilities": {
+      "get": {
+        "tags": [
+          "CloneWizard"
+        ],
+        "parameters": [
+          {
+            "name": "cloneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CloneWizard"
+        ],
+        "parameters": [
+          {
+            "name": "cloneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Step5Request"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Step5Request"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/Step5Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/clonewizard/{cloneId}/finalize": {
+      "post": {
+        "tags": [
+          "CloneWizard"
+        ],
+        "parameters": [
+          {
+            "name": "cloneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/user/email/change-request": {
       "post": {
         "tags": [
@@ -1699,6 +1879,41 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/clones": {
+      "post": {
+        "tags": [
+          "ExampleClone"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/clones/{cloneId}": {
+      "delete": {
+        "tags": [
+          "ExampleClone"
+        ],
+        "parameters": [
+          {
+            "name": "cloneId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2363,6 +2578,132 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/verify/age": {
+      "post": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgeVerificationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgeVerificationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgeVerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockVerificationResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/verify/human": {
+      "post": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockVerificationResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/verify/government-id": {
+      "post": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GovernmentIDRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GovernmentIDRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GovernmentIDRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockVerificationResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/verify/complete": {
+      "post": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MockVerificationResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/verify/reset": {
+      "delete": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -4219,6 +4560,21 @@
         },
         "additionalProperties": false
       },
+      "AgeVerificationRequest": {
+        "type": "object",
+        "properties": {
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AgeVerificationResult": {
         "enum": [
           0,
@@ -4237,6 +4593,36 @@
           },
           "message": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CapabilityDetail": {
+        "type": "object",
+        "properties": {
+          "capability_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "capability_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "capability_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "effective_trust_level_required": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "effective_requires_approval": {
+            "type": "boolean"
+          },
+          "effective_max_daily_uses": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -4446,6 +4832,39 @@
         },
         "additionalProperties": false
       },
+      "EntitlementBundle": {
+        "type": "object",
+        "properties": {
+          "subscription_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "max_clones": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_users": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max_storage_mb": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "monthly_interactions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CapabilityDetail"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ExperienceRating": {
         "enum": [
           0,
@@ -4508,6 +4927,24 @@
           "limit": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GovernmentIDRequest": {
+        "type": "object",
+        "properties": {
+          "idType": {
+            "type": "string",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "nullable": true
+          },
+          "documentNumber": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4580,6 +5017,47 @@
           },
           "rememberMe": {
             "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "MockVerificationResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "verificationLevel": {
+            "$ref": "#/components/schemas/IdentityVerificationLevel"
+          },
+          "ageCategory": {
+            "$ref": "#/components/schemas/AgeVerificationResult"
+          },
+          "ageVerified": {
+            "type": "boolean"
+          },
+          "humanVerified": {
+            "type": "boolean"
+          },
+          "governmentIDVerified": {
+            "type": "boolean"
+          },
+          "isMockData": {
+            "type": "boolean"
+          },
+          "mockIDInfo": {
+            "nullable": true
+          },
+          "nextSteps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -4969,6 +5447,9 @@
               "$ref": "#/components/schemas/DocumentInfo"
             },
             "nullable": true
+          },
+          "capabilities": {
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -5137,7 +5618,9 @@
           3,
           4,
           5,
-          6
+          6,
+          7,
+          8
         ],
         "type": "integer",
         "format": "int32"
@@ -5163,7 +5646,8 @@
           3,
           4,
           5,
-          6
+          6,
+          7
         ],
         "type": "integer",
         "format": "int32"

@@ -5,6 +5,7 @@
 
 using Dapper;
 using KeiroGenesis.API.Core.Database;
+using KeiroGenesis.API.DTO.Clone;
 using KeiroGenesis.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +54,7 @@ namespace KeiroGenesis.API.Repositories
 
             return result.FirstOrDefault();
         }
-
+  
         // Update clone - ✅ USES FUNCTION + ADDED user_id PARAMETER
         public async Task<bool> UpdateCloneAsync(
             Guid tenantId,
@@ -106,8 +107,74 @@ namespace KeiroGenesis.API.Repositories
 
             return result;
         }
+
+
+        // =========================================================
+        // GET CLONE STATUS (FUNCTION)
+        // =========================================================
+        public async Task<dynamic?> GetCloneStatusAsync(
+            Guid tenantId,
+            Guid userId,
+            Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryFirstOrDefaultAsync(
+                @"SELECT * 
+              FROM clone.fn_get_clone_status(
+                  @tenantId,
+                  @userId,
+                  @cloneId
+              )",
+                new
+                {
+                    tenantId,
+                    userId,
+                    cloneId
+                });
+        }
+
+        // =========================================================
+        // UPDATE CLONE STATUS (PROCEDURE)
+        // =========================================================
+        public async Task<bool> UpdateCloneStatusAsync(
+            Guid tenantId,
+            Guid userId,
+            Guid cloneId,
+            string status)
+        {
+            using var conn = _db.CreateConnection();
+
+            try
+            {
+                await conn.ExecuteAsync(
+                    @"CALL clone.sp_update_clone_status(
+                    @tenantId,
+                    @userId,
+                    @cloneId,
+                    @status
+                )",
+                    new
+                    {
+                        tenantId,
+                        userId,
+                        cloneId,
+                        status
+                    });
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
+
+
+
 }
+
 #endregion
 
 #region Service
@@ -271,6 +338,93 @@ namespace KeiroGenesis.API.Services
             }
         }
 
+        public async Task<CloneStatusResponse> GetCloneStatusAsync(
+        Guid tenantId,
+        Guid userId,
+        Guid cloneId)
+        {
+            try
+            {
+                var status = await _repo.GetCloneStatusAsync(
+                    tenantId, userId, cloneId);
+
+                if (status == null)
+                {
+                    return new CloneStatusResponse
+                    {
+                        Success = false,
+                        Message = "Clone not found"
+                    };
+                }
+
+                return new CloneStatusResponse
+                {
+                    Success = true,
+                    Message = "Status retrieved successfully",
+                    CloneId = status.clone_id,
+                    DisplayName = status.display_name,
+                    Status = status.status,
+                    WizardStep = status.wizard_step,
+                    CreatedAt = status.created_at,
+                    UpdatedAt = status.updated_at,
+                    WizardCompletedAt = status.wizard_completed_at
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Error getting clone status for {CloneId}", cloneId);
+
+                return new CloneStatusResponse
+                {
+                    Success = false,
+                    Message = "Failed to get clone status"
+                };
+            }
+        }
+
+        public async Task<CloneStatusResponse> UpdateCloneStatusAsync(
+            Guid tenantId,
+            Guid userId,
+            Guid cloneId,
+            string status)
+        {
+            try
+            {
+                var updated = await _repo.UpdateCloneStatusAsync(
+                    tenantId, userId, cloneId, status);
+
+                if (!updated)
+                {
+                    return new CloneStatusResponse
+                    {
+                        Success = false,
+                        Message = "Clone not found or update failed"
+                    };
+                }
+
+                return new CloneStatusResponse
+                {
+                    Success = true,
+                    Message = "Status updated successfully",
+                    CloneId = cloneId,
+                    Status = status
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Error updating clone status for {CloneId}", cloneId);
+
+                return new CloneStatusResponse
+                {
+                    Success = false,
+                    Message = "Failed to update status"
+                };
+            }
+        }
+
+
         public async Task<BaseResponse> DeleteCloneAsync(Guid tenantId, Guid userId, Guid cloneId)
         {
             try
@@ -302,7 +456,17 @@ namespace KeiroGenesis.API.Services
                 };
             }
         }
+
+
     }
+
+   
+
+}
+#endregion DTOs and Responses
+
+namespace KeiroGenesis.API.DTO.Clone
+{
 
     // DTOs
     public class UpdateCloneRequest
@@ -382,7 +546,28 @@ namespace KeiroGenesis.API.Services
         [JsonPropertyName("updatedAt")]
         public DateTime? UpdatedAt { get; set; }
     }
+    public class CloneStatusResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public Guid? CloneId { get; set; }
+        public string? DisplayName { get; set; }
+        public string? Status { get; set; }
+        public int? WizardStep { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public DateTime? WizardCompletedAt { get; set; }
+    }
+
+    public class UpdateStatusRequest
+    {
+        public string Status { get; set; } = string.Empty;
+    }
+
 }
+
+
+#region
 #endregion
 
 #region Controller
@@ -442,7 +627,7 @@ namespace KeiroGenesis.API.Controllers.V1
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateClone(Guid cloneId, [FromBody] Services.UpdateCloneRequest request)
+        public async Task<IActionResult> UpdateClone(Guid cloneId, [FromBody] UpdateCloneRequest request)
         {
             var tenantId = GetTenantId();
             var userId = GetCurrentUserId();
@@ -489,6 +674,53 @@ namespace KeiroGenesis.API.Controllers.V1
             if (claim == null || !Guid.TryParse(claim, out var userId))
                 throw new UnauthorizedAccessException("Invalid user claim");
             return userId;
+        }
+
+        /// <summary>
+        /// Get clone status
+        /// </summary>
+        [HttpGet("{cloneId}/status")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetStatus(Guid cloneId)
+        {
+            var tenantId = GetTenantId();
+            var userId = GetCurrentUserId();
+
+            _logger.LogInformation("Getting status for clone {CloneId}", cloneId);
+
+            var result = await _service.GetCloneStatusAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+                return NotFound(result);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Update clone status
+        /// </summary>
+        [HttpPut("{cloneId}/status")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateStatus(
+            Guid cloneId,
+            [FromBody] UpdateStatusRequest request)
+        {
+            var tenantId = GetTenantId();
+            var userId = GetCurrentUserId();
+
+            _logger.LogInformation("Updating status for clone {CloneId} to {Status}",
+                cloneId, request.Status);
+
+            var result = await _service.UpdateCloneStatusAsync(
+                tenantId, userId, cloneId, request.Status);
+
+            if (!result.Success)
+                return result.Message.Contains("not found") ? NotFound(result) : BadRequest(result);
+
+            return Ok(result);
         }
     }
 }

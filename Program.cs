@@ -108,6 +108,7 @@ builder.Services.AddScoped<CloneWizardService>();
 builder.Services.AddScoped<IEmailProvider, EmailService>();
 
 
+
 // ==========================================================================
 // AUTHENTICATION (JWT / PRE-AUTH) — SYMMETRIC
 // ==========================================================================
@@ -206,7 +207,7 @@ builder.Services.AddCors(o =>
 // IDENTITY MODULE - MODERN NPGSQL DATA SOURCE (Npgsql 8.0+)
 // ==========================================================================
 
-var identityConnectionString = builder.Configuration.GetConnectionString("KeiroGenesisDb")
+var identityConnectionString = builder.Configuration.GetConnectionString("PostgreSQL")
     ?? throw new InvalidOperationException("Connection string 'KeiroGenesisDb' not found");
 
 var dataSourceBuilder = new NpgsqlDataSourceBuilder(identityConnectionString);
@@ -222,6 +223,8 @@ dataSourceBuilder.MapEnum<VerificationProvider>("auth.verification_provider");
 var identityDataSource = dataSourceBuilder.Build();
 
 
+// Register as singleton 
+builder.Services.AddSingleton(identityDataSource);
 
 // Then register services
 builder.Services.AddScoped<IdentitySignalsRepository>();

@@ -385,7 +385,6 @@ namespace KeiroGenesis.API.Services
 // ============================================================================
 // REPOSITORY LAYER - Add these methods to IdentitySignalsRepository
 // ============================================================================
-
 namespace KeiroGenesis.API.Repositories
 {
     using KeiroGenesis.Identity;
@@ -406,39 +405,22 @@ namespace KeiroGenesis.API.Repositories
         {
             using var conn = CreateConnection();
 
-            // Get identity profile ID
-            var profileId = await conn.ExecuteScalarAsync<Guid?>(
-                @"SELECT identity_profile_id 
-                  FROM identity.identity_profiles 
-                  WHERE tenant_id = @TenantId AND user_id = @UserId",
-                new { TenantId = tenantId, UserId = userId });
-
-            if (!profileId.HasValue)
-            {
-                throw new InvalidOperationException("Identity profile not found");
-            }
-
-            await conn.ExecuteAsync(
-                @"INSERT INTO identity.verification_attempts (
-                    tenant_id, identity_profile_id, user_id, method, status,
-                    provider, confidence_score, fraud_alert_triggered,
-                    initiated_at, completed_at
-                  ) VALUES (
-                    @TenantId, @ProfileId, @UserId, @Method, @Status,
-                    @Provider, @ConfidenceScore, false,
-                    @Now, @Now
-                  )",
+            var result = await conn.ExecuteScalarAsync<bool>(
+                "SELECT auth.fn_record_verification_attempt(@p_tenant_id, @p_user_id, @p_method, @p_status, @p_provider, @p_confidence_score)",
                 new
                 {
-                    TenantId = tenantId,
-                    ProfileId = profileId.Value,
-                    UserId = userId,
-                    Method = method.ToString(),
-                    Status = status.ToString(),
-                    Provider = provider?.ToString(),
-                    ConfidenceScore = confidenceScore,
-                    Now = DateTime.UtcNow
+                    p_tenant_id = tenantId,
+                    p_user_id = userId,
+                    p_method = method.ToString(),
+                    p_status = status.ToString(),
+                    p_provider = provider?.ToString() ?? "MVPMock",
+                    p_confidence_score = confidenceScore ?? 1.0m
                 });
+
+            if (!result)
+            {
+                throw new InvalidOperationException("Failed to record verification attempt");
+            }
         }
 
         /// <summary>
@@ -452,38 +434,23 @@ namespace KeiroGenesis.API.Repositories
         {
             using var conn = CreateConnection();
 
-            var now = DateTime.UtcNow;
-            var expiresAt = level >= IdentityVerificationLevel.GovernmentVerified
-                ? now.AddYears(1) // Government ID expires after 1 year
-                : (DateTime?)null;
-
-            await conn.ExecuteAsync(
-                @"UPDATE identity.identity_profiles
-                  SET verification_level = @Level,
-                      age_verified = @AgeVerified,
-                      age_category = @AgeCategory,
-                      verified_at = @VerifiedAt,
-                      expires_at = @ExpiresAt,
-                      requires_reverification = false,
-                      reverification_reason = NULL,
-                      updated_at = @UpdatedAt
-                  WHERE tenant_id = @TenantId AND user_id = @UserId",
+            var result = await conn.ExecuteScalarAsync<bool>(
+                "SELECT auth.fn_update_verification_level(@p_tenant_id, @p_user_id, @p_level, @p_age_category)",
                 new
                 {
-                    TenantId = tenantId,
-                    UserId = userId,
-                    Level = level.ToString(),
-                    AgeVerified = level >= IdentityVerificationLevel.AgeAssured,
-                    AgeCategory = ageCategory?.ToString() ?? AgeVerificationResult.Unknown.ToString(),
-                    VerifiedAt = now,
-                    ExpiresAt = expiresAt,
-                    UpdatedAt = now
+                    p_tenant_id = tenantId,
+                    p_user_id = userId,
+                    p_level = level.ToString(),
+                    p_age_category = ageCategory?.ToString() ?? AgeVerificationResult.Unknown.ToString()
                 });
+
+            if (!result)
+            {
+                throw new InvalidOperationException("Failed to update verification level");
+            }
         }
     }
-}
-
-// ============================================================================
+}// ============================================================================
 // ENUMS - Add to KeiroGenesis.Identity namespace if not present
 // ============================================================================
 

@@ -817,59 +817,59 @@ namespace KeiroGenesis.API.Services
         /// <summary>
         /// Save clone capabilities (Step 5)
         /// </summary>
-        public async Task<WizardResponse> SaveCapabilitiesAsync(
-            Guid tenantId, Guid userId, Guid cloneId, Step5Request request)
-        {
-            try
-            {
-                // Verify ownership
-                bool isOwner = await _repo.CloneBelongsToUserAsync(tenantId, userId, cloneId);
-                if (!isOwner)
-                {
-                    _logger.LogWarning("User {UserId} attempted to modify clone {CloneId} without ownership",
-                        userId, cloneId);
-                    return new WizardResponse
-                    {
-                        Success = false,
-                        Message = "You do not have permission to modify this clone",
-                        ErrorCode = "UNAUTHORIZED"
-                    };
-                }
+        //public async Task<WizardResponse> SaveCapabilitiesAsync(
+        //    Guid tenantId, Guid userId, Guid cloneId, Step5Request request)
+        //{
+        //    try
+        //    {
+        //        // Verify ownership
+        //        bool isOwner = await _repo.CloneBelongsToUserAsync(tenantId, userId, cloneId);
+        //        if (!isOwner)
+        //        {
+        //            _logger.LogWarning("User {UserId} attempted to modify clone {CloneId} without ownership",
+        //                userId, cloneId);
+        //            return new WizardResponse
+        //            {
+        //                Success = false,
+        //                Message = "You do not have permission to modify this clone",
+        //                ErrorCode = "UNAUTHORIZED"
+        //            };
+        //        }
 
-                // Serialize capabilities to JSON
-                var capabilitiesJson = System.Text.Json.JsonSerializer.Serialize(request.Capabilities);
+        //        // Serialize capabilities to JSON
+        //        var featuresJson = System.Text.Json.JsonSerializer.Serialize(request.Features);
 
-                // Save capabilities to database
-                bool saved = await _repo.SaveCloneCapabilitiesAsync(
-                    tenantId, userId, cloneId, capabilitiesJson);
+        //        // Save capabilities to database
+        //        bool saved = await _repo.SaveCloneCapabilitiesAsync(
+        //            tenantId, userId, cloneId, featuresJson);
 
-                if (!saved)
-                {
-                    return new WizardResponse
-                    {
-                        Success = false,
-                        Message = "Failed to save capabilities"
-                    };
-                }
+        //        if (!saved)
+        //        {
+        //            return new WizardResponse
+        //            {
+        //                Success = false,
+        //                Message = "Failed to save capabilities"
+        //            };
+        //        }
 
-                return new WizardResponse
-                {
-                    Success = true,
-                    Message = "Capabilities saved successfully. Ready to finalize!",
-                    CloneId = cloneId,
-                    CurrentStep = 5
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error saving capabilities for clone {CloneId}", cloneId);
-                return new WizardResponse
-                {
-                    Success = false,
-                    Message = "Failed to save capabilities: " + ex.Message
-                };
-            }
-        }
+        //        return new WizardResponse
+        //        {
+        //            Success = true,
+        //            Message = "Capabilities saved successfully. Ready to finalize!",
+        //            CloneId = cloneId,
+        //            CurrentStep = 5
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error saving capabilities for clone {CloneId}", cloneId);
+        //        return new WizardResponse
+        //        {
+        //            Success = false,
+        //            Message = "Failed to save capabilities: " + ex.Message
+        //        };
+        //    }
+        //}
 
         /// <summary>
         /// Finalize clone (Step 6)
@@ -932,7 +932,7 @@ namespace KeiroGenesis.API.Services
     }
     #endregion
     // ==========================================================================
-    #region API Models
+#region API Models
     // Request/Response Models
     public class Step1Request
     {
@@ -984,9 +984,30 @@ namespace KeiroGenesis.API.Services
         [JsonPropertyName("documents")]
         public DocumentInfo[] Documents { get; set; } = Array.Empty<DocumentInfo>();
 
-        [JsonPropertyName("capabilities")]
-        public object Capabilities { get; set; } = new { };
+        [JsonPropertyName("features")]
+        public CloneFeatures Features { get; set; } = new();
 
+    }
+
+     public class CloneFeatures
+    {
+        [JsonPropertyName("text_chat_enabled")]
+        public bool TextChatEnabled { get; set; } = true;
+
+        [JsonPropertyName("voice_interaction_enabled")]
+        public bool VoiceInterationEnabled { get; set; } = false;
+
+        [JsonPropertyName("memory_recall_enabled")]
+        public bool MemoryRecallEnabled { get; set; } = true;
+
+        [JsonPropertyName("contextual_learning_enabled")]
+        public bool ContextualLearningEnabled { get; set; } = true;
+
+        [JsonPropertyName("image_generation_enabled")]
+        public bool ImageGenerationEnabled { get; set; } = false;
+
+        [JsonPropertyName("api_access_enabled")]
+        public bool ApiAccessEnabled { get; set; } = false;
     }
 
     public class DocumentInfo
@@ -1241,11 +1262,11 @@ namespace KeiroGenesis.API.Controllers.V1
             return Ok(result);
         }
 
-        //Helper: Get tenant ID from claims
-        /// <summary>
-        /// Get clone capabilities (Step 5)
-        /// </summary>
-        [HttpGet("{cloneId}/capabilities")]
+            //Helper: Get tenant ID from claims
+            /// <summary>
+            /// Get clone capabilities (Step 5)
+            /// </summary>
+        [HttpPost("{cloneId}/features")]
         [ProducesResponseType(200)]
         [ProducesResponseType(403)]
         [ProducesResponseType(404)]
@@ -1271,28 +1292,28 @@ namespace KeiroGenesis.API.Controllers.V1
         /// <summary>
         /// Set/update clone capabilities (Step 5)
         /// </summary>
-        [HttpPost("{cloneId}/capabilities")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(403)]
-        public async Task<IActionResult> SetCapabilities(Guid cloneId, [FromBody] Services.Step5Request request)
-        {
-            Guid tenantId = GetTenantId();
-            Guid userId = GetCurrentUserId();
+        //[HttpPost("{cloneId}/capabilities")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(400)]
+        //[ProducesResponseType(403)]
+        //public async Task<IActionResult> SetCapabilities(Guid cloneId, [FromBody] Services.Step5Request request)
+        //{
+        //    Guid tenantId = GetTenantId();
+        //    Guid userId = GetCurrentUserId();
 
-            _logger.LogInformation("Setting capabilities for clone {CloneId}", cloneId);
+        //    _logger.LogInformation("Setting capabilities for clone {CloneId}", cloneId);
 
-            Services.WizardResponse result = await _service.SaveCapabilitiesAsync(tenantId, userId, cloneId, request);
+        //    Services.WizardResponse result = await _service.SaveCapabilitiesAsync(tenantId, userId, cloneId, request);
 
-            if (!result.Success)
-            {
-                if (result.ErrorCode == "UNAUTHORIZED")
-                    return StatusCode(403, result);
-                return BadRequest(result);
-            }
+        //    if (!result.Success)
+        //    {
+        //        if (result.ErrorCode == "UNAUTHORIZED")
+        //            return StatusCode(403, result);
+        //        return BadRequest(result);
+        //    }
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Finalize clone (Step 6)

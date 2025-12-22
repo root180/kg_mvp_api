@@ -9,6 +9,7 @@ using KeiroGenesis.API.Controllers.V1;
 using KeiroGenesis.API.Core.Database;
 using KeiroGenesis.API.Core.Versioning;
 using KeiroGenesis.API.GraphQL.Dashboard;
+using KeiroGenesis.API.Ratings;
 using KeiroGenesis.API.Repositories;
 using KeiroGenesis.API.Security;
 using KeiroGenesis.API.Services;
@@ -111,6 +112,8 @@ builder.Services.AddScoped<CloneWizardService>();
 
 // Email Provider
 builder.Services.AddScoped<IEmailProvider, EmailService>();
+
+
 
 
 
@@ -234,6 +237,11 @@ builder.Services.AddSingleton(identityDataSource);
 // Then register services
 builder.Services.AddScoped<IdentitySignalsRepository>();
 builder.Services.AddScoped<IdentitySignalsService>();
+
+// Content Rating Module
+builder.Services.AddScoped<ContentRatingsRepository>(); 
+builder.Services.AddScoped<ContentRatingsService>();
+
 // ==========================================================================
 // GRAPHQL — SERVICE REGISTRATION (ONLY HERE)
 // ==========================================================================

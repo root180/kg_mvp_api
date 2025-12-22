@@ -1,0 +1,72 @@
+2025-12-22 09:21:09.762 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 09:21:09.953 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 09:21:09.955 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 09:21:09.957 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 09:21:09.960 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 09:21:13.084 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 09:21:13.086 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 09:21:15.034 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 09:21:15.432 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 09:21:21.788 -05:00 [Information] Rating profile created for user 75ee5a73-6f53-464b-8a26-a0208f2c7ce6: "MA"
+2025-12-22 09:57:06.633 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 09:57:06.817 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 09:57:06.820 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 09:57:06.821 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 09:57:06.821 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 09:57:09.983 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 09:57:09.987 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 09:58:24.174 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 09:58:24.529 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 09:58:29.211 -05:00 [Information] Rating profile created for user bfc37530-6551-4bdb-97fe-1c51a10d2bdf: "MA"
+2025-12-22 10:06:56.838 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 10:06:57.014 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:06:57.027 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 10:06:57.027 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 10:06:57.031 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:07:00.174 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 10:07:00.176 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 10:07:03.173 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 10:07:03.528 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 10:07:08.941 -05:00 [Information] Rating profile created for user 86153121-df7c-4c3d-b8ce-8a764c4ceae9: "G"
+2025-12-22 10:12:13.910 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 10:12:14.084 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:12:14.085 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 10:12:14.085 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 10:12:14.086 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:12:17.174 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 10:12:17.176 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 10:12:19.480 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 10:12:19.800 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 10:12:25.812 -05:00 [Information] Rating profile created for user 9f18aa8f-d726-4594-a26d-10bb5bacc3ae: "G"
+2025-12-22 10:19:01.084 -05:00 [Information] Rating profile created for user 6e961d7f-1eeb-418d-b12d-ff99e2f2c13c: "MA"
+2025-12-22 10:19:19.165 -05:00 [Information] Rating profile created for user 28ea588c-4249-425f-b306-a604cab6411a: "MA"
+2025-12-22 10:25:54.041 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 10:25:54.262 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:25:54.264 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 10:25:54.264 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 10:25:54.265 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:25:57.420 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 10:25:57.422 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 10:25:59.337 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 10:25:59.648 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 10:26:03.817 -05:00 [Information] Rating profile created for user a91e1f13-ba81-4548-b56b-e4a3a85da146: "MA"
+2025-12-22 10:27:41.606 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 10:27:41.822 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:27:41.825 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 10:27:41.831 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 10:27:41.832 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:27:44.959 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 10:27:44.966 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 10:27:48.189 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 10:27:48.532 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 10:27:53.453 -05:00 [Information] Rating profile created for user 48e42655-200f-4fe1-8267-46f57f983dc2: "MA"
+2025-12-22 10:36:08.115 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 10:36:08.299 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:36:08.301 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 10:36:08.301 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 10:36:08.301 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 10:36:11.427 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 10:36:11.429 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 10:36:15.070 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 10:36:15.381 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 10:36:19.629 -05:00 [Information] Rating profile created for user 2b4978df-9135-46ec-8614-87f639277fec: "MA"

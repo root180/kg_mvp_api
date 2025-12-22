@@ -8,6 +8,9 @@
 using Dapper;
 using KeiroGenesis.API.Core.Database;
 using KeiroGenesis.API.Core.Helpers;
+using KeiroGenesis.API.Ratings;
+using KeiroGenesis.API.Services;
+using KeiroGenesis.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -24,7 +27,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
+using static HotChocolate.ErrorCodes;
 
 // ==========================================================================
 // REPOSITORY
@@ -42,27 +48,70 @@ namespace KeiroGenesis.API.Repositories
             _logger = logger;
         }
 
-        // Register new user + tenant
-        public async Task<dynamic?> RegisterUserAsync(
-            string email, string username, string passwordHash,
-            string firstName, string lastName, string tenantName)
+        public async Task<RegisterResponse> RegisterUserAsync(RegisterRequest dto)
         {
             using var conn = _db.CreateConnection();
-
-            var result = await conn.QueryAsync(@"
-                SELECT user_id, tenant_id, email, username, first_name, last_name, tenant_name
-                FROM auth.fn_register_user(@p_email, @p_username, @p_password_hash, @p_first_name, @p_last_name, @p_tenant_name)
-            ", new
+            try
             {
-                p_email = email,
-                p_username = username,
-                p_password_hash = passwordHash,
-                p_first_name = firstName,
-                p_last_name = lastName,
-                p_tenant_name = tenantName
-            });
+                var result = await conn.QuerySingleOrDefaultAsync<RegisterResponse>(@"
+            SELECT 
+                user_id AS UserId,
+                tenant_id AS TenantId,
+                username AS Username,
+                email AS Email,
+                first_name AS FirstName,
+                last_name AS LastName,
+                tenant_name AS TenantName,
+                content_eligibility_level AS ContentEligibilityLevel,
+                age AS Age
+            FROM auth.fn_register_user(
+                @p_email, 
+                @p_username, 
+                @p_password_hash, 
+                @p_first_name, 
+                @p_last_name, 
+                @p_tenant_name,
+                @p_date_of_birth::date,
+                @p_gender,
+                @p_mobile_number
+            )
+        ", new
+                {
+                    p_email = dto.Email,
+                    p_username = dto.Username,
+                    p_password_hash = dto.PasswordHash,
+                    p_first_name = dto.FirstName ?? "",
+                    p_last_name = dto.LastName ?? "",
+                    p_tenant_name = dto.TenantName ?? dto.Username,
+                    p_date_of_birth = dto.DateOfBirth?.Date,
+                    p_gender = dto.Gender,
+                    p_mobile_number = dto.MobileNumber
+                });
 
-            return result.FirstOrDefault();
+                if (result != null)
+                {
+                    result.Success = true;
+                    result.Message = "User registered successfully";
+                    return result;
+                }
+
+                return new RegisterResponse
+                {
+                    Success = false,
+                    Message = "Registration failed - no data returned from database"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Database error during user registration");
+                return new RegisterResponse
+                {
+                    Success = false,
+                    Message = ex.Message.Contains("COPPA")
+                        ? "You must be at least 13 years old to register (COPPA compliance)"
+                        : $"Registration failed: {ex.Message}"
+                };
+            }
         }
 
         // Login - get user by email
@@ -322,15 +371,22 @@ namespace KeiroGenesis.API.Services
         private readonly IConfiguration _config;
         private readonly ILogger<AuthService> _logger;
         private readonly IEmailProvider _emailService;
+        private readonly IdentitySignalsService _identityService;
+        private readonly ContentRatingsService _ratingService;
+
+
 
         public AuthService(
             Repositories.AuthRepository repo,
             IConfiguration config,
             ILogger<AuthService> logger,
-            IEmailProvider emailService)
+            IEmailProvider emailService, IdentitySignalsService identityService,
+            ContentRatingsService ratingService)
         {
             _repo = repo;
             _config = config;
+            _identityService = identityService;
+            _ratingService = ratingService;
             _logger = logger;
             _emailService = emailService;
         }
@@ -348,12 +404,12 @@ namespace KeiroGenesis.API.Services
             return BCrypt.Net.BCrypt.Verify(password, passwordHash);
         }
 
-        // Generate JWT Access Token with roles
-        public string GenerateAccessToken(
+        public async Task<string> GenerateAccessTokenAsync(
             Guid userId,
             Guid tenantId,
             string email,
             string username,
+            string? contentRating = null,  // ← Optional: pass rating during registration
             string[]? roles = null)
         {
             var secret = _config["Auth:Secret"]
@@ -374,15 +430,47 @@ namespace KeiroGenesis.API.Services
                 SecurityAlgorithms.HmacSha256
             );
 
-            var claims = new List<Claim>
+            // ✅ Fetch identity verification status
+            var identityStatus = await _identityService.GetStatusAsync(tenantId, userId);
+
+            // ✅ Fetch or use provided content rating
+            string allowedRating;
+            if (contentRating != null)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("user_id", userId.ToString()),
-                new Claim("tenant_id", tenantId.ToString()),
-                new Claim("username", username)
-            };
+                // Registration scenario - rating was just created and passed in
+                allowedRating = contentRating;
+            }
+            else
+            {
+                // Token refresh scenario - fetch existing rating
+                var ratingStatus = await _ratingService.GetRatingStatusAsync(tenantId, userId);
+                allowedRating = ratingStatus.AllowedRating ?? "G";
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim("user_id", userId.ToString()),
+        new Claim("tenant_id", tenantId.ToString()),
+        new Claim("username", username),
+
+        // -------------------------------
+        // IDENTITY VERIFICATION (SIGNALS)
+        // -------------------------------
+        new Claim("verification_level", identityStatus.VerificationLevel.ToString()),
+        new Claim("age_verified", identityStatus.AgeVerified.ToString().ToLower()),
+        new Claim("age_category", identityStatus.AgeCategory.ToString()),
+        new Claim("human_verified", identityStatus.HumanVerified.ToString().ToLower()),
+        new Claim("government_id_verified", identityStatus.GovernmentIDVerified.ToString().ToLower()),
+        
+        // -------------------------------
+        // CONTENT RATING (DECISIONS)
+        // -------------------------------
+        new Claim("allowed_rating", allowedRating),
+        new Claim("content_level", MapRatingToContentLevel(allowedRating))
+    };
 
             if (roles != null)
             {
@@ -396,11 +484,109 @@ namespace KeiroGenesis.API.Services
                 issuer: issuer,
                 audience: audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(15),
+                expires: DateTime.UtcNow.AddMinutes(_config.GetValue<int>("Auth:AccessTokenExpiryMinutes", 15)),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        // Generate JWT Access Token with roles
+        // Generate JWT Access Token with roles
+        //        public async Task<string> GenerateAccessTokenAsync(
+        //            Guid userId,
+        //            Guid tenantId,
+        //            string email,
+        //            string username, 
+        //            string contentRating,
+        //            string[]? roles = null)
+        //        {
+        //            var secret = _config["Auth:Secret"]
+        //                ?? throw new InvalidOperationException("Auth:Secret not configured");
+
+        //            var issuer = _config["Auth:Issuer"]
+        //                ?? throw new InvalidOperationException("Auth:Issuer not configured");
+
+        //            var audience = _config["Auth:Audience"]
+        //                ?? throw new InvalidOperationException("Auth:Audience not configured");
+
+        //            var securityKey = new SymmetricSecurityKey(
+        //                Encoding.UTF8.GetBytes(secret)
+        //            );
+
+        //            var credentials = new SigningCredentials(
+        //                securityKey,
+        //                SecurityAlgorithms.HmacSha256
+        //            );
+
+        //            // ✅ Fetch identity verification status
+        //            var identityStatus = await _identityService.GetStatusAsync(tenantId, userId);
+
+        //            // ✅ Fetch content rating status  
+        //            var ratingStatus = await _ratingService.GetRatingStatusAsync(tenantId, userId);
+
+        //            var claims = new List<Claim>
+        //        {
+        //        new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+        //        new Claim(JwtRegisteredClaimNames.Email, email),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //        new Claim("user_id", userId.ToString()),
+        //        new Claim("tenant_id", tenantId.ToString()),
+        //        new Claim("username", username),
+
+        //        // -------------------------------
+        //        // IDENTITY VERIFICATION (SIGNALS)
+        //        // -------------------------------
+        //        new Claim("verification_level", identityStatus.VerificationLevel.ToString()),
+        //        new Claim("age_verified", identityStatus.AgeVerified.ToString().ToLower()),
+        //        new Claim("age_category", identityStatus.AgeCategory.ToString()),
+        //        new Claim("human_verified", identityStatus.HumanVerified.ToString().ToLower()),
+        //        new Claim("government_id_verified", identityStatus.GovernmentIDVerified.ToString().ToLower()),
+
+        //        // -------------------------------
+        //        // CONTENT RATING (DECISIONS)
+        //        // -------------------------------
+        //        new Claim("allowed_rating", contentRating ?? "G"),
+
+
+        //new Claim("allowed_rating", contentRating ?? "G"),
+        //        new Claim("content_level", MapRatingToContentLevel(contentRating ?? "G"))
+        //    };
+
+        //            if (roles != null)
+        //            {
+        //                foreach (var role in roles)
+        //                {
+        //                    claims.Add(new Claim(ClaimTypes.Role, role));
+        //                }
+        //            }
+
+        //            // ✅ Get token expiry from config (your existing pattern)
+        //            var accessTokenExpiryMinutes = _config.GetValue<int>("Auth:AccessTokenExpiryMinutes", 15);
+
+        //            var token = new JwtSecurityToken(
+        //                issuer: issuer,
+        //                audience: audience,
+        //                claims: claims,
+        //                expires: DateTime.UtcNow.AddMinutes(accessTokenExpiryMinutes),
+        //                signingCredentials: credentials
+        //            );
+
+        //            return new JwtSecurityTokenHandler().WriteToken(token);
+        //        }
+
+        // ✅ Add this helper method to AuthService
+        private static string MapRatingToContentLevel(string allowedRating)
+        {
+            return allowedRating?.ToUpper() switch
+            {
+                "G" => "general",
+                "PG" => "general",
+                "PG-13" => "mature",
+                "R" => "mature",
+                "NC-17" => "mature",
+                _ => "restricted"
+            };
         }
 
         // Generate Refresh Token
@@ -444,34 +630,67 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
-                var passwordHash = HashPassword(request.Password);
-
-                var user = await _repo.RegisterUserAsync(
-                    request.Email,
-                    request.Username,
-                    passwordHash,
-                    request.FirstName ?? "",
-                    request.LastName ?? "",
-                    request.TenantName ?? request.Username
-                );
-
-                if (user == null)
+                // Optional: Client-side age validation
+                if (request.DateOfBirth.HasValue)
                 {
-                    return new RegisterResponse
+                    var age = DateTime.UtcNow.Year - request.DateOfBirth.Value.Year;
+                    if (request.DateOfBirth.Value > DateTime.UtcNow.AddYears(-age)) age--;
+
+                    if (age < 13)
                     {
-                        Success = false,
-                        Message = "Registration failed"
-                    };
+                        return new RegisterResponse
+                        {
+                            Success = false,
+                            Message = "You must be at least 13 years old to register (COPPA compliance)"
+                        };
+                    }
+
+                    if (request.DateOfBirth.Value > DateTime.UtcNow)
+                    {
+                        return new RegisterResponse
+                        {
+                            Success = false,
+                            Message = "Date of birth cannot be in the future"
+                        };
+                    }
+
+                    if (age > 120)
+                    {
+                        return new RegisterResponse
+                        {
+                            Success = false,
+                            Message = "Invalid date of birth"
+                        };
+                    }
                 }
 
-                var userId = (Guid)user.user_id;
-                var tenantId = (Guid)user.tenant_id;
+                // Hash password and set it on request
+                request.PasswordHash = HashPassword(request.Password);
 
-                var accessToken = GenerateAccessToken(
-                    userId,
-                    tenantId,
-                    request.Email,
-                    request.Username,
+                // Call repository
+                var result = await _repo.RegisterUserAsync(request);
+
+                if (!result.Success || result.UserId == null || result.TenantId == null)
+                {
+                    return result;
+                }
+
+                // ✅ CREATE rating profile during registration
+                var contentRating = await _ratingService.InitializeRatingProfileAsync(
+                    result.TenantId.Value,
+                    result.UserId.Value,
+                    request.DateOfBirth
+                );
+
+
+
+                // Generate tokens
+                var accessToken = await GenerateAccessTokenAsync(
+                    result.UserId.Value,
+                    result.TenantId.Value,
+                    result.Email ?? request.Email,
+                    result.Username ?? request.Username,
+                    contentRating,
                     new[] { "owner" }
                 );
 
@@ -481,25 +700,34 @@ namespace KeiroGenesis.API.Services
                 var refreshTokenExpiryDays = _config.GetValue<int>("Auth:RefreshTokenExpiryDays", 7);
 
                 await _repo.StoreRefreshTokenAsync(
-                    userId,
-                    tenantId,
+                    result.UserId.Value,
+                    result.TenantId.Value,
                     refreshTokenHash,
                     DateTime.UtcNow.AddDays(refreshTokenExpiryDays)
                 );
 
-                return new RegisterResponse
-                {
-                    Success = true,
-                    Message = "Registration successful",
-                    UserId = userId,
-                    TenantId = tenantId,
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
-                };
+                // Add tokens to result
+                result.AccessToken = accessToken;
+                result.RefreshToken = refreshToken;
+                result.ContentEligibilityLevel = contentRating;
+                result.Success = true;
+                result.Message = "Registration successful";
+
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during registration");
+
+                if (ex.Message.Contains("COPPA") || ex.Message.Contains("13 years old"))
+                {
+                    return new RegisterResponse
+                    {
+                        Success = false,
+                        Message = "You must be at least 13 years old to register (COPPA compliance)"
+                    };
+                }
+
                 return new RegisterResponse
                 {
                     Success = false,
@@ -546,6 +774,7 @@ namespace KeiroGenesis.API.Services
                 var tenantId = (Guid)user.tenant_id;
                 var username = (string)user.username;
                 var email = (string)user.email;
+                var dateofbirth = (DateTime)user;  //GET DATE OF BIRTH
 
                 IEnumerable<int> roleIds = await _repo.GetUserRolesAsync(userId, tenantId);
                 var roleArray = roleIds.Select(id => id switch
@@ -556,11 +785,15 @@ namespace KeiroGenesis.API.Services
                     _ => "member"
                 }).ToArray();
 
-                var accessToken = GenerateAccessToken(
+                var contentRating = await _ratingService.GetRatingStatusAsync(tenantId, userId);
+
+
+                var accessToken = await GenerateAccessTokenAsync(
                     userId,
                     tenantId,
                     email,
                     username,
+                    null,
                     roleArray
                 );
 
@@ -637,6 +870,7 @@ namespace KeiroGenesis.API.Services
 
                 var email = (string)user.email;
                 var username = (string)user.username;
+               
 
                 IEnumerable<int> roleIds = await _repo.GetUserRolesAsync(userId, tenantId);
                 var roleArray = roleIds.Select(id => id switch
@@ -647,11 +881,17 @@ namespace KeiroGenesis.API.Services
                     _ => "member"
                 }).ToArray();
 
-                var newAccessToken = GenerateAccessToken(
+
+                // GET CONTENT RATINGS
+
+                var contentRating = await _ratingService.GetRatingStatusAsync(tenantId, userId);
+
+                var newAccessToken = await GenerateAccessTokenAsync(
                     userId,
                     tenantId,
                     email,
                     username,
+                    null,
                     roleArray
                 );
 
@@ -994,12 +1234,34 @@ namespace KeiroGenesis.API.Services
 
     public class RegisterRequest
     {
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
+
+        [JsonPropertyName("username")]
         public string Username { get; set; } = string.Empty;
+
+        [JsonPropertyName("password")]
         public string Password { get; set; } = string.Empty;
+
+        [JsonPropertyName("first_name")]
         public string? FirstName { get; set; }
+
+        [JsonPropertyName("last_name")]
         public string? LastName { get; set; }
+
+        [JsonPropertyName("tenant_name")]
         public string? TenantName { get; set; }
+
+        public string PasswordHash { get; set; }  // Internal - not from JSON
+
+        [JsonPropertyName("date_of_birth")]
+        public DateTime? DateOfBirth { get; set; }
+
+        [JsonPropertyName("gender")]
+        public string? Gender { get; set; }
+
+        [JsonPropertyName("mobile_number")]
+        public string? MobileNumber { get; set; }
     }
 
     public class RegisterResponse
@@ -1010,6 +1272,17 @@ namespace KeiroGenesis.API.Services
         public Guid? TenantId { get; set; }
         public string? AccessToken { get; set; }
         public string? RefreshToken { get; set; }
+
+        // NEW FIELDS - User profile info
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? TenantName { get; set; }
+
+        // NEW FIELDS - Content rating & age
+        public string? ContentEligibilityLevel { get; set; }  // "G", "PG", "PG-13", "R", "NC-17"
+        public int? Age { get; set; }
     }
 
     public class LoginRequest

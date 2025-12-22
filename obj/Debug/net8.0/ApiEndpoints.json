@@ -548,6 +548,16 @@
   },
   {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "Publish",
+    "RelativePath": "api/v1/auth/identity/publish",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
     "Method": "GetStatus",
     "RelativePath": "api/v1/auth/identity/status",
     "HttpMethod": "GET",
@@ -857,6 +867,22 @@
     ]
   },
   {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
+    "Method": "Upgrade",
+    "RelativePath": "api/v1/billing/upgrade",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.Services.UpgradeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilityController",
     "Method": "CheckCapability",
     "RelativePath": "api/v1/capabilities/check/{capabilityCode}",
@@ -872,17 +898,17 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "Type": "KeiroGenesis.API.Models.CapabilityCheckResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
           "text/json"
         ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 401
       },
       {
@@ -911,12 +937,8 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 401
       },
       {
@@ -1282,8 +1304,8 @@
   {
     "ContainingType": "KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController",
     "Method": "GetCapabilities",
-    "RelativePath": "api/v1/clonewizard/{cloneId}/capabilities",
-    "HttpMethod": "GET",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/features",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -1308,43 +1330,6 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 404
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController",
-    "Method": "SetCapabilities",
-    "RelativePath": "api/v1/clonewizard/{cloneId}/capabilities",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "cloneId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "KeiroGenesis.API.Services.Step5Request",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 400
-      },
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 403
       }
     ]
   },
@@ -1488,6 +1473,46 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 403
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Ratings.ContentRatingsController",
+    "Method": "GetStatus",
+    "RelativePath": "api/v1/content/ratings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Ratings.RatingStatusResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Ratings.ContentRatingsController",
+    "Method": "Evaluate",
+    "RelativePath": "api/v1/content/ratings/evaluate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Ratings.RatingDecisionResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       }
     ]
   },
@@ -1766,72 +1791,6 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 503
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.Identity.IdentityRatingController",
-    "Method": "GetStatus",
-    "RelativePath": "api/v1/identity/ratings",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.RatingStatusResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.Identity.IdentityRatingController",
-    "Method": "Evaluate",
-    "RelativePath": "api/v1/identity/ratings/evaluate",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.RatingDecisionResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.Identity.IdentityRatingController",
-    "Method": "UpdatePreference",
-    "RelativePath": "api/v1/identity/ratings/preference",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "KeiroGenesis.Identity.UpdateRatingPreferenceRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.RatingDecisionResponse",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
       }
     ]
   },

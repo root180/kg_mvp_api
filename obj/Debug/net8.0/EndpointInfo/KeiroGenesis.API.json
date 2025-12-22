@@ -985,6 +985,37 @@
         }
       }
     },
+    "/api/v1/billing/upgrade": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpgradeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpgradeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpgradeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/v1/capabilities/entitlements": {
       "get": {
         "tags": [
@@ -1012,24 +1043,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1054,27 +1068,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized",
+            "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/CapabilityCheckResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/CapabilityCheckResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
+                  "$ref": "#/components/schemas/CapabilityCheckResponse"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1665,8 +1679,8 @@
         }
       }
     },
-    "/api/v1/clonewizard/{cloneId}/capabilities": {
-      "get": {
+    "/api/v1/clonewizard/{cloneId}/features": {
+      "post": {
         "tags": [
           "CloneWizard"
         ],
@@ -1690,52 +1704,6 @@
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "CloneWizard"
-        ],
-        "parameters": [
-          {
-            "name": "cloneId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Step5Request"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Step5Request"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/Step5Request"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         }
       }
@@ -1765,6 +1733,64 @@
           },
           "403": {
             "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/content/ratings": {
+      "get": {
+        "tags": [
+          "ContentRatings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingStatusResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingStatusResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/content/ratings/evaluate": {
+      "post": {
+        "tags": [
+          "ContentRatings"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingDecisionResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingDecisionResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatingDecisionResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -2347,112 +2373,6 @@
         }
       }
     },
-    "/api/v1/identity/ratings": {
-      "get": {
-        "tags": [
-          "IdentityRating"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingStatusResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingStatusResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingStatusResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/identity/ratings/evaluate": {
-      "post": {
-        "tags": [
-          "IdentityRating"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/identity/ratings/preference": {
-      "post": {
-        "tags": [
-          "IdentityRating"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRatingPreferenceRequest"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRatingPreferenceRequest"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateRatingPreferenceRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RatingDecisionResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/auth/identity/status": {
       "get": {
         "tags": [
@@ -2578,6 +2498,18 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/identity/publish": {
+      "post": {
+        "tags": [
+          "IdentitySignals"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -4598,6 +4530,19 @@
         },
         "additionalProperties": false
       },
+      "CapabilityCheckResponse": {
+        "type": "object",
+        "properties": {
+          "capability_code": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_capability": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
       "CapabilityDetail": {
         "type": "object",
         "properties": {
@@ -4638,6 +4583,30 @@
           "newPassword": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CloneFeatures": {
+        "type": "object",
+        "properties": {
+          "text_chat_enabled": {
+            "type": "boolean"
+          },
+          "voice_interaction_enabled": {
+            "type": "boolean"
+          },
+          "memory_recall_enabled": {
+            "type": "boolean"
+          },
+          "contextual_learning_enabled": {
+            "type": "boolean"
+          },
+          "image_generation_enabled": {
+            "type": "boolean"
+          },
+          "api_access_enabled": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -5152,10 +5121,6 @@
             "type": "string",
             "nullable": true
           },
-          "preferredRating": {
-            "type": "string",
-            "nullable": true
-          },
           "reason": {
             "type": "string",
             "nullable": true
@@ -5171,10 +5136,6 @@
         "type": "object",
         "properties": {
           "allowedRating": {
-            "type": "string",
-            "nullable": true
-          },
-          "preferredRating": {
             "type": "string",
             "nullable": true
           },
@@ -5227,15 +5188,32 @@
             "type": "string",
             "nullable": true
           },
-          "firstName": {
+          "first_name": {
             "type": "string",
             "nullable": true
           },
-          "lastName": {
+          "last_name": {
             "type": "string",
             "nullable": true
           },
-          "tenantName": {
+          "tenant_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "passwordHash": {
+            "type": "string",
+            "nullable": true
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "gender": {
+            "type": "string",
+            "nullable": true
+          },
+          "mobile_number": {
             "type": "string",
             "nullable": true
           }
@@ -5448,8 +5426,8 @@
             },
             "nullable": true
           },
-          "capabilities": {
-            "nullable": true
+          "features": {
+            "$ref": "#/components/schemas/CloneFeatures"
           }
         },
         "additionalProperties": false
@@ -5490,20 +5468,20 @@
         },
         "additionalProperties": false
       },
-      "UpdateRatingPreferenceRequest": {
+      "UpdateStatusRequest": {
         "type": "object",
         "properties": {
-          "preferredRating": {
+          "status": {
             "type": "string",
             "nullable": true
           }
         },
         "additionalProperties": false
       },
-      "UpdateStatusRequest": {
+      "UpgradeRequest": {
         "type": "object",
         "properties": {
-          "status": {
+          "targetTier": {
             "type": "string",
             "nullable": true
           }

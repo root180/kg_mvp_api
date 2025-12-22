@@ -28,6 +28,93 @@ using System.Threading.Tasks;
 
 namespace KeiroGenesis.Identity
 {
+
+    #region Content Level Policy
+    // -----------------------------------------------------------------------------
+    // Defines content-level ordering and comparison rules.
+    // Used for capability gating based on token-asserted content_level.
+    // No services. No database. Claims-only evaluation.
+    // -----------------------------------------------------------------------------
+  
+
+    public static class ContentLevelPolicy
+    {
+        private static readonly Dictionary<string, int> Rank = new()
+        {
+            ["restricted"] = 0,
+            ["general"] = 1,
+            ["mature"] = 2
+        };
+
+        public static bool Allows(string tokenLevel, string requiredLevel)
+        {
+            var tokenRank =
+                Rank.TryGetValue(tokenLevel, out var tr) ? tr : 0;
+
+            var requiredRank =
+                Rank.TryGetValue(requiredLevel, out var rr) ? rr : 0;
+
+            return tokenRank >= requiredRank;
+        }
+    }
+
+    // -----------------------------------------------------------------------------
+    // Declares required capability and optional minimum content level
+    // for identity-based access enforcement.
+    // -----------------------------------------------------------------------------
+      public static class IdentityAuthorizationExtensions
+    {
+        public static bool IsCapabilityAllowed(
+            ClaimsPrincipal user,
+            string requiredCapability,
+            string? requiredContentLevel,
+            out string failureReason)
+        {
+            failureReason = string.Empty;
+
+            var caps =
+                user.FindAll("cap")
+                    .Select(c => c.Value)
+                    .ToHashSet();
+
+            if (!caps.Contains(requiredCapability))
+            {
+                failureReason = "capability_denied";
+                return false;
+            }
+
+            if (requiredContentLevel != null)
+            {
+                var contentLevel =
+                    user.FindFirst("content_level")?.Value ?? "restricted";
+
+                if (!ContentLevelPolicy.Allows(
+                        contentLevel,
+                        requiredContentLevel))
+                {
+                    failureReason = "content_level_insufficient";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+    public sealed class RequiresCapabilityAttribute : Attribute
+    {
+        public string Capability { get; }
+        public string? MinimumContentLevel { get; }
+
+        public RequiresCapabilityAttribute(
+            string capability,
+            string? minimumContentLevel = null)
+        {
+            Capability = capability;
+            MinimumContentLevel = minimumContentLevel;
+        }
+    }
+    #endregion
+
     // =========================================================================
     // IDENTITY SIGNAL CORE (NO DECISIONS)
     // =========================================================================
@@ -101,6 +188,22 @@ namespace KeiroGenesis.Identity
         public DateTime OccurredAtUtc { get; set; }
         public string PayloadJson { get; set; } = "{}";
     }
+
+    // Represents assertions about user identity content
+    public sealed class IdentityContentAssertion
+    {
+        public string ContentLevel { get; init; } = "general";
+
+        public bool AgeVerified { get; init; }
+        public bool HumanVerified { get; init; }
+        public bool GovernmentIDVerified { get; init; }
+
+        public string VerificationLevel { get; init; } = "unverified";
+    }
+
+    
+
+
 
     // =========================================================================
     // DATABASE MODELS
@@ -632,6 +735,46 @@ namespace KeiroGenesis.API.Services
             };
         }
 
+        public async Task<IdentityContentAssertion> GetIdentityContentAssertionAsync(
+      Guid tenantId,
+      Guid userId)
+        {
+            var snapshot = await _repo.GetIdentitySnapshotAsync(tenantId, userId);
+
+            if (snapshot == null)
+            {
+                snapshot = new IdentitySignalSnapshot
+                {
+                    TenantId = tenantId,
+                    UserId = userId,
+                    VerificationLevel = IdentityVerificationLevel.Unverified,
+                    AgeVerified = false,
+                    AgeCategory = AgeVerificationResult.Unknown
+                };
+            }
+
+            snapshot = IdentitySignalCore.Normalize(snapshot);
+
+            // 🔒 DEFAULT SAFE CONTENT
+            var contentLevel = "general";
+
+            if (!snapshot.AgeVerified || snapshot.AgeCategory == AgeVerificationResult.Minor)
+                contentLevel = "restricted";
+            else if (snapshot.AgeCategory == AgeVerificationResult.Adult)
+                contentLevel = "mature";
+
+            return new IdentityContentAssertion
+            {
+                ContentLevel = contentLevel,
+                VerificationLevel = snapshot.VerificationLevel.ToString(),
+                AgeVerified = snapshot.AgeVerified,
+                HumanVerified = snapshot.HumanVerified,
+                GovernmentIDVerified = snapshot.GovernmentIDVerified
+            };
+        }
+
+
+
         public async Task<List<ConsentResponse>> GetConsentsAsync(Guid tenantId, Guid userId)
         {
             var consents = await _repo.GetConsentRecordsAsync(tenantId, userId);
@@ -692,7 +835,7 @@ namespace KeiroGenesis.API.Controllers.V1
     using KeiroGenesis.API.Services;
     using KeiroGenesis.Identity;
 
-    [ApiController]
+
     [Route("api/v1/auth/identity")]
     [Produces("application/json")]
     public partial class IdentitySignalsController : ControllerBase
@@ -824,5 +967,39 @@ namespace KeiroGenesis.API.Controllers.V1
                 return StatusCode(500, new { message = "Failed to retrieve identity history" });
             }
         }
+    
+
+    #region Capability Enforcement
+// -----------------------------------------------------------------------------
+// Explicit capability and content-level enforcement using identity claims.
+// -----------------------------------------------------------------------------
+#endregion
+
+        [HttpPost("publish")]
+        [Authorize]
+        [RequiresCapability("experience.publish", "mature")]
+        public IActionResult Publish()
+        {
+            var requirement =
+                HttpContext.GetEndpoint()?
+                    .Metadata
+                    .GetMetadata<RequiresCapabilityAttribute>();
+
+            if (requirement != null &&
+                !IdentityAuthorizationExtensions.IsCapabilityAllowed(
+                    User,
+                    requirement.Capability,
+                    requirement.MinimumContentLevel,
+                    out var reason))
+            {
+                return Forbid(reason);
+            }
+
+            return Ok();
+        }
+    
+    
     }
-}
+
+
+    }

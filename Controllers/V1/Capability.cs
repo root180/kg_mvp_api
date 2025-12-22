@@ -81,6 +81,26 @@ namespace KeiroGenesis.API.Models
         public int? EffectiveMaxDailyUses { get; set; }
     }
 
+    // Add after line 82 (after CapabilityDetail class)
+
+    public sealed class CapabilityCheckResponse
+    {
+        [JsonPropertyName("capability_code")]
+        public string CapabilityCode { get; set; } = string.Empty;
+
+        [JsonPropertyName("has_capability")]
+        public bool HasCapability { get; set; }
+    }
+
+    public sealed class ErrorResponse
+    {
+        [JsonPropertyName("error")]
+        public string Error { get; set; } = string.Empty;
+
+        [JsonPropertyName("error_code")]
+        public string? ErrorCode { get; set; }
+    }
+
     // Internal Dapper mapping class
     internal class EntitlementRow
     {
@@ -439,7 +459,7 @@ namespace KeiroGenesis.API.Controllers.V1
     /// <summary>
     /// API endpoints for capability queries
     /// </summary>
-    [ApiController]
+  
     [Route("api/v1/capabilities")]
     [Authorize]
     public sealed class CapabilityController : ControllerBase
@@ -476,7 +496,7 @@ namespace KeiroGenesis.API.Controllers.V1
             catch (UnauthorizedAccessException ex)
             {
                 _logger.LogWarning(ex, "Unauthorized entitlement request");
-                return Unauthorized(new { error = ex.Message });
+                return Unauthorized(new ErrorResponse { Error = ex.Message, ErrorCode = "UNAUTHORIZED" });
             }
             catch (Exception ex)
             {
@@ -489,7 +509,7 @@ namespace KeiroGenesis.API.Controllers.V1
         /// Check if authenticated user has specific capability.
         /// </summary>
         [HttpGet("check/{capabilityCode}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(CapabilityCheckResponse), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public async Task<ActionResult> CheckCapability(string capabilityCode)
@@ -502,16 +522,16 @@ namespace KeiroGenesis.API.Controllers.V1
                 var hasCapability = await _service.HasCapabilityAsync(
                     tenantId, userId, capabilityCode);
 
-                return Ok(new
+                return Ok(new CapabilityCheckResponse
                 {
-                    capability_code = capabilityCode,
-                    has_capability = hasCapability
+                    CapabilityCode = capabilityCode,
+                    HasCapability = hasCapability
                 });
             }
             catch (UnauthorizedAccessException ex)
             {
                 _logger.LogWarning(ex, "Unauthorized capability check");
-                return Unauthorized(new { error = ex.Message });
+                return Unauthorized(new ErrorResponse { Error = ex.Message, ErrorCode = "UNAUTHORIZED" });
             }
             catch (Exception ex)
             {

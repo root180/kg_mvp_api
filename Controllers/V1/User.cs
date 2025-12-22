@@ -199,7 +199,7 @@ public class UserProfileResponse
     [JsonPropertyName("contentEligibilityLevel")]
     public string? ContentEligibilityLevel { get; set; }
 
-    [JsonPropertyName("age")]
+  
     public int? Age { get; set; }
 
     [JsonPropertyName("isActive")]

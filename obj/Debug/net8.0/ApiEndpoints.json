@@ -775,7 +775,7 @@
     ]
   },
   {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilityController",
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilitiesController",
     "Method": "CheckCapability",
     "RelativePath": "api/v1/capabilities/check/{capabilityCode}",
     "HttpMethod": "GET",
@@ -799,19 +799,27 @@
         "StatusCode": 200
       },
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "KeiroGenesis.API.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 401
       },
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "KeiroGenesis.API.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 500
       }
     ]
   },
   {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilityController",
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilitiesController",
     "Method": "GetEntitlements",
     "RelativePath": "api/v1/capabilities/entitlements",
     "HttpMethod": "GET",
@@ -829,13 +837,21 @@
         "StatusCode": 200
       },
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "KeiroGenesis.API.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 401
       },
       {
-        "Type": "System.Void",
-        "MediaTypes": [],
+        "Type": "KeiroGenesis.API.Models.ErrorResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "StatusCode": 500
       }
     ]
@@ -1038,32 +1054,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.ExampleCloneController",
-    "Method": "CreateClone",
-    "RelativePath": "api/v1/clones",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.ExampleCloneController",
-    "Method": "DeleteClone",
-    "RelativePath": "api/v1/clones/{cloneId}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "cloneId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController",

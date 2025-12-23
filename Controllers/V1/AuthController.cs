@@ -431,7 +431,7 @@ namespace KeiroGenesis.API.Services
             );
 
             // ✅ Fetch identity verification status
-            var identityStatus = await _identityService.GetStatusAsync(tenantId, userId);
+            var identityStatus = await _identityService.GetProfileStatusAsync(tenantId, userId);
 
             // ✅ Fetch or use provided content rating
             string allowedRating;
@@ -520,7 +520,7 @@ namespace KeiroGenesis.API.Services
         //            );
 
         //            // ✅ Fetch identity verification status
-        //            var identityStatus = await _identityService.GetStatusAsync(tenantId, userId);
+        //            var identityStatus = await _identityService.GetProfileStatusAsync(tenantId, userId);
 
         //            // ✅ Fetch content rating status  
         //            var ratingStatus = await _ratingService.GetRatingStatusAsync(tenantId, userId);
@@ -683,6 +683,9 @@ namespace KeiroGenesis.API.Services
                 );
 
 
+                // ✅ CREATE identity profile
+                await _identityService.CreateIdentityProfileAsync(result.TenantId.Value, result.UserId.Value);
+
 
                 // Generate tokens
                 var accessToken = await GenerateAccessTokenAsync(
@@ -774,7 +777,7 @@ namespace KeiroGenesis.API.Services
                 var tenantId = (Guid)user.tenant_id;
                 var username = (string)user.username;
                 var email = (string)user.email;
-                var dateofbirth = (DateTime)user;  //GET DATE OF BIRTH
+                
 
                 IEnumerable<int> roleIds = await _repo.GetUserRolesAsync(userId, tenantId);
                 var roleArray = roleIds.Select(id => id switch

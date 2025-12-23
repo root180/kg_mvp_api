@@ -142,7 +142,7 @@ namespace KeiroGenesis.API.Controllers.V1
                 _logger.LogInformation("MVP Mock: Auto-verifying government ID for user {UserId}", userId);
 
                 // Validate that they've completed human verification first
-                var status = await _service.GetStatusAsync(tenantId, userId);
+                var status = await _service.GetProfileStatusAsync(tenantId, userId);
                 if (status.VerificationLevel < IdentityVerificationLevel.HumanVerified)
                 {
                     return BadRequest(new 
@@ -237,7 +237,7 @@ namespace KeiroGenesis.API.Controllers.V1
                 );
 
                 // Get updated status
-                var status = await _service.GetStatusAsync(tenantId, userId);
+                var status = await _service.GetProfileStatusAsync(tenantId, userId);
 
                 return Ok(new MockVerificationResult
                 {

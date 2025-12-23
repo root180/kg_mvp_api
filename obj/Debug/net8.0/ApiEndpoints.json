@@ -463,212 +463,6 @@
     ]
   },
   {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "RecordConsent",
-    "RelativePath": "api/v1/auth/identity/consent",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "KeiroGenesis.Identity.ConsentRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.ConsentResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "GetConsents",
-    "RelativePath": "api/v1/auth/identity/consent",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[KeiroGenesis.Identity.ConsentResponse, KeiroGenesis.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "GetHistory",
-    "RelativePath": "api/v1/auth/identity/history",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "limit",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[KeiroGenesis.Identity.VerificationAttemptResponse, KeiroGenesis.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "Initialize",
-    "RelativePath": "api/v1/auth/identity/initialize",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.IdentityStatusResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "Publish",
-    "RelativePath": "api/v1/auth/identity/publish",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "GetStatus",
-    "RelativePath": "api/v1/auth/identity/status",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.Identity.IdentityStatusResponse",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "StartAgeVerification",
-    "RelativePath": "api/v1/auth/identity/verify/age",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "KeiroGenesis.API.Controllers.V1.AgeVerificationRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "CompleteFullVerification",
-    "RelativePath": "api/v1/auth/identity/verify/complete",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "StartGovernmentIDVerification",
-    "RelativePath": "api/v1/auth/identity/verify/government-id",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "KeiroGenesis.API.Controllers.V1.GovernmentIDRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "StartHumanVerification",
-    "RelativePath": "api/v1/auth/identity/verify/human",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
-        "MediaTypes": [
-          "application/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
-    "Method": "ResetVerification",
-    "RelativePath": "api/v1/auth/identity/verify/reset",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.AuthController",
     "Method": "InspectJwt",
     "RelativePath": "api/v1/auth/jwt/inspect",
@@ -868,19 +662,117 @@
   },
   {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
-    "Method": "Upgrade",
-    "RelativePath": "api/v1/billing/upgrade",
+    "Method": "GetSubscription",
+    "RelativePath": "api/v1/billing/subscription",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Models.SubscriptionStatus",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
+    "Method": "Cancel",
+    "RelativePath": "api/v1/billing/subscription/cancel",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "KeiroGenesis.API.Services.UpgradeRequest",
+        "Type": "KeiroGenesis.API.Controllers.V1.BillingController\u002BCancelRequest",
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Models.SubscriptionCancellationResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
+    "Method": "Downgrade",
+    "RelativePath": "api/v1/billing/subscription/downgrade",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.Controllers.V1.BillingController\u002BDowngradeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Models.SubscriptionUpgradeResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
+    "Method": "Upgrade",
+    "RelativePath": "api/v1/billing/subscription/upgrade",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.Controllers.V1.BillingController\u002BUpgradeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Models.SubscriptionUpgradeResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.BillingController",
+    "Method": "GetUserSubscription",
+    "RelativePath": "api/v1/billing/subscription/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Models.UserSubscriptionStatus",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.CapabilityController",
@@ -1793,6 +1685,212 @@
         "StatusCode": 503
       }
     ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "RecordConsent",
+    "RelativePath": "api/v1/identity/consent",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.Identity.ConsentRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.Identity.ConsentResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "GetConsents",
+    "RelativePath": "api/v1/identity/consent",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[KeiroGenesis.Identity.ConsentResponse, KeiroGenesis.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "GetHistory",
+    "RelativePath": "api/v1/identity/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "limit",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[KeiroGenesis.Identity.VerificationAttemptResponse, KeiroGenesis.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "Initialize",
+    "RelativePath": "api/v1/identity/initialize",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.Identity.IdentityStatusResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "Publish",
+    "RelativePath": "api/v1/identity/publish",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "GetStatus",
+    "RelativePath": "api/v1/identity/status",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.Identity.IdentityStatusResponse",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "StartAgeVerification",
+    "RelativePath": "api/v1/identity/verify/age",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.Controllers.V1.AgeVerificationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "CompleteFullVerification",
+    "RelativePath": "api/v1/identity/verify/complete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "StartGovernmentIDVerification",
+    "RelativePath": "api/v1/identity/verify/government-id",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.Controllers.V1.GovernmentIDRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "StartHumanVerification",
+    "RelativePath": "api/v1/identity/verify/human",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.Controllers.V1.MockVerificationResult",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.IdentitySignalsController",
+    "Method": "ResetVerification",
+    "RelativePath": "api/v1/identity/verify/reset",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.MessagingController",

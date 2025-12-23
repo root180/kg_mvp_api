@@ -1,0 +1,80 @@
+2025-12-23 00:38:07.136 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 00:38:07.350 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 00:38:07.352 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 00:38:07.352 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 00:38:07.352 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 00:38:10.456 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 00:38:10.459 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 00:38:12.333 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 00:38:12.676 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 00:38:58.332 -05:00 [Error] Error getting entitlements
+Npgsql.PostgresException (0x80004005): 42703: column us.id does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CapabilityRepository.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 186
+   at KeiroGenesis.API.Services.CapabilityService.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 294
+   at KeiroGenesis.API.Controllers.V1.CapabilityController.GetEntitlements() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 493
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column us.id does not exist
+    InternalPosition: 21
+    InternalQuery: 
+    SELECT
+        us.id AS subscription_id,
+        sp.subscription_plan_id,
+        sp.subscription_name,
+        sp.max_clones,
+        sp.max_users,
+        sp.max_storage_mb,
+        sp.monthly_interactions,
+        sp.price_monthly,
+        sp.price_annual,
+        sp.currency
+    FROM billing.user_subscriptions us
+    JOIN billing.subscription_plans sp
+      ON sp.subscription_plan_id = us.plan_id
+    WHERE us.user_id = p_user_id
+      AND us.status = 'active'
+      AND EXISTS (
+          SELECT 1
+          FROM core.user_tenants ut
+          WHERE ut.user_id = p_user_id
+            AND ut.tenant_id = p_tenant_id
+            AND ut.is_active = true
+      )
+    ORDER BY us.created_at DESC
+    LIMIT 1;
+
+    Where: SQL function "fn_get_active_plan_for_user_tenant" during inlining
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 00:49:34.728 -05:00 [Error] Error getting entitlements
+Npgsql.PostgresException (0x80004005): 0A000: SET is not allowed in a non-volatile function
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CapabilityRepository.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 186
+   at KeiroGenesis.API.Services.CapabilityService.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 294
+   at KeiroGenesis.API.Controllers.V1.CapabilityController.GetEntitlements() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 493
+  Exception data:
+    Severity: ERROR
+    SqlState: 0A000
+    MessageText: SET is not allowed in a non-volatile function
+    Where: SQL function "fn_get_entitlement_bundle" during startup
+    File: functions.c
+    Line: 524
+    Routine: init_execution_state

@@ -70,3 +70,333 @@
 2025-12-22 10:36:15.070 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
 2025-12-22 10:36:15.381 -05:00 [Information] PostgreSQL connection test succeeded
 2025-12-22 10:36:19.629 -05:00 [Information] Rating profile created for user 2b4978df-9135-46ec-8614-87f639277fec: "MA"
+2025-12-22 11:11:23.083 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 11:11:23.237 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 11:11:23.239 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 11:11:23.239 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 11:11:23.239 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 11:11:26.297 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 11:11:26.300 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 11:11:32.318 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 11:11:32.611 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 11:12:28.397 -05:00 [Error] Error during login
+System.InvalidCastException: Unable to cast object of type 'DapperRow' to type 'System.DateTime'.
+   at CallSite.Target(Closure, CallSite, Object)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   at KeiroGenesis.API.Services.AuthService.LoginAsync(LoginRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\AuthController.cs:line 777
+2025-12-22 11:14:54.313 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 11:14:54.472 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 11:14:54.475 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 11:14:54.476 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 11:14:54.476 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 11:14:57.681 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 11:14:57.686 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 11:14:59.823 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 11:15:00.145 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 11:24:43.803 -05:00 [Error] Error in ForgotPasswordAsync
+Npgsql.PostgresException (0x80004005): 42883: function auth.fn_get_tenant_id_by_email(text) does not exist
+
+POSITION: 26
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.AuthRepository.GetTenantIdByEmailAsync(String email) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\AuthController.cs:line 336
+   at KeiroGenesis.API.Services.AuthService.ForgotPasswordAsync(String email) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\AuthController.cs:line 962
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function auth.fn_get_tenant_id_by_email(text) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 26
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-22 11:25:22.670 -05:00 [Error] Error in ForgotUsernameAsync
+Npgsql.PostgresException (0x80004005): 42883: function auth.fn_get_tenant_id_by_email(text) does not exist
+
+POSITION: 26
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.AuthRepository.GetTenantIdByEmailAsync(String email) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\AuthController.cs:line 336
+   at KeiroGenesis.API.Services.AuthService.ForgotUsernameAsync(String email) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\AuthController.cs:line 1188
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function auth.fn_get_tenant_id_by_email(text) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 26
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-22 12:14:42.049 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 12:14:42.212 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 12:14:42.214 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 12:14:42.214 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 12:14:42.215 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 12:14:45.431 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 12:14:45.433 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 12:15:03.374 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 12:15:03.724 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 12:43:16.400 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=dad3cc65-4c7d-48f3-8639-d74c229b69ea - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentitySnapshotAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 13:32:33.002 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=dad3cc65-4c7d-48f3-8639-d74c229b69ea - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentitySnapshotAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 13:32:34.294 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=dad3cc65-4c7d-48f3-8639-d74c229b69ea - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserializec1777e88-b6a6-4002-9b24-27dcbb714221(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentitySnapshotAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 13:44:41.353 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 13:44:41.441 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:44:41.442 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 13:44:41.442 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 13:44:41.442 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:44:44.660 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 13:44:44.662 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 13:44:46.675 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 13:44:47.347 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 13:44:48.347 -05:00 [Error] Error getting identity status
+Npgsql.PostgresException (0x80004005): 0A000: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 514
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetStatusAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 661
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 877
+  Exception data:
+    Severity: ERROR
+    SqlState: 0A000
+    MessageText: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+    Position: 15
+    File: namespace.c
+    Line: 3330
+    Routine: DeconstructQualifiedName
+2025-12-22 13:56:48.187 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 13:56:48.362 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:56:48.366 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 13:56:48.367 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 13:56:48.370 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:56:51.400 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 13:56:51.402 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 13:58:07.099 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 13:58:07.332 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:58:07.336 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 13:58:07.337 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 13:58:07.338 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:58:10.405 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 13:58:10.408 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 13:59:16.360 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 13:59:16.554 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:59:16.560 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 13:59:16.560 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 13:59:16.561 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 13:59:19.814 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 13:59:19.817 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 14:02:07.168 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 14:02:07.486 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:02:07.488 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 14:02:07.488 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 14:02:07.488 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:02:10.729 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 14:02:10.731 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 14:02:19.001 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 14:02:19.313 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 14:02:20.248 -05:00 [Error] Error getting identity status
+Npgsql.PostgresException (0x80004005): 0A000: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileStatusAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 514
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetProfileStatusAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 661
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 877
+  Exception data:
+    Severity: ERROR
+    SqlState: 0A000
+    MessageText: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+    Position: 15
+    File: namespace.c
+    Line: 3330
+    Routine: DeconstructQualifiedName
+2025-12-22 14:02:52.571 -05:00 [Error] Error getting identity status
+Npgsql.PostgresException (0x80004005): 0A000: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileStatusAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 514
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetProfileStatusAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 661
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\IdentityVerification.cs:line 877
+  Exception data:
+    Severity: ERROR
+    SqlState: 0A000
+    MessageText: cross-database references are not implemented: auth.auth.fn_get_identity_profile
+    Position: 15
+    File: namespace.c
+    Line: 3330
+    Routine: DeconstructQualifiedName
+2025-12-22 14:03:51.926 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 14:03:52.204 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:03:52.207 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 14:03:52.207 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 14:03:52.208 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:03:55.282 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 14:03:55.285 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 14:03:55.715 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 14:03:56.014 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 14:03:58.421 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=cb6976c2-eda2-4b46-acb0-6b204cd09407 - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserialize2dc4555c-fe0e-4fdd-950d-8cbc16efafdd(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserialize2dc4555c-fe0e-4fdd-950d-8cbc16efafdd(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 14:04:42.529 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 14:04:42.730 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:04:42.732 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 14:04:42.733 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 14:04:42.746 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:04:45.791 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 14:04:45.793 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 14:04:46.709 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 14:04:47.110 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 14:04:47.702 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=cb6976c2-eda2-4b46-acb0-6b204cd09407 - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserialize226962e5-6c0a-4231-8e3d-bf2718e45e89(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserialize226962e5-6c0a-4231-8e3d-bf2718e45e89(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 14:07:57.202 -05:00 [Error] Error getting identity status
+System.Data.DataException: Error parsing column 3 (verification_level=cb6976c2-eda2-4b46-acb0-6b204cd09407 - Object)
+ ---> System.InvalidCastException: Received enum value 'Unverified' from database which wasn't found on enum KeiroGenesis.Identity.IdentityVerificationLevel
+   at Npgsql.Internal.Converters.EnumConverter`1.ReadCore(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.Read(PgReader reader)
+   at Npgsql.Internal.PgBufferedConverter`1.ReadAsObject(Boolean async, PgReader reader, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.ReadAsObject(PgReader reader)
+   at Npgsql.NpgsqlDataReader.GetValue(Int32 ordinal)
+   at Npgsql.NpgsqlDataReader.get_Item(Int32 ordinal)
+   at Deserialize226962e5-6c0a-4231-8e3d-bf2718e45e89(DbDataReader)
+   --- End of inner exception stack trace ---
+   at Dapper.SqlMapper.ThrowDataException(Exception ex, Int32 index, IDataReader reader, Object value) in /_/Dapper/SqlMapper.cs:line 3928
+   at Deserialize226962e5-6c0a-4231-8e3d-bf2718e45e89(DbDataReader)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command)
+   at KeiroGenesis.API.Repositories.IdentitySignalsRepository.GetIdentityProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Services.IdentitySignalsService.GetProfileStatusAsync(Guid tenantId, Guid userId)
+   at KeiroGenesis.API.Controllers.V1.IdentitySignalsController.GetStatus()
+2025-12-22 14:13:24.478 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 14:13:24.683 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:13:24.693 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 14:13:24.693 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 14:13:24.693 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 14:13:27.890 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 14:13:27.892 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 14:13:29.777 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 14:13:30.066 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 15:54:11.004 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-22 15:54:11.282 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 15:54:11.284 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-22 15:54:11.291 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-22 15:54:11.291 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-22 15:54:14.282 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-22 15:54:14.284 -05:00 [Warning] Startup email notification failed to send
+2025-12-22 15:54:19.927 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-22 15:54:20.511 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-22 15:54:47.004 -05:00 [Error] No active subscription found for tenant 104df6ab-ef05-4d73-98c5-167b169c1ca0, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-22 15:54:47.238 -05:00 [Warning] Unauthorized entitlement request
+System.UnauthorizedAccessException: No active subscription found. Contact support to activate a plan.
+   at KeiroGenesis.API.Repositories.CapabilityRepository.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 204
+   at KeiroGenesis.API.Services.CapabilityService.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 294
+   at KeiroGenesis.API.Controllers.V1.CapabilityController.GetEntitlements() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 493

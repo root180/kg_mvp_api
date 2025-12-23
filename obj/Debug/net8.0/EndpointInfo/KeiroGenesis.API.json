@@ -985,7 +985,56 @@
         }
       }
     },
-    "/api/v1/billing/upgrade": {
+    "/api/v1/billing/subscription": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/billing/subscription/user/{userId}": {
+      "get": {
+        "tags": [
+          "Billing"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSubscriptionStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/billing/subscription/upgrade": {
       "post": {
         "tags": [
           "Billing"
@@ -1011,7 +1060,90 @@
         },
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionUpgradeResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/billing/subscription/downgrade": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DowngradeRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DowngradeRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/DowngradeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionUpgradeResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/billing/subscription/cancel": {
+      "post": {
+        "tags": [
+          "Billing"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionCancellationResult"
+                }
+              }
+            }
           }
         }
       }
@@ -2373,7 +2505,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/status": {
+    "/api/v1/identity/status": {
       "get": {
         "tags": [
           "IdentitySignals"
@@ -2392,7 +2524,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/initialize": {
+    "/api/v1/identity/initialize": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2411,7 +2543,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/consent": {
+    "/api/v1/identity/consent": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2469,7 +2601,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/history": {
+    "/api/v1/identity/history": {
       "get": {
         "tags": [
           "IdentitySignals"
@@ -2502,7 +2634,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/publish": {
+    "/api/v1/identity/publish": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2514,7 +2646,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/verify/age": {
+    "/api/v1/identity/verify/age": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2552,7 +2684,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/verify/human": {
+    "/api/v1/identity/verify/human": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2571,7 +2703,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/verify/government-id": {
+    "/api/v1/identity/verify/government-id": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2609,7 +2741,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/verify/complete": {
+    "/api/v1/identity/verify/complete": {
       "post": {
         "tags": [
           "IdentitySignals"
@@ -2628,7 +2760,7 @@
         }
       }
     },
-    "/api/v1/auth/identity/verify/reset": {
+    "/api/v1/identity/verify/reset": {
       "delete": {
         "tags": [
           "IdentitySignals"
@@ -4530,6 +4662,16 @@
         },
         "additionalProperties": false
       },
+      "CancelRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "CapabilityCheckResponse": {
         "type": "object",
         "properties": {
@@ -4740,6 +4882,16 @@
             "format": "int64"
           },
           "mimeType": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DowngradeRequest": {
+        "type": "object",
+        "properties": {
+          "newPlan": {
             "type": "string",
             "nullable": true
           }
@@ -5432,6 +5584,86 @@
         },
         "additionalProperties": false
       },
+      "SubscriptionCancellationResult": {
+        "type": "object",
+        "properties": {
+          "subscriptionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "cancelledAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "effectiveUntil": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubscriptionStatus": {
+        "type": "object",
+        "properties": {
+          "subscriptionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subscriptionPlanId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "planName": {
+            "type": "string",
+            "nullable": true
+          },
+          "planRank": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "activatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "SubscriptionUpgradeResult": {
+        "type": "object",
+        "properties": {
+          "subscriptionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "oldPlan": {
+            "type": "string",
+            "nullable": true
+          },
+          "newPlan": {
+            "type": "string",
+            "nullable": true
+          },
+          "upgradedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
       "UpdateActorStatusRequest": {
         "type": "object",
         "properties": {
@@ -5481,7 +5713,7 @@
       "UpgradeRequest": {
         "type": "object",
         "properties": {
-          "targetTier": {
+          "newPlan": {
             "type": "string",
             "nullable": true
           }
@@ -5534,6 +5766,41 @@
           "total": {
             "type": "integer",
             "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UserSubscriptionStatus": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "tenantId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "planName": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          },
+          "activatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false

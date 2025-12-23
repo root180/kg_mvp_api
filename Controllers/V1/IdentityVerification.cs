@@ -214,7 +214,7 @@ namespace KeiroGenesis.Identity
         public Guid IdentityProfileId { get; set; }
         public Guid TenantId { get; set; }
         public Guid UserId { get; set; }
-        public IdentityVerificationLevel VerificationLevel { get; set; }
+        public string VerificationLevel { get; set; }
         public bool AgeVerified { get; set; }
         public AgeVerificationResult AgeCategory { get; set; }
         public DateTime? VerifiedAt { get; set; }
@@ -494,6 +494,9 @@ namespace KeiroGenesis.API.Repositories
     public partial class IdentitySignalsRepository
     {
         private readonly NpgsqlDataSource _dataSource;
+        private readonly ILogger<IdentitySignalsRepository> _logger = 
+            LoggerFactory.Create(builder => builder.AddConsole())
+            .CreateLogger<IdentitySignalsRepository>();
 
         public IdentitySignalsRepository(NpgsqlDataSource dataSource)
         {
@@ -507,61 +510,79 @@ namespace KeiroGenesis.API.Repositories
         // IDENTITY SNAPSHOT
         // ============================================================
 
-        public async Task<IdentitySignalSnapshot?> GetIdentitySnapshotAsync(Guid tenantId, Guid userId)
+        public async Task<IdentitySignalSnapshot?> GetIdentityProfileStatusAsync(Guid tenantId, Guid userId)
         {
-            using var conn = CreateConnection();
-
-            var profile = await conn.QueryFirstOrDefaultAsync<IdentityProfile>(
-                "SELECT * FROM auth.fn_get_identity_profile_by_user(@tenant_id, @user_id)",
-                new { tenant_id = tenantId, user_id = userId }
-            );
-
-            if (profile == null)
-                return null;
-
-            return new IdentitySignalSnapshot
+            try
             {
-                TenantId = profile.TenantId,
-                UserId = profile.UserId,
-                VerificationLevel = profile.VerificationLevel,
-                AgeVerified = profile.AgeVerified,
-                AgeCategory = profile.AgeCategory,
-                HumanVerified = false,
-                GovernmentIDVerified = false,
-                VerifiedAt = profile.VerifiedAt,
-                ExpiresAt = profile.ExpiresAt,
-                RequiresReverification = profile.RequiresReverification,
-                ReverificationReason = profile.ReverificationReason
-            };
+                using var conn = CreateConnection();
+                var profile = await conn.QueryFirstOrDefaultAsync<IdentityProfile>(
+                    "SELECT * FROM auth.fn_get_identity_profile(@tenant_id, @user_id)",
+                    new { tenant_id = tenantId, user_id = userId }
+                );
+
+
+
+
+
+                if (profile == null)
+                    return null;
+
+                return new IdentitySignalSnapshot
+                {
+                    TenantId = profile.TenantId,
+                    UserId = profile.UserId,
+                    VerificationLevel = Enum.Parse<IdentityVerificationLevel>(profile.VerificationLevel),
+                    AgeVerified = profile.AgeVerified,
+                    AgeCategory = profile.AgeCategory,
+                    HumanVerified = false,
+                    GovernmentIDVerified = false,
+                    VerifiedAt = profile.VerifiedAt,
+                    ExpiresAt = profile.ExpiresAt,
+                    RequiresReverification = profile.RequiresReverification,
+                    ReverificationReason = profile.ReverificationReason
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in GetIdentityProfileStatusAsync for user {UserId}", userId);
+                throw new InvalidOperationException($"Failed to get identity profile: {ex.Message}", ex);
+            }
         }
 
         public async Task<bool> IdentityProfileExistsAsync(Guid tenantId, Guid userId)
         {
-            using var conn = CreateConnection();
-
-            var profile = await conn.QueryFirstOrDefaultAsync<IdentityProfile>(
-                "SELECT * FROM auth.fn_get_identity_profile_by_user(@tenant_id, @user_id)",
-                new { tenant_id = tenantId, user_id = userId }
-            );
-
-            return profile != null;
+            try
+            {
+                using var conn = CreateConnection();
+                var profile = await conn.QueryFirstOrDefaultAsync<IdentityProfile>(
+                    "SELECT * FROM auth.fn_get_identity_profile_by_user(@tenant_id, @user_id)",
+                    new { tenant_id = tenantId, user_id = userId }
+                );
+                return profile != null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in IdentityProfileExistsAsync for user {UserId}", userId);
+                throw new InvalidOperationException($"Failed to check if identity profile exists: {ex.Message}", ex);
+            }
         }
-
-        // ============================================================
-        // IDENTITY PROFILE
-        // ============================================================
 
         public async Task<Guid> CreateIdentityProfileAsync(Guid tenantId, Guid userId)
         {
-            using var conn = CreateConnection();
-
-            return await conn.ExecuteScalarAsync<Guid>(
-                "SELECT auth.fn_create_identity_profile(@tenant_id, @user_id)",
-                new { tenant_id = tenantId, user_id = userId }
-            );
-        }
-
-        // ============================================================
+            try
+            {
+                using var conn = CreateConnection();
+                return await conn.ExecuteScalarAsync<Guid>(
+                    "SELECT auth.fn_create_identity_profile(@tenant_id, @user_id)",
+                    new { tenant_id = tenantId, user_id = userId }
+                );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in CreateIdentityProfileAsync for user {UserId}", userId);
+                throw new InvalidOperationException($"Failed to create identity profile: {ex.Message}", ex);
+            }
+        }       // ============================================================
         // CONSENT RECORDS
         // ============================================================
 
@@ -656,9 +677,9 @@ namespace KeiroGenesis.API.Services
             _logger = logger;
         }
 
-        public async Task<IdentityStatusResponse> GetStatusAsync(Guid tenantId, Guid userId)
+        public async Task<IdentityStatusResponse> GetProfileStatusAsync(Guid tenantId, Guid userId)
         {
-            var snapshot = await _repo.GetIdentitySnapshotAsync(tenantId, userId);
+            var snapshot = await _repo.GetIdentityProfileStatusAsync(tenantId, userId);
 
             if (snapshot == null)
             {
@@ -680,7 +701,7 @@ namespace KeiroGenesis.API.Services
             return MapToStatusResponse(snapshot, profileExists: true);
         }
 
-        public async Task<IdentityStatusResponse> InitializeAsync(Guid tenantId, Guid userId)
+        public async Task<IdentityStatusResponse> CreateIdentityProfileAsync(Guid tenantId, Guid userId)
         {
             var exists = await _repo.IdentityProfileExistsAsync(tenantId, userId);
             if (!exists)
@@ -694,8 +715,11 @@ namespace KeiroGenesis.API.Services
                 _logger.LogInformation("Identity profile already exists for user {UserId} in tenant {TenantId}", userId, tenantId);
             }
 
-            return await GetStatusAsync(tenantId, userId);
+            return await GetProfileStatusAsync(tenantId, userId);
         }
+
+    
+
 
         public async Task<ConsentResponse> RecordConsentAsync(Guid tenantId, Guid userId, ConsentRequest request)
         {
@@ -739,7 +763,7 @@ namespace KeiroGenesis.API.Services
       Guid tenantId,
       Guid userId)
         {
-            var snapshot = await _repo.GetIdentitySnapshotAsync(tenantId, userId);
+            var snapshot = await _repo.GetIdentityProfileStatusAsync(tenantId, userId);
 
             if (snapshot == null)
             {
@@ -836,7 +860,7 @@ namespace KeiroGenesis.API.Controllers.V1
     using KeiroGenesis.Identity;
 
 
-    [Route("api/v1/auth/identity")]
+    [Route("api/v1/identity")]
     [Produces("application/json")]
     public partial class IdentitySignalsController : ControllerBase
     {
@@ -871,7 +895,7 @@ namespace KeiroGenesis.API.Controllers.V1
             {
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
-                var result = await _service.GetStatusAsync(tenantId, userId);
+                var result = await _service.GetProfileStatusAsync(tenantId, userId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -892,7 +916,7 @@ namespace KeiroGenesis.API.Controllers.V1
             {
                 var tenantId = GetTenantId();
                 var userId = GetUserId();
-                var result = await _service.InitializeAsync(tenantId, userId);
+                var result = await _service.CreateIdentityProfileAsync(tenantId, userId);
                 return CreatedAtAction(nameof(GetStatus), result);
             }
             catch (Exception ex)

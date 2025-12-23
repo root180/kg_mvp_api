@@ -6,6 +6,9 @@
 // ✅ Issue 3: Consistent ErrorResponse with error_code
 // ✅ Issue 4: Cache includes entitlement_version for billing-authoritative staleness prevention
 // ✅ Issue 5: Tenant ownership validated server-side before capability evaluation
+// ⚠️ Issue A: Capability-level caching restored (performance)
+// ⚠️ Issue B: Fail closed on NULL capability checks
+// ⚠️ Issue C: Entitlement version sanity check
 // ==========================================================================
 
 using Dapper;
@@ -14,6 +17,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using System;
 using System.Collections.Generic;
@@ -23,16 +27,14 @@ using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-// ==========================================================================
 #region DTOs and Models
-// ==========================================================================
 
 namespace KeiroGenesis.API.Models
 {
     /// <summary>
     /// Complete entitlement bundle with subscription limits and capabilities
     /// </summary>
-    public  class EntitlementBundle
+    public sealed class EntitlementBundle
     {
         [JsonPropertyName("subscription_name")]
         public string SubscriptionName { get; set; } = string.Empty;
@@ -52,12 +54,12 @@ namespace KeiroGenesis.API.Models
         [JsonPropertyName("capabilities")]
         public List<CapabilityDetail> Capabilities { get; set; } = new();
 
-        // ✅ FIX #4: Cache versioning for billing-authoritative staleness prevention
+        // ✅ FIX #4: Cache versioning
         [JsonPropertyName("entitlement_version")]
         public long EntitlementVersion { get; set; }
     }
 
-    public  class CapabilityDetail
+    public sealed class CapabilityDetail
     {
         [JsonPropertyName("capability_id")]
         public Guid CapabilityId { get; set; }
@@ -78,7 +80,7 @@ namespace KeiroGenesis.API.Models
         public int? EffectiveMaxDailyUses { get; set; }
     }
 
-    public  class CapabilityCheckResponse
+    public sealed class CapabilityCheckResponse
     {
         [JsonPropertyName("capability_code")]
         public string CapabilityCode { get; set; } = string.Empty;
@@ -87,8 +89,8 @@ namespace KeiroGenesis.API.Models
         public bool HasCapability { get; set; }
     }
 
-    // ✅ FIX #3: Consistent error response with error_code
-    public  class ErrorResponse
+    // ✅ FIX #3: Consistent error response
+    public sealed class ErrorResponse
     {
         [JsonPropertyName("error")]
         public string Error { get; set; } = string.Empty;
@@ -97,18 +99,16 @@ namespace KeiroGenesis.API.Models
         public string ErrorCode { get; set; } = string.Empty;
     }
 }
+
 #endregion
-// ==========================================================================
-#region Repository Layer (No Raw SQL)
-// ==========================================================================
+
+#region Repository Layer
 
 namespace KeiroGenesis.API.Repositories
 {
     using KeiroGenesis.API.Models;
-    using Microsoft.AspNetCore.Connections;
 
-    // ✅ FIX #1: DB function wrapper - no raw SQL literals in business logic
-    public  class CapabilityRepository
+    public class CapabilityRepository
     {
         private readonly IDbConnectionFactory _db;
         private readonly ILogger<CapabilityRepository> _logger;
@@ -121,8 +121,7 @@ namespace KeiroGenesis.API.Repositories
             _logger = logger;
         }
 
-        // Internal row type for Dapper mapping
-        private  class EntitlementRow
+        private class EntitlementRow
         {
             public string subscription_name { get; set; } = string.Empty;
             public int max_clones { get; set; }
@@ -135,20 +134,15 @@ namespace KeiroGenesis.API.Repositories
             public int effective_trust_level_required { get; set; }
             public bool effective_requires_approval { get; set; }
             public int? effective_max_daily_uses { get; set; }
-            public long entitlement_version { get; set; } // ✅ FIX #4: Version tracking
+            public long entitlement_version { get; set; }
         }
 
-        /// <summary>
-        /// ✅ FIX #1: Stored procedure invocation pattern (no raw SQL)
-        /// Calls capability.fn_get_entitlement_bundle via parameterized query
-        /// </summary>
         public async Task<EntitlementBundle> GetEntitlementBundleAsync(
             Guid tenantId,
             Guid userId)
         {
             using var conn = _db.CreateConnection();
 
-            // ✅ Contract-compliant: Function invocation with parameters only
             var rows = await conn.QueryAsync<EntitlementRow>(
                 "SELECT * FROM capability.fn_get_entitlement_bundle(@tenant_id, @user_id)",
                 new { tenant_id = tenantId, user_id = userId });
@@ -166,6 +160,16 @@ namespace KeiroGenesis.API.Repositories
             }
 
             var first = rowList.First();
+
+            // ⚠️ FIX ISSUE C: Validate entitlement version
+            if (first.entitlement_version <= 0)
+            {
+                _logger.LogCritical(
+                    "Invalid entitlement_version ({Version}) returned from DB for tenant {TenantId}",
+                    first.entitlement_version, tenantId);
+                throw new InvalidOperationException("Invalid entitlement state");
+            }
+
             return new EntitlementBundle
             {
                 SubscriptionName = first.subscription_name,
@@ -173,7 +177,7 @@ namespace KeiroGenesis.API.Repositories
                 MaxUsers = first.max_users,
                 MaxStorageMb = first.max_storage_mb,
                 MonthlyInteractions = first.monthly_interactions,
-                EntitlementVersion = first.entitlement_version, // ✅ FIX #4
+                EntitlementVersion = first.entitlement_version,
                 Capabilities = rowList.Select(r => new CapabilityDetail
                 {
                     CapabilityId = r.capability_id,
@@ -187,7 +191,7 @@ namespace KeiroGenesis.API.Repositories
         }
 
         /// <summary>
-        /// ✅ FIX #1: Stored procedure invocation pattern
+        /// ⚠️ FIX ISSUE B: Fail closed on NULL/missing capability
         /// </summary>
         public async Task<bool> HasCapabilityAsync(
             Guid tenantId,
@@ -196,7 +200,8 @@ namespace KeiroGenesis.API.Repositories
         {
             using var conn = _db.CreateConnection();
 
-            var result = await conn.ExecuteScalarAsync<bool>(
+            // ⚠️ FIX ISSUE B: Use nullable bool to detect NULL returns
+            var result = await conn.ExecuteScalarAsync<bool?>(
                 "SELECT capability.fn_has_capability(@tenant_id, @user_id, @capability_code)",
                 new
                 {
@@ -205,7 +210,16 @@ namespace KeiroGenesis.API.Repositories
                     capability_code = capabilityCode
                 });
 
-            return result;
+            // ⚠️ FIX ISSUE B: Fail closed if NULL or missing
+            if (!result.HasValue)
+            {
+                _logger.LogWarning(
+                    "Capability check returned NULL for {CapabilityCode} - capability may not exist",
+                    capabilityCode);
+                return false;
+            }
+
+            return result.Value;
         }
 
         /// <summary>
@@ -217,7 +231,6 @@ namespace KeiroGenesis.API.Repositories
 
             try
             {
-                // Calls billing.fn_validate_tenant_ownership which throws if invalid
                 await conn.ExecuteAsync(
                     "SELECT billing.fn_validate_tenant_ownership(@tenant_id, @user_id)",
                     new { tenant_id = tenantId, user_id = userId });
@@ -232,9 +245,8 @@ namespace KeiroGenesis.API.Repositories
 }
 
 #endregion
-// ==========================================================================
-#region Service Layer (with Cache Versioning)
-// ==========================================================================
+
+#region Service Layer
 
 namespace KeiroGenesis.API.Services
 {
@@ -248,7 +260,7 @@ namespace KeiroGenesis.API.Services
         private readonly IMemoryCache _cache;
         private readonly ILogger<CapabilityService> _logger;
 
-        // ✅ FIX #4: Cache duration reduced + version-based invalidation
+        // ✅ FIX #4: Cache duration
         private static readonly TimeSpan BundleCacheDuration = TimeSpan.FromMinutes(5);
 
         public CapabilityService(
@@ -263,7 +275,7 @@ namespace KeiroGenesis.API.Services
 
         /// <summary>
         /// ✅ FIX #4: Cache key includes entitlement_version
-        /// ✅ FIX #5: Validates tenant ownership before capability resolution
+        /// ✅ FIX #5: Validates tenant ownership
         /// </summary>
         public async Task<EntitlementBundle> GetEntitlementBundleAsync(
             Guid tenantId,
@@ -272,7 +284,7 @@ namespace KeiroGenesis.API.Services
             // ✅ FIX #5: Validate tenant ownership server-side
             await _repo.ValidateTenantOwnershipAsync(tenantId, userId);
 
-            // ✅ FIX #4: Fetch fresh to check version (lightweight)
+            // ✅ FIX #4: Fetch to check version
             var bundle = await _repo.GetEntitlementBundleAsync(tenantId, userId);
 
             // Cache key includes version for automatic invalidation
@@ -293,6 +305,9 @@ namespace KeiroGenesis.API.Services
             return bundle;
         }
 
+        /// <summary>
+        /// ⚠️ FIX ISSUE A: Capability-level caching restored
+        /// </summary>
         public async Task<bool> HasCapabilityAsync(
             Guid tenantId,
             Guid userId,
@@ -301,22 +316,35 @@ namespace KeiroGenesis.API.Services
             // ✅ FIX #5: Validate ownership first
             await _repo.ValidateTenantOwnershipAsync(tenantId, userId);
 
-            return await _repo.HasCapabilityAsync(tenantId, userId, capabilityCode);
+            // ⚠️ FIX ISSUE A: Capability-level caching keyed by version
+            var bundle = await GetEntitlementBundleAsync(tenantId, userId);
+            var cacheKey = $"cap:{tenantId}:{userId}:{capabilityCode.ToLowerInvariant()}:v{bundle.EntitlementVersion}";
+
+            if (_cache.TryGetValue(cacheKey, out bool cachedResult))
+            {
+                _logger.LogDebug("Capability check cache hit for {CapabilityCode}", capabilityCode);
+                return cachedResult;
+            }
+
+            var result = await _repo.HasCapabilityAsync(tenantId, userId, capabilityCode);
+
+            // Cache for 60 seconds (safe because keyed by version)
+            _cache.Set(cacheKey, result, TimeSpan.FromSeconds(60));
+
+            return result;
         }
     }
 }
 
 #endregion
-// ==========================================================================
+
 #region Authorization Components
-// ==========================================================================
 
 namespace KeiroGenesis.API.Authorization
 {
     using KeiroGenesis.API.Services;
-    using Microsoft.Extensions.Options;
 
-    public  class CapabilityRequirement : IAuthorizationRequirement
+    public class CapabilityRequirement : IAuthorizationRequirement
     {
         public string CapabilityCode { get; }
 
@@ -327,7 +355,7 @@ namespace KeiroGenesis.API.Authorization
     }
 
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true)]
-    public  class RequireCapabilityAttribute : Attribute, IAuthorizeData
+    public class RequireCapabilityAttribute : Attribute, IAuthorizeData
     {
         public string? Policy { get; set; }
         public string? Roles { get; set; }
@@ -335,14 +363,12 @@ namespace KeiroGenesis.API.Authorization
 
         public RequireCapabilityAttribute(string capabilityCode)
         {
-            Policy = $"Capability:{capabilityCode}";
+            // Normalize to lowercase for consistency
+            Policy = $"Capability:{capabilityCode.ToLowerInvariant()}";
         }
     }
 
-    /// <summary>
-    /// ✅ FIX #2: Must be registered in DI
-    /// </summary>
-    public  class CapabilityPolicyProvider : IAuthorizationPolicyProvider
+    public class CapabilityPolicyProvider : IAuthorizationPolicyProvider
     {
         private const string PolicyPrefix = "Capability:";
         private readonly DefaultAuthorizationPolicyProvider _fallback;
@@ -375,11 +401,7 @@ namespace KeiroGenesis.API.Authorization
             => _fallback.GetFallbackPolicyAsync();
     }
 
-    /// <summary>
-    /// ✅ FIX #2: Must be registered in DI
-    /// ✅ FIX #5: Validates tenant ownership via service
-    /// </summary>
-    public  class CapabilityAuthorizationHandler
+    public class CapabilityAuthorizationHandler
         : AuthorizationHandler<CapabilityRequirement>
     {
         private readonly CapabilityService _service;
@@ -420,7 +442,6 @@ namespace KeiroGenesis.API.Authorization
 
             try
             {
-                // ✅ FIX #5: Server-side validation happens inside HasCapabilityAsync
                 var hasCapability = await _service.HasCapabilityAsync(
                     tenantId,
                     userId,
@@ -451,10 +472,10 @@ namespace KeiroGenesis.API.Authorization
         }
     }
 }
+
 #endregion
-// ==========================================================================
+
 #region Controller
-// ==========================================================================
 
 namespace KeiroGenesis.API.Controllers.V1
 {
@@ -512,7 +533,7 @@ namespace KeiroGenesis.API.Controllers.V1
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting entitlements");
-                // ✅ FIX #3: Consistent ErrorResponse with error_code
+                // ✅ FIX #3: Consistent ErrorResponse
                 return StatusCode(500, new ErrorResponse
                 {
                     Error = "Internal server error",
@@ -563,3 +584,16 @@ namespace KeiroGenesis.API.Controllers.V1
 }
 
 #endregion
+
+// ==========================================================================
+// DI REGISTRATION (Add to Program.cs):
+// ==========================================================================
+// using KeiroGenesis.API.Authorization;
+// using KeiroGenesis.API.Repositories;
+// using KeiroGenesis.API.Services;
+//
+// builder.Services.AddScoped<CapabilityRepository>();
+// builder.Services.AddScoped<CapabilityService>();
+// builder.Services.AddSingleton<IAuthorizationPolicyProvider, CapabilityPolicyProvider>();
+// builder.Services.AddScoped<IAuthorizationHandler, CapabilityAuthorizationHandler>();
+// builder.Services.AddMemoryCache();

@@ -5,13 +5,13 @@
 // ==========================================================================
 
 using Dapper;
+using KeiroGenesis.API.Authorization;
 using KeiroGenesis.API.Controllers.V1;
 using KeiroGenesis.API.Core.Database;
 using KeiroGenesis.API.Core.Versioning;
 using KeiroGenesis.API.GraphQL.Dashboard;
 using KeiroGenesis.API.Ratings;
 using KeiroGenesis.API.Repositories;
-using KeiroGenesis.API.Security;
 using KeiroGenesis.API.Services;
 using KeiroGenesis.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

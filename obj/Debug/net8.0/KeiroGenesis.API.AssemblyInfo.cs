@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KeiroGenesis.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a73bd70b2378ca93f1ad20ca07d2592f76b1697f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b27f9c817d6474d5d0f9ff8483148d04fcf5489")]
 [assembly: System.Reflection.AssemblyProductAttribute("KeiroGenesis.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KeiroGenesis.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

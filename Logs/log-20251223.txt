@@ -175,3 +175,902 @@ System.UnauthorizedAccessException: No active subscription found. Contact suppor
    at KeiroGenesis.API.Services.CapabilityService.GetEntitlementBundleAsync(Guid tenantId, Guid userId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 288
    at KeiroGenesis.API.Controllers.V1.CapabilitiesController.GetEntitlements() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Capability.cs:line 521
 2025-12-23 13:56:02.368 -05:00 [Information] Loaded entitlement bundle: tenant=104df6ab-ef05-4d73-98c5-167b169c1ca0, tier="free", version=1766516031000, capabilities=11
+2025-12-23 15:46:55.463 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 15:46:55.792 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 15:46:55.795 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 15:46:55.797 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 15:46:55.797 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 15:46:58.800 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 15:46:58.803 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 15:47:05.978 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 15:47:06.301 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 15:47:06.802 -05:00 [Error] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'KeiroGenesis.API.Services.ExperienceWizardService' while attempting to activate 'KeiroGenesis.API.Controllers.V1.ExperienceWizardController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.ThrowHelperUnableToResolveService(Type type, Type requiredBy)
+   at lambda_method58(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Program.cs:line 282
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-12-23 15:51:55.049 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 15:51:55.358 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 15:51:55.362 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 15:51:55.364 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 15:51:55.372 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 15:51:58.459 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 15:51:58.466 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 15:54:11.578 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 15:54:12.291 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 15:54:12.637 -05:00 [Information] Creating experience for clone 00000000-0000-0000-0000-000000000000
+2025-12-23 15:54:13.477 -05:00 [Error] Error creating experience draft
+Npgsql.PostgresException (0x80004005): 42883: function clone.fn_clone_belongs_to_user(uuid, uuid, uuid) does not exist
+
+POSITION: 8
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.CloneBelongsToUserAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 115
+   at KeiroGenesis.API.Services.ExperienceWizardService.CreateExperienceDraftAsync(Guid tenantId, Guid userId, CreateExperienceRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 344
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function clone.fn_clone_belongs_to_user(uuid, uuid, uuid) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 8
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-23 16:20:18.963 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 16:20:19.190 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 16:20:19.192 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 16:20:19.192 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 16:20:19.192 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 16:20:22.472 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 16:20:22.476 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 17:09:18.604 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 17:09:18.773 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 17:09:18.776 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 17:09:18.778 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 17:09:18.778 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 17:09:22.029 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 17:09:22.032 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 17:14:58.482 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 17:14:58.758 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 17:19:56.812 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 3F000: schema "experience" does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 172
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 348
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 498
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Program.cs:line 288
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 3F000
+    MessageText: schema "experience" does not exist
+    Position: 15
+    File: namespace.c
+    Line: 3545
+    Routine: get_namespace_oid
+2025-12-23 17:27:02.575 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 17:27:03.063 -05:00 [Error] Failed to create experience draft
+Npgsql.PostgresException (0x80004005): 3F000: schema "experience" does not exist
+
+POSITION: 8
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, String name, String description) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 96
+   at KeiroGenesis.API.Services.ExperienceWizardService.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, CreateExperienceRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 220
+  Exception data:
+    Severity: ERROR
+    SqlState: 3F000
+    MessageText: schema "experience" does not exist
+    Position: 8
+    File: namespace.c
+    Line: 3545
+    Routine: get_namespace_oid
+2025-12-23 17:49:42.013 -05:00 [Information] Creating clone for user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 17:49:50.664 -05:00 [Information] Saving personality for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:49:50.708 -05:00 [Information] Personality saved for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:49:56.054 -05:00 [Information] Uploading knowledge for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:49:56.099 -05:00 [Information] Uploaded 2 documents for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:50:15.077 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:50:15.707 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.total_chats does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.total_chats does not exist
+    InternalPosition: 189
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 17:57:19.275 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:57:19.891 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.total_chats does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.total_chats does not exist
+    InternalPosition: 189
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 17:57:21.292 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:57:21.792 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.total_chats does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.total_chats does not exist
+    InternalPosition: 189
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 17:58:47.807 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 17:58:48.203 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.total_chats does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.total_chats does not exist
+    InternalPosition: 189
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:06:37.445 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:10:47.473 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.total_chats does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.total_chats does not exist
+    InternalPosition: 189
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:10:51.809 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:10:54.177 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.last_active_at does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.last_active_at does not exist
+    InternalPosition: 295
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:10:58.598 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:11:34.456 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.last_active_at does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.last_active_at does not exist
+    InternalPosition: 339
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:11:38.074 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:11:40.261 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.last_active_at does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.last_active_at does not exist
+    InternalPosition: 339
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:11:43.322 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:13:43.996 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.last_active_at does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.last_active_at does not exist
+    InternalPosition: 339
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-23 18:13:47.982 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:13:50.013 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.updated_at AS last_active_at,  -- ✅ Use updated_at instead
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.updated_at > NOW() - INTERVAL '1 hour' THEN 'healthy'  -- ✅ Use updated_at
+            WHEN c.updated_at > NOW() - INTERVAL '24 hours' THEN 'idle'   -- ✅ Use updated_at
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 13 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 18:13:53.606 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:15:39.318 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        COALESCE(c.total_chats, 0) AS total_interactions,
+        COALESCE(c.total_messages, 0) AS total_messages,
+        c.updated_at AS last_active_at,  -- ✅ Use updated_at instead
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.updated_at > NOW() - INTERVAL '1 hour' THEN 'healthy'  -- ✅ Use updated_at
+            WHEN c.updated_at > NOW() - INTERVAL '24 hours' THEN 'idle'   -- ✅ Use updated_at
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 13 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 18:15:42.782 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:21:33.677 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 18:21:33.786 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 18:21:33.787 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 18:21:33.787 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 18:21:33.787 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 18:21:37.039 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 18:21:37.042 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 18:21:38.523 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 18:21:38.824 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 18:21:38.971 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:21:41.169 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 18:21:45.626 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:21:47.335 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 18:21:50.343 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:22:59.663 -05:00 [Error] Error getting clone status for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 122
+   at KeiroGenesis.API.Services.CloneService.GetCloneStatusAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Clone.cs:line 348
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT 
+        c.clone_id,
+        c.clone_slug AS clone_name,
+        c.display_name,
+        c.status,
+        c.is_active,
+        (c.status = 'paused') AS is_paused,
+        0 AS total_interactions,      -- ✅ Return 0 since column doesn't exist
+        0 AS total_messages,           -- ✅ Return 0 since column doesn't exist
+        c.last_active_at,
+        c.created_at,
+        CASE 
+            WHEN c.is_active = false THEN 'inactive'
+            WHEN c.status = 'suspended' THEN 'suspended'
+            WHEN c.status = 'paused' THEN 'paused'
+            WHEN c.last_active_at > NOW() - INTERVAL '1 hour' THEN 'healthy'
+            WHEN c.last_active_at > NOW() - INTERVAL '24 hours' THEN 'idle'
+            ELSE 'stale'
+        END AS health_status,
+        100 AS response_time_ms
+    FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL"
+PL/pgSQL function clone.fn_get_clone_status(uuid,uuid,uuid) line 14 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 18:23:02.618 -05:00 [Information] Getting status for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-23 18:25:03.957 -05:00 [Information] Loaded entitlement bundle: tenant=104df6ab-ef05-4d73-98c5-167b169c1ca0, tier="free", version=1766516031000, capabilities=11
+2025-12-23 18:33:24.002 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 18:33:24.398 -05:00 [Error] Failed to create experience draft
+Npgsql.PostgresException (0x80004005): 3F000: schema "experience" does not exist
+
+POSITION: 8
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, String name, String description) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 96
+   at KeiroGenesis.API.Services.ExperienceWizardService.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, CreateExperienceRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 220
+  Exception data:
+    Severity: ERROR
+    SqlState: 3F000
+    MessageText: schema "experience" does not exist
+    Position: 8
+    File: namespace.c
+    Line: 3545
+    Routine: get_namespace_oid
+2025-12-23 18:33:39.660 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 3F000: schema "experience" does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 172
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 348
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 498
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Program.cs:line 288
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 3F000
+    MessageText: schema "experience" does not exist
+    Position: 15
+    File: namespace.c
+    Line: 3545
+    Routine: get_namespace_oid

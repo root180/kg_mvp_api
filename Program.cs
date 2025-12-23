@@ -99,7 +99,13 @@ builder.Services.AddScoped<CapabilityRepository>();
 builder.Services.AddScoped<CapabilityService>();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, CapabilityPolicyProvider>();
-builder.Services.AddScoped<IAuthorizationHandler, CapabilityAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, CapabilityAuthorizationHandler>();//
+
+
+// Experience Wizard
+builder.Services.AddScoped<KeiroGenesis.API.Repositories.ExperienceWizardRepository>();
+builder.Services.AddScoped<KeiroGenesis.API.Services.ExperienceWizardService>();
+
 
 // Management
 builder.Services.AddScoped<UserManagementRepository>();

@@ -339,14 +339,13 @@ namespace KeiroGenesis.API.Services
         }
 
         public async Task<CloneStatusResponse> GetCloneStatusAsync(
-        Guid tenantId,
-        Guid userId,
-        Guid cloneId)
+          Guid tenantId,
+          Guid userId,
+          Guid cloneId)
         {
             try
             {
-                var status = await _repo.GetCloneStatusAsync(
-                    tenantId, userId, cloneId);
+                var status = await _repo.GetCloneStatusAsync(tenantId, userId, cloneId);
 
                 if (status == null)
                 {
@@ -364,17 +363,19 @@ namespace KeiroGenesis.API.Services
                     CloneId = status.clone_id,
                     DisplayName = status.display_name,
                     Status = status.status,
-                    WizardStep = status.wizard_step,
+                    IsActive = status.is_active,
+                    IsPaused = status.is_paused,
+                    TotalInteractions = status.total_interactions,
+                    TotalMessages = status.total_messages,
+                    LastActiveAt = status.last_active_at,
                     CreatedAt = status.created_at,
-                    UpdatedAt = status.updated_at,
-                    WizardCompletedAt = status.wizard_completed_at
+                    HealthStatus = status.health_status,
+                    ResponseTimeMs = status.response_time_ms
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,
-                    "Error getting clone status for {CloneId}", cloneId);
-
+                _logger.LogError(ex, "Error getting clone status for {CloneId}", cloneId);
                 return new CloneStatusResponse
                 {
                     Success = false,
@@ -553,10 +554,16 @@ namespace KeiroGenesis.API.DTO.Clone
         public Guid? CloneId { get; set; }
         public string? DisplayName { get; set; }
         public string? Status { get; set; }
-        public int? WizardStep { get; set; }
+
+        // ✅ Match DB function return columns
+        public bool? IsActive { get; set; }
+        public bool? IsPaused { get; set; }
+        public int? TotalInteractions { get; set; }
+        public int? TotalMessages { get; set; }
+        public DateTime? LastActiveAt { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public DateTime? UpdatedAt { get; set; }
-        public DateTime? WizardCompletedAt { get; set; }
+        public string? HealthStatus { get; set; }
+        public int? ResponseTimeMs { get; set; }
     }
 
     public class UpdateStatusRequest

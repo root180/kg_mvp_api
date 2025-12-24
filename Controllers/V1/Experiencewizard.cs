@@ -178,6 +178,24 @@ namespace KeiroGenesis.API.Repositories
                     p_clone_id = cloneId
                 });
         }
+
+        public async Task<IEnumerable<dynamic>> GetUserExperiencesAsync(
+            Guid tenantId,
+            Guid userId,
+            string? status = null)
+        {
+            using var conn = _db.CreateConnection();
+
+            return await conn.QueryAsync(
+                "SELECT * FROM experience.fn_get_user_experiences(@p_tenant_id, @p_user_id, @p_status)",
+                new
+                {
+                    p_tenant_id = tenantId,
+                    p_user_id = userId,
+                    p_status = status
+                });
+        }
+
     }
 }
 #endregion
@@ -244,6 +262,13 @@ namespace KeiroGenesis.API.Services
             }
         }
 
+        public async Task<IEnumerable<dynamic>> GetUserExperiencesAsync(
+        Guid tenantId,
+        Guid userId,
+        string? status = null)
+        {
+            return await _repo.GetUserExperiencesAsync(tenantId, userId, status);
+        }
 
         /// <summary>
         /// ✅ Uses existing GetRatingStatusAsync - no new methods needed
@@ -502,7 +527,46 @@ namespace KeiroGenesis.API.Controllers.V1
 
             return Ok(experiences);
         }
+
+
+
+        /// <summary>
+        /// Get all experiences for the current user (across all clones)
+        /// GET /api/v1/experiences?status=draft
+        /// </summary>
+        [HttpGet("/api/v1/experiences")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetUserExperiences(
+            [FromQuery] string? status = null)
+        {
+            // Validate status parameter
+            if (status != null && !new[] { "draft", "published", "archived" }.Contains(status.ToLower()))
+            {
+                return BadRequest(new { error = $"Invalid status '{status}'. Must be: draft, published, or archived" });
+            }
+
+            var tenantId = GetTenantId();
+            var userId = GetUserId();
+
+            var experiences = await _service.GetUserExperiencesAsync(
+                tenantId,
+                userId,
+                status);
+
+            var experienceList = experiences.ToList();
+
+            return Ok(new
+            {
+                count = experienceList.Count,
+                status = status ?? "all",
+                results = experienceList
+            });
+        }
+
     }
+
+
 }
 #endregion
 

@@ -400,7 +400,22 @@ namespace KeiroGenesis.API.Services
                     return new CloneStatusResponse
                     {
                         Success = false,
-                        Message = "Clone not found or update failed"
+                        Message = "Failed to update status"
+                    };
+                }
+
+                // ✅ Fetch full status after update
+                var fullStatus = await _repo.GetCloneStatusAsync(
+                    tenantId, userId, cloneId);
+
+                if (fullStatus == null)
+                {
+                    return new CloneStatusResponse
+                    {
+                        Success = true,
+                        Message = "Status updated successfully",
+                        Status = status,
+                        CloneId = cloneId
                     };
                 }
 
@@ -408,19 +423,26 @@ namespace KeiroGenesis.API.Services
                 {
                     Success = true,
                     Message = "Status updated successfully",
-                    CloneId = cloneId,
-                    Status = status
+                    CloneId = fullStatus.clone_id,
+                    DisplayName = fullStatus.display_name,
+                    Status = fullStatus.status,
+                    IsActive = fullStatus.is_active,
+                    IsPaused = fullStatus.is_paused,
+                    TotalInteractions = fullStatus.total_interactions,
+                    TotalMessages = fullStatus.total_messages,
+                    LastActiveAt = fullStatus.last_active_at,
+                    CreatedAt = fullStatus.created_at,
+                    HealthStatus = fullStatus.health_status,
+                    ResponseTimeMs = fullStatus.response_time_ms
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,
-                    "Error updating clone status for {CloneId}", cloneId);
-
+                _logger.LogError(ex, "Error updating clone status");
                 return new CloneStatusResponse
                 {
                     Success = false,
-                    Message = "Failed to update status"
+                    Message = "Failed to update clone status"
                 };
             }
         }

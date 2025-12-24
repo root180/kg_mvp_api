@@ -1074,3 +1074,529 @@ POSITION: 15
     File: namespace.c
     Line: 3545
     Routine: get_namespace_oid
+2025-12-23 18:51:03.272 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 18:51:24.063 -05:00 [Error] Failed to set rating
+Npgsql.PostgresException (0x80004005): 42501: Rating MA exceeds allowed maximum
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, String rating) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 118
+   at KeiroGenesis.API.Services.ExperienceWizardService.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, SetRatingRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 276
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: Rating MA exceeds allowed maximum
+    Where: PL/pgSQL function experience.fn_set_experience_rating(uuid,uuid,uuid,character varying) line 24 at RAISE
+    File: pl_exec.c
+    Line: 3911
+    Routine: exec_stmt_raise
+2025-12-23 19:00:57.886 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42883: function experience.fn_get_experience(uuid, uuid, uuid) does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 155
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 340
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetExperience(Guid cloneId, Guid experienceId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 478
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext() in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Program.cs:line 288
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function experience.fn_get_experience(uuid, uuid, uuid) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 15
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-23 19:02:08.842 -05:00 [Error] Failed to set rating
+Npgsql.PostgresException (0x80004005): 42501: Rating MA exceeds allowed maximum
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, String rating)
+   at KeiroGenesis.API.Services.ExperienceWizardService.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, SetRatingRequest request)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: Rating MA exceeds allowed maximum
+    Where: PL/pgSQL function experience.fn_set_experience_rating(uuid,uuid,uuid,character varying) line 24 at RAISE
+    File: pl_exec.c
+    Line: 3911
+    Routine: exec_stmt_raise
+2025-12-23 19:02:39.037 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42883: function experience.fn_get_clone_experiences(uuid, uuid, uuid) does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function experience.fn_get_clone_experiences(uuid, uuid, uuid) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 15
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-23 19:52:45.490 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(200) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(200) does not match expected type text in column 2.
+    Where: SQL statement "SELECT
+        e.experience_id,
+        e.name,
+        e.description,
+        e.rating,
+        e.status,
+        e.is_public,
+        e.created_at,
+        e.updated_at,
+        e.published_at
+    FROM experience.experiences e
+    WHERE e.clone_id = p_clone_id
+      AND e.tenant_id = p_tenant_id
+      AND e.deleted_at IS NULL
+    ORDER BY e.created_at DESC"
+PL/pgSQL function experience.fn_get_clone_experiences(uuid,uuid,uuid) line 20 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 19:52:48.781 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(200) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(200) does not match expected type text in column 2.
+    Where: SQL statement "SELECT
+        e.experience_id,
+        e.name,
+        e.description,
+        e.rating,
+        e.status,
+        e.is_public,
+        e.created_at,
+        e.updated_at,
+        e.published_at
+    FROM experience.experiences e
+    WHERE e.clone_id = p_clone_id
+      AND e.tenant_id = p_tenant_id
+      AND e.deleted_at IS NULL
+    ORDER BY e.created_at DESC"
+PL/pgSQL function experience.fn_get_clone_experiences(uuid,uuid,uuid) line 20 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 22:06:55.278 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(200) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetCloneExperiencesAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetCloneExperiences(Guid cloneId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(200) does not match expected type text in column 2.
+    Where: SQL statement "SELECT
+        e.experience_id,
+        e.name,
+        e.description,
+        e.rating,
+        e.status,
+        e.is_public,
+        e.created_at,
+        e.updated_at,
+        e.published_at
+    FROM experience.experiences e
+    WHERE e.clone_id = p_clone_id
+      AND e.tenant_id = p_tenant_id
+      AND e.deleted_at IS NULL
+    ORDER BY e.created_at DESC"
+PL/pgSQL function experience.fn_get_clone_experiences(uuid,uuid,uuid) line 20 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-23 22:07:14.683 -05:00 [Error] Failed to set rating
+Npgsql.PostgresException (0x80004005): 42501: Rating MA exceeds allowed maximum
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, String rating)
+   at KeiroGenesis.API.Services.ExperienceWizardService.SetRatingAsync(Guid tenantId, Guid userId, Guid experienceId, SetRatingRequest request)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42501
+    MessageText: Rating MA exceeds allowed maximum
+    Where: PL/pgSQL function experience.fn_set_experience_rating(uuid,uuid,uuid,character varying) line 24 at RAISE
+    File: pl_exec.c
+    Line: 3911
+    Routine: exec_stmt_raise
+2025-12-23 22:26:54.895 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42883: function experience.fn_get_experience(uuid, uuid, uuid) does not exist
+
+POSITION: 15
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetExperience(Guid cloneId, Guid experienceId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function experience.fn_get_experience(uuid, uuid, uuid) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 15
+    File: parse_func.c
+    Line: 629
+    Routine: ParseFuncOrColumn
+2025-12-23 22:51:13.720 -05:00 [Error] An unhandled exception has occurred while executing the request.
+Npgsql.PostgresException (0x80004005): 42703: column e.rating does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryRowAsync[T](IDbConnection cnn, Row row, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 489
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId)
+   at KeiroGenesis.API.Services.ExperienceWizardService.GetExperienceAsync(Guid tenantId, Guid userId, Guid experienceId)
+   at KeiroGenesis.API.Controllers.V1.ExperienceWizardController.GetExperience(Guid cloneId, Guid experienceId)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Program.<>c__DisplayClass0_0.<<<Main>$>b__9>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column e.rating does not exist
+    Hint: Perhaps you meant to reference the column "e.rating_id".
+    InternalPosition: 112
+    InternalQuery: SELECT
+        e.experience_id,
+        e.clone_id,
+        e.name::TEXT,
+        e.description::TEXT,
+        e.rating,
+        e.max_allowed_rating,
+        e.status,
+        e.is_public,
+        e.created_at,
+        e.updated_at,
+        e.published_at
+    FROM experience.experiences e
+    WHERE e.experience_id = p_experience_id
+      AND e.deleted_at IS NULL
+    Where: PL/pgSQL function experience.fn_get_experience(uuid,uuid,uuid) line 13 at RETURN QUERY
+    File: parse_relation.c
+    Line: 3723
+    Routine: errorMissingColumn
+2025-12-23 23:22:46.376 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 23:22:46.584 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:22:46.586 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 23:22:46.587 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 23:22:46.589 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:22:49.875 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 23:22:49.879 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 23:22:55.124 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 23:22:55.499 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 23:26:58.612 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 23:26:58.807 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:26:58.809 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 23:26:58.810 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 23:26:58.810 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:27:01.822 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 23:27:01.824 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 23:27:09.193 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 23:27:09.496 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 23:30:55.258 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 23:30:55.462 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:30:55.464 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 23:30:55.464 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 23:30:55.465 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:30:58.768 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 23:30:58.770 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 23:31:01.834 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 23:31:02.250 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 23:31:44.882 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 23:31:45.330 -05:00 [Error] Failed to create experience draft
+Npgsql.PostgresException (0x80004005): 42703: record "new" has no field "max_allowed_rating"
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, String name, String description) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 96
+   at KeiroGenesis.API.Services.ExperienceWizardService.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, CreateExperienceRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 238
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: record "new" has no field "max_allowed_rating"
+    Where: PL/pgSQL assignment "NEW.max_allowed_rating := 'PG'"
+PL/pgSQL function fn_set_max_allowed_rating() line 15 at assignment
+SQL statement "INSERT INTO experience.experiences (
+        tenant_id,
+        user_id,
+        clone_id,
+        name,
+        description
+    )
+    VALUES (
+        p_tenant_id,
+        p_user_id,
+        p_clone_id,
+        p_name,
+        p_description
+    )
+    RETURNING experience_id"
+PL/pgSQL function experience.fn_create_experience_draft(uuid,uuid,uuid,text,text) line 7 at SQL statement
+    File: pl_exec.c
+    Line: 5609
+    Routine: plpgsql_exec_get_datum_type_info
+2025-12-23 23:31:57.334 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 23:31:57.809 -05:00 [Error] Failed to create experience draft
+Npgsql.PostgresException (0x80004005): 42703: record "new" has no field "max_allowed_rating"
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.ExecuteScalarImplAsync[T](IDbConnection cnn, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 1241
+   at KeiroGenesis.API.Repositories.ExperienceWizardRepository.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, String name, String description) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 96
+   at KeiroGenesis.API.Services.ExperienceWizardService.CreateExperienceDraftAsync(Guid tenantId, Guid userId, Guid cloneId, CreateExperienceRequest request) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\Experiencewizard.cs:line 238
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: record "new" has no field "max_allowed_rating"
+    Where: PL/pgSQL assignment "NEW.max_allowed_rating := 'PG'"
+PL/pgSQL function fn_set_max_allowed_rating() line 15 at assignment
+SQL statement "INSERT INTO experience.experiences (
+        tenant_id,
+        user_id,
+        clone_id,
+        name,
+        description
+    )
+    VALUES (
+        p_tenant_id,
+        p_user_id,
+        p_clone_id,
+        p_name,
+        p_description
+    )
+    RETURNING experience_id"
+PL/pgSQL function experience.fn_create_experience_draft(uuid,uuid,uuid,text,text) line 7 at SQL statement
+    File: pl_exec.c
+    Line: 5609
+    Routine: plpgsql_exec_get_datum_type_info
+2025-12-23 23:35:48.685 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 23:37:39.891 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-23 23:43:15.865 -05:00 [Information] Loaded entitlement bundle: tenant=104df6ab-ef05-4d73-98c5-167b169c1ca0, tier="free", version=1766516031000, capabilities=11
+2025-12-23 23:50:25.034 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "active"
+2025-12-23 23:53:43.854 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-23 23:53:44.133 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:53:44.143 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-23 23:53:44.144 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-23 23:53:44.145 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-23 23:53:47.017 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-23 23:53:47.027 -05:00 [Warning] Startup email notification failed to send
+2025-12-23 23:53:48.171 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-23 23:53:48.498 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-23 23:53:48.636 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "active"

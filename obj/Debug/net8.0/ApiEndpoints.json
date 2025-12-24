@@ -1427,6 +1427,41 @@
     ]
   },
   {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "GetKnowledge",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeListResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      }
+    ]
+  },
+  {
     "ContainingType": "KeiroGenesis.API.Services.KeiroGenesis.API.Controllers.V1.CloneWizardController",
     "Method": "UploadKnowledge",
     "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge",
@@ -1460,6 +1495,261 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 403
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "DeleteKnowledge",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/{documentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "documentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "UploadFile",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/files",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 202
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 429
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "UploadText",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/text",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.UploadTextRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 202
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 429
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "UploadUrl",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/urls",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.UploadUrlRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 202
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 429
       }
     ]
   },
@@ -1574,6 +1864,37 @@
           "text/json"
         ],
         "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.ExperienceWizardController",
+    "Method": "GetUserExperiences",
+    "RelativePath": "api/v1/experiences",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "status",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
       }
     ]
   },

@@ -1,0 +1,16 @@
+2025-12-24 00:02:57.436 -05:00 [Information] Uploading knowledge for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-24 00:02:57.669 -05:00 [Information] Uploaded 2 documents for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-24 00:21:57.651 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-24 00:21:57.834 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 00:21:57.837 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-24 00:21:57.837 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-24 00:21:57.837 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 00:22:00.809 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-24 00:22:00.810 -05:00 [Warning] Startup email notification failed to send
+2025-12-24 00:46:14.414 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-24 00:46:14.642 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 00:46:14.645 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-24 00:46:14.645 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-24 00:46:14.647 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 00:46:17.888 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-24 00:46:17.890 -05:00 [Warning] Startup email notification failed to send

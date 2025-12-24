@@ -103,8 +103,8 @@ builder.Services.AddScoped<IAuthorizationHandler, CapabilityAuthorizationHandler
 
 
 // Experience Wizard
-builder.Services.AddScoped<KeiroGenesis.API.Repositories.ExperienceWizardRepository>();
-builder.Services.AddScoped<KeiroGenesis.API.Services.ExperienceWizardService>();
+builder.Services.AddScoped<ExperienceWizardRepository>();
+builder.Services.AddScoped<ExperienceWizardService>();
 
 
 // Management

@@ -134,14 +134,12 @@ namespace KeiroGenesis.API.Repositories
                 });
         }
 
-        // =========================================================
-        // UPDATE CLONE STATUS (PROCEDURE)
-        // =========================================================
+
         public async Task<bool> UpdateCloneStatusAsync(
-            Guid tenantId,
-            Guid userId,
-            Guid cloneId,
-            string status)
+        Guid tenantId,
+        Guid userId,
+        Guid cloneId,
+        string status)
         {
             using var conn = _db.CreateConnection();
 
@@ -149,11 +147,11 @@ namespace KeiroGenesis.API.Repositories
             {
                 await conn.ExecuteAsync(
                     @"CALL clone.sp_update_clone_status(
-                    @tenantId,
-                    @userId,
-                    @cloneId,
-                    @status
-                )",
+                @tenantId,
+                @userId,
+                @cloneId,
+                @status
+            )",
                     new
                     {
                         tenantId,
@@ -164,11 +162,58 @@ namespace KeiroGenesis.API.Repositories
 
                 return true;
             }
-            catch
+            catch (Npgsql.PostgresException ex) when (ex.SqlState == "23514")
             {
+                // Check constraint violation (actor doesn't exist)
+                _logger.LogWarning(
+                    "Activation blocked for clone {CloneId}: {Message}",
+                    cloneId, ex.MessageText);
+                throw new InvalidOperationException(ex.MessageText, ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Error updating clone status for {CloneId} to {Status}",
+                    cloneId, status);
                 return false;
             }
         }
+
+        public async Task<(bool canActivate, string reason)> CanCloneActivateAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.QueryFirstOrDefaultAsync(
+                @"SELECT can_activate, reason 
+          FROM clone.fn_can_clone_activate(
+              @tenant_id, @user_id, @clone_id
+          )",
+                new { tenant_id = tenantId, user_id = userId, clone_id = cloneId }
+            );
+
+            if (result == null)
+                return (false, "Unable to verify activation readiness");
+
+            return ((bool)result.can_activate, (string)result.reason);
+        }
+
+        // *** NEW: Get activation readiness details ***
+        public async Task<dynamic?> GetActivationReadinessAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.QueryAsync(
+                @"SELECT * FROM clone.fn_get_activation_readiness(
+            @tenant_id, @user_id, @clone_id
+        )",
+                new { tenant_id = tenantId, user_id = userId, clone_id = cloneId }
+            );
+
+            return result.FirstOrDefault();
+        }
+
     }
 
 
@@ -276,13 +321,34 @@ namespace KeiroGenesis.API.Services
         }
 
         public async Task<CloneResponse> UpdateCloneAsync(
-            Guid tenantId,
-            Guid userId,
-            Guid cloneId,
-            UpdateCloneRequest request)
+       Guid tenantId,
+       Guid userId,
+       Guid cloneId,
+       UpdateCloneRequest request)
         {
             try
             {
+                // *** NEW: Check activation gate if status change requested ***
+                if (!string.IsNullOrEmpty(request.Status) &&
+                    request.Status.ToLower() == "active")
+                {
+                    var (canActivate, reason) = await _repo.CanCloneActivateAsync(
+                        tenantId, userId, cloneId);
+
+                    if (!canActivate)
+                    {
+                        _logger.LogWarning(
+                            "Clone {CloneId} cannot be activated: {Reason}",
+                            cloneId, reason);
+
+                        return new CloneResponse
+                        {
+                            Success = false,
+                            Message = reason
+                        };
+                    }
+                }
+
                 bool success = await _repo.UpdateCloneAsync(
                     tenantId,
                     userId,
@@ -325,6 +391,19 @@ namespace KeiroGenesis.API.Services
                         CreatedAt = clone.created_at,
                         UpdatedAt = clone.updated_at
                     }
+                };
+            }
+            catch (InvalidOperationException ex)
+            {
+                // Catch actor enforcement exception from repository
+                _logger.LogWarning(ex,
+                    "Clone update failed for {CloneId}: {Message}",
+                    cloneId, ex.Message);
+
+                return new CloneResponse
+                {
+                    Success = false,
+                    Message = ex.Message
                 };
             }
             catch (Exception ex)
@@ -392,6 +471,27 @@ namespace KeiroGenesis.API.Services
         {
             try
             {
+                // *** ACTIVATION GATE: Check if actor exists before allowing activation ***
+                if (status.ToLower() == "active")
+                {
+                    var (canActivate, reason) = await _repo.CanCloneActivateAsync(
+                        tenantId, userId, cloneId);
+
+                    if (!canActivate)
+                    {
+                        _logger.LogWarning(
+                            "Clone {CloneId} cannot be activated: {Reason}",
+                            cloneId, reason);
+
+                        return new CloneStatusResponse
+                        {
+                            Success = false,
+                            CloneId = cloneId,
+                            Message = reason
+                        };
+                    }
+                }
+
                 var updated = await _repo.UpdateCloneStatusAsync(
                     tenantId, userId, cloneId, status);
 
@@ -404,7 +504,7 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
-                // ✅ Fetch full status after update
+                // Fetch full status after update
                 var fullStatus = await _repo.GetCloneStatusAsync(
                     tenantId, userId, cloneId);
 
@@ -436,6 +536,20 @@ namespace KeiroGenesis.API.Services
                     ResponseTimeMs = fullStatus.response_time_ms
                 };
             }
+            catch (InvalidOperationException ex)
+            {
+                // Actor enforcement exception from repository
+                _logger.LogWarning(ex,
+                    "Clone activation failed for {CloneId}: {Message}",
+                    cloneId, ex.Message);
+
+                return new CloneStatusResponse
+                {
+                    Success = false,
+                    CloneId = cloneId,
+                    Message = ex.Message
+                };
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error updating clone status");
@@ -446,7 +560,72 @@ namespace KeiroGenesis.API.Services
                 };
             }
         }
+        // *** NEW: Check activation readiness ***
+        public async Task<ActivationReadinessResponse> GetActivationReadinessAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            try
+            {
+                var readiness = await _repo.GetActivationReadinessAsync(
+                    tenantId, userId, cloneId);
 
+                if (readiness == null)
+                {
+                    return new ActivationReadinessResponse
+                    {
+                        Success = false,
+                        CloneId = cloneId,
+                        Message = "Clone not found or access denied"
+                    };
+                }
+
+                // Parse blockers and next_steps arrays
+                var blockers = new List<string>();
+                var nextSteps = new List<string>();
+
+                if (readiness.activation_blockers != null)
+                {
+                    string[] blockersArray = readiness.activation_blockers;
+                    blockers.AddRange(blockersArray);
+                }
+
+                if (readiness.next_steps != null)
+                {
+                    string[] stepsArray = readiness.next_steps;
+                    nextSteps.AddRange(stepsArray);
+                }
+
+                return new ActivationReadinessResponse
+                {
+                    Success = true,
+                    CloneId = readiness.clone_id,
+                    DisplayName = readiness.display_name ?? "",
+                    CurrentStatus = readiness.current_status ?? "",
+                    IsActive = readiness.is_active ?? false,
+                    HasActor = readiness.has_actor ?? false,
+                    ActorId = readiness.actor_id,
+                    CanActivate = readiness.can_activate ?? false,
+                    ActivationBlockers = blockers,
+                    NextSteps = nextSteps,
+                    Message = readiness.can_activate == true
+                        ? "Clone is ready for activation"
+                        : "Clone cannot be activated yet"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,
+                    "Error checking activation readiness for clone {CloneId}",
+                    cloneId);
+
+                return new ActivationReadinessResponse
+                {
+                    Success = false,
+                    CloneId = cloneId,
+                    Message = $"Error: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<BaseResponse> DeleteCloneAsync(Guid tenantId, Guid userId, Guid cloneId)
         {
@@ -508,6 +687,9 @@ namespace KeiroGenesis.API.DTO.Clone
 
         [JsonPropertyName("visibility")]
         public string? Visibility { get; set; }
+
+        [JsonPropertyName("status")]
+        public string? Status { get; set; }
     }
 
     public class BaseResponse
@@ -593,6 +775,43 @@ namespace KeiroGenesis.API.DTO.Clone
         public string Status { get; set; } = string.Empty;
     }
 
+    // *** NEW DTO: Activation Readiness Response ***
+    public sealed class ActivationReadinessResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; init; }
+
+        [JsonPropertyName("cloneId")]
+        public Guid CloneId { get; init; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; init; } = string.Empty;
+
+        [JsonPropertyName("currentStatus")]
+        public string CurrentStatus { get; init; } = string.Empty;
+
+        [JsonPropertyName("isActive")]
+        public bool IsActive { get; init; }
+
+        [JsonPropertyName("hasActor")]
+        public bool HasActor { get; init; }
+
+        [JsonPropertyName("actorId")]
+        public Guid? ActorId { get; init; }
+
+        [JsonPropertyName("canActivate")]
+        public bool CanActivate { get; init; }
+
+        [JsonPropertyName("activationBlockers")]
+        public List<string> ActivationBlockers { get; init; } = new();
+
+        [JsonPropertyName("nextSteps")]
+        public List<string> NextSteps { get; init; } = new();
+
+        [JsonPropertyName("message")]
+        public string Message { get; init; } = string.Empty;
+    }
+
 }
 
 
@@ -602,7 +821,7 @@ namespace KeiroGenesis.API.DTO.Clone
 #region Controller
 namespace KeiroGenesis.API.Controllers.V1
 {
-    [ApiController]
+    
     [Route("api/v1/clone")]
     [Authorize]
     public class CloneController : ControllerBase
@@ -727,8 +946,21 @@ namespace KeiroGenesis.API.Controllers.V1
         }
 
         /// <summary>
-        /// Update clone status
+        /// Update clone status (activation requires actor)
         /// </summary>
+        /// <remarks>
+        /// **IMPORTANT**: Setting status to 'active' requires an actor runtime to exist.
+        /// 
+        /// **Before activating:**
+        /// 1. Check: GET /api/v1/clones/{cloneId}/activation-readiness
+        /// 2. If hasActor = false: POST /api/v1/actors/ensure-runtime/{cloneId}
+        /// 3. Then activate: PUT /api/v1/clones/{cloneId}/status
+        /// 
+        /// **This endpoint will fail if:**
+        /// - Actor runtime doesn't exist (for status='active')
+        /// - User doesn't own the clone
+        /// - Clone not found
+        /// </remarks>
         [HttpPut("{cloneId}/status")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -751,6 +983,37 @@ namespace KeiroGenesis.API.Controllers.V1
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Check if clone is ready for activation
+        /// </summary>
+        /// <remarks>
+        /// Returns detailed activation status including:
+        /// - Whether actor exists
+        /// - Whether clone can be activated
+        /// - Blockers preventing activation
+        /// - Next steps to enable activation
+        /// 
+        /// **Use this endpoint before showing "Activate" button in UI**
+        /// </remarks>
+        [HttpGet("{cloneId}/activation-readiness")]
+        [ProducesResponseType(typeof(ActivationReadinessResponse), 200)]
+        public async Task<IActionResult> GetActivationReadiness(Guid cloneId)
+        {
+            var tenantId = GetTenantId();
+            var userId = GetCurrentUserId();
+
+            var result = await _service.GetActivationReadinessAsync(
+                tenantId, userId, cloneId);
+
+            return Ok(result);
+        }
+
+
+
     }
+
+
+
 }
 #endregion

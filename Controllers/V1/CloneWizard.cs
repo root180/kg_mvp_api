@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Dapper;
 using KeiroGenesis.API.Core.Database;
+using KeiroGenesis.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -25,11 +26,13 @@ namespace KeiroGenesis.API.Repositories
     {
         private readonly IDbConnectionFactory _db;
         private readonly ILogger<CloneWizardRepository> _logger;
-
-        public CloneWizardRepository(IDbConnectionFactory db, ILogger<CloneWizardRepository> logger)
+        private readonly ActorRuntimeService _actorService;
+        public CloneWizardRepository(IDbConnectionFactory db, ILogger<CloneWizardRepository> logger, ActorRuntimeService actorService)
         {
             _db = db;
-            _logger = logger;
+            _actorService = actorService;
+            _logger = logger; 
+            
         }
 
         // 🔐 OWNERSHIP VALIDATION (C# GUARD - First Layer)
@@ -286,12 +289,12 @@ namespace KeiroGenesis.API.Services
     public class CloneWizardService
     {
         private readonly Repositories.CloneWizardRepository _repo;
-        private readonly ActorService _actorService;
+        private readonly ActorRuntimeService _actorService;
         private readonly ILogger<CloneWizardService> _logger;
 
         public CloneWizardService(
             Repositories.CloneWizardRepository repo,
-            ActorService actorService,
+           ActorRuntimeService actorService,
             ILogger<CloneWizardService> logger)
         {
             _repo = repo;
@@ -300,8 +303,9 @@ namespace KeiroGenesis.API.Services
         }
 
         // Step 1: Create draft clone (no ownership check needed - creating new)
+
         public async Task<WizardResponse> CreateCloneDraftAsync(
-            Guid tenantId, Guid userId, Step1Request request)
+    Guid tenantId, Guid userId, Step1Request request)
         {
             try
             {
@@ -315,6 +319,9 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
+                // ========================================================
+                // STEP 1: Create clone draft
+                // ========================================================
                 dynamic? result = await _repo.CreateCloneDraftAsync(
                     tenantId, userId,
                     request.DisplayName,
@@ -343,23 +350,65 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
-                // FIXED: Extract values before logging
                 Guid cloneId = result.clone_id;
                 string cloneSlug = result.clone_slug;
 
                 _logger.LogInformation("Clone draft created: {CloneId} for user {UserId}",
-                    cloneId,
-                    userId);
+                    cloneId, userId);
 
+                // ========================================================
+                // STEP 2: Immediately create actor runtime for this clone
+                // ========================================================
+                // This ensures Clone → Actor (1:1) relationship from the start
+                // User can complete wizard steps, and when they activate,
+                // the actor will already exist
+
+                var actorResult = await _actorService.EnsureRuntimeAsync(
+                    tenantId, userId, cloneId);
+
+                if (!actorResult.Success)
+                {
+                    // Log the issue but don't fail clone creation
+                    // The activation step will catch this later
+                    _logger.LogWarning(
+                        "Failed to create actor for clone {CloneId}: {Message}. Clone created but actor missing.",
+                        cloneId, actorResult.Message);
+
+                    // Still return success for clone creation, but include warning
+                    return new WizardResponse
+                    {
+                        Success = true,
+                        Message = "Clone draft created successfully (actor creation pending)",
+                        Data = new
+                        {
+                            cloneId = cloneId,
+                            cloneSlug = cloneSlug,
+                            status = "draft",
+                            actorId = (Guid?)null,
+                            actorCreated = false,
+                            warning = "Actor runtime will be created during activation"
+                        }
+                    };
+                }
+
+                _logger.LogInformation(
+                    "Actor runtime created for clone {CloneId}: actor_id={ActorId}",
+                    cloneId, actorResult.ActorId);
+
+                // ========================================================
+                // STEP 3: Return success with both clone and actor info
+                // ========================================================
                 return new WizardResponse
                 {
                     Success = true,
-                    Message = "Clone draft created successfully",
+                    Message = "Clone draft and actor runtime created successfully",
                     Data = new
                     {
                         cloneId = cloneId,
                         cloneSlug = cloneSlug,
-                        status = "draft"
+                        status = "draft",
+                        actorId = actorResult.ActorId,
+                        actorCreated = true
                     }
                 };
             }
@@ -374,6 +423,81 @@ namespace KeiroGenesis.API.Services
                 };
             }
         }
+
+        //public async Task<WizardResponse> CreateCloneDraftAsync(
+        //    Guid tenantId, Guid userId, Step1Request request)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrWhiteSpace(request.DisplayName))
+        //        {
+        //            return new WizardResponse
+        //            {
+        //                Success = false,
+        //                Message = "Display name is required",
+        //                ErrorCode = "VALIDATION_ERROR"
+        //            };
+        //        }
+
+        //        dynamic? result = await _repo.CreateCloneDraftAsync(
+        //            tenantId, userId,
+        //            request.DisplayName,
+        //            request.Tagline ?? "",
+        //            request.Bio ?? "",
+        //            request.Visibility ?? "private"
+        //        );
+
+        //        if (result == null)
+        //        {
+        //            return new WizardResponse
+        //            {
+        //                Success = false,
+        //                Message = "Failed to create clone",
+        //                ErrorCode = "CREATION_FAILED"
+        //            };
+        //        }
+
+        //        if (result.status == "error")
+        //        {
+        //            return new WizardResponse
+        //            {
+        //                Success = false,
+        //                Message = result.error_message,
+        //                ErrorCode = "BUSINESS_RULE_VIOLATION"
+        //            };
+        //        }
+
+        //        // FIXED: Extract values before logging
+        //        Guid cloneId = result.clone_id;
+        //        string cloneSlug = result.clone_slug;
+
+        //        _logger.LogInformation("Clone draft created: {CloneId} for user {UserId}",
+        //            cloneId,
+        //            userId);
+
+        //        return new WizardResponse
+        //        {
+        //            Success = true,
+        //            Message = "Clone draft created successfully",
+        //            Data = new
+        //            {
+        //                cloneId = cloneId,
+        //                cloneSlug = cloneSlug,
+        //                status = "draft"
+        //            }
+        //        };
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error creating clone draft for user {UserId}", userId);
+        //        return new WizardResponse
+        //        {
+        //            Success = false,
+        //            Message = $"Failed to create clone: {ex.Message}",
+        //            ErrorCode = "INTERNAL_ERROR"
+        //        };
+        //    }
+        //}
 
         // Step 2: Update avatar
         public async Task<WizardResponse> UpdateAvatarAsync(
@@ -608,7 +732,7 @@ namespace KeiroGenesis.API.Services
 
         // Step 6: Activate clone
         public async Task<WizardResponse> ActivateCloneAsync(
-            Guid tenantId, Guid userId, Guid cloneId)
+      Guid tenantId, Guid userId, Guid cloneId)
         {
             try
             {
@@ -618,7 +742,6 @@ namespace KeiroGenesis.API.Services
                 {
                     _logger.LogWarning("User {UserId} attempted to activate clone {CloneId} (unauthorized)",
                         userId, cloneId);
-
                     return new WizardResponse
                     {
                         Success = false,
@@ -627,7 +750,33 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
-                // 🔐 LAYER 2: DB function verifies AGAIN
+                // ========================================================
+                // STEP 1: Ensure actor runtime exists (should already exist from creation)
+                // ========================================================
+                var actorResult = await _actorService.EnsureRuntimeAsync(
+                    tenantId, userId, cloneId);
+
+                if (!actorResult.Success)
+                {
+                    _logger.LogWarning(
+                        "Failed to ensure actor for clone {CloneId}: {Message}",
+                        cloneId, actorResult.Message);
+
+                    return new WizardResponse
+                    {
+                        Success = false,
+                        Message = $"Clone activation failed: {actorResult.Message}",
+                        ErrorCode = "ACTOR_CREATION_FAILED"
+                    };
+                }
+
+                _logger.LogInformation(
+                    "Actor verified for clone {CloneId}: actor_id={ActorId}",
+                    cloneId, actorResult.ActorId);
+
+                // ========================================================
+                // STEP 2: Activate clone (DB enforces actor existence)
+                // ========================================================
                 dynamic? result = await _repo.ActivateCloneAsync(tenantId, userId, cloneId);
 
                 if (result == null)
@@ -650,20 +799,7 @@ namespace KeiroGenesis.API.Services
                     };
                 }
 
-                // ------------------------------------------------------
-                // Ensure runtime Actor exists for this clone (idempotent)
-                // ------------------------------------------------------
-                await _actorService.EnsureCloneActorAsync(
-                    tenantId: tenantId,
-                    cloneId: cloneId,
-                    ownerUserId: userId,
-                    displayName: result.display_name,
-                    handle: result.clone_slug,
-                    avatarUrl: result.avatar_url
-                );
-
-
-                _logger.LogInformation("Clone {CloneId} activated", cloneId);
+                _logger.LogInformation("Clone {CloneId} activated successfully", cloneId);
 
                 return new WizardResponse
                 {
@@ -672,6 +808,7 @@ namespace KeiroGenesis.API.Services
                     Data = new
                     {
                         cloneId = result.clone_id,
+                        actorId = actorResult.ActorId,
                         status = result.status
                     }
                 };
@@ -687,7 +824,6 @@ namespace KeiroGenesis.API.Services
                 };
             }
         }
-
         // Helper: Get wizard status
         public async Task<WizardResponse> GetWizardStatusAsync(
             Guid tenantId, Guid userId, Guid cloneId)

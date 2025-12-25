@@ -1,0 +1,57 @@
+2025-12-25 00:05:14.390 -05:00 [Information] Ensuring actor runtime for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-25 00:05:15.020 -05:00 [Error] Error ensuring actor runtime for clone e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42702: column reference "actor_id" is ambiguous
+
+DETAIL: It could refer to either a PL/pgSQL variable or a table column.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.ActorRuntimeRepository.EnsureCloneActorAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\ActorRuntime.cs:line 110
+   at KeiroGenesis.API.Services.ActorRuntimeService.EnsureRuntimeAsync(Guid tenantId, Guid userId, Guid cloneId) in C:\Users\ai365\OneDrive\Documents\GitHub\kg_mvp\Controllers\V1\ActorRuntime.cs:line 179
+  Exception data:
+    Severity: ERROR
+    SqlState: 42702
+    MessageText: column reference "actor_id" is ambiguous
+    Detail: It could refer to either a PL/pgSQL variable or a table column.
+    InternalPosition: 753
+    InternalQuery: INSERT INTO actor.actors (
+            actor_id,
+            tenant_id,
+            actor_type,
+            display_name,
+            handle,
+            avatar_url,
+            status,
+            created_at,
+            updated_at,
+            metadata
+        )
+        VALUES (
+            gen_random_uuid(),
+            p_tenant_id,
+            'clone',
+            v_clone_display_name,
+            v_clone_slug,  -- Use clone_slug as handle
+            v_clone_avatar_url,
+            'active',
+            now(),
+            now(),
+            jsonb_build_object(
+                'source', 'clone',
+                'clone_id', p_clone_id,
+                'created_by_function', 'fn_ensure_clone_actor'
+            )
+        )
+        RETURNING actor_id
+    Where: PL/pgSQL function actor.fn_ensure_clone_actor(uuid,uuid,uuid) line 48 at SQL statement
+    File: pl_comp.c
+    Line: 1133
+    Routine: plpgsql_post_column_ref
+2025-12-25 00:09:11.770 -05:00 [Information] Ensuring actor runtime for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-25 00:09:11.812 -05:00 [Information] Actor runtime ensured for clone e44c77c4-6a01-4909-b394-c104296d274c: actor_id=171899a2-ddb5-4401-8548-e2b7ebf2e49a, is_new=True

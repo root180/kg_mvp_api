@@ -115,6 +115,10 @@ builder.Services.AddScoped<UserManagementService>();
 builder.Services.AddScoped<CloneWizardRepository>();
 builder.Services.AddScoped<CloneWizardService>();
 
+// Actors
+// Register Actor Runtime (Repository + Service)
+builder.Services.AddScoped<ActorRuntimeRepository>();
+builder.Services.AddScoped<ActorRuntimeService>();
 
 // Email Provider
 builder.Services.AddScoped<IEmailProvider, EmailService>();
@@ -247,6 +251,9 @@ builder.Services.AddScoped<IdentitySignalsService>();
 // Content Rating Module
 builder.Services.AddScoped<ContentRatingsRepository>(); 
 builder.Services.AddScoped<ContentRatingsService>();
+
+
+//
 
 // ==========================================================================
 // GRAPHQL — SERVICE REGISTRATION (ONLY HERE)

@@ -1,16 +1,25 @@
-2025-12-24 00:02:57.436 -05:00 [Information] Uploading knowledge for clone e44c77c4-6a01-4909-b394-c104296d274c
-2025-12-24 00:02:57.669 -05:00 [Information] Uploaded 2 documents for clone e44c77c4-6a01-4909-b394-c104296d274c
-2025-12-24 00:21:57.651 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
-2025-12-24 00:21:57.834 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2025-12-24 00:21:57.837 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
-2025-12-24 00:21:57.837 -05:00 [Information] 📖 Swagger: http://localhost:8080
-2025-12-24 00:21:57.837 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2025-12-24 00:22:00.809 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
-2025-12-24 00:22:00.810 -05:00 [Warning] Startup email notification failed to send
-2025-12-24 00:46:14.414 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
-2025-12-24 00:46:14.642 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2025-12-24 00:46:14.645 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
-2025-12-24 00:46:14.645 -05:00 [Information] 📖 Swagger: http://localhost:8080
-2025-12-24 00:46:14.647 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2025-12-24 00:46:17.888 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
-2025-12-24 00:46:17.890 -05:00 [Warning] Startup email notification failed to send
+2025-12-24 23:43:23.063 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-24 23:43:23.274 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 23:43:23.276 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-24 23:43:23.277 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-24 23:43:23.277 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 23:43:26.401 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-24 23:43:26.403 -05:00 [Warning] Startup email notification failed to send
+2025-12-24 23:43:32.632 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-24 23:43:32.942 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-24 23:43:33.061 -05:00 [Information] Creating clone for user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-24 23:44:19.893 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-24 23:44:20.151 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 23:44:20.154 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-24 23:44:20.155 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-24 23:44:20.155 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-24 23:44:23.181 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-24 23:44:23.184 -05:00 [Warning] Startup email notification failed to send
+2025-12-24 23:49:17.426 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-24 23:49:17.708 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-24 23:49:17.831 -05:00 [Information] Creating clone for user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-24 23:50:09.593 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "Inactive"
+2025-12-24 23:50:21.722 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "Active"
+2025-12-24 23:50:21.746 -05:00 [Warning] Clone e44c77c4-6a01-4909-b394-c104296d274c cannot be activated: "Clone cannot be activated without an assigned actor. Call POST /api/v1/actors/ensure-runtime/{cloneId} first."
+2025-12-24 23:58:23.669 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "Active"
+2025-12-24 23:58:23.689 -05:00 [Warning] Clone e44c77c4-6a01-4909-b394-c104296d274c cannot be activated: "Clone cannot be activated without an assigned actor. Call POST /api/v1/actors/ensure-runtime/{cloneId} first."

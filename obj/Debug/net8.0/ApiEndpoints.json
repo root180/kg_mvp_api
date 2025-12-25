@@ -877,12 +877,8 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 404
       }
     ]
@@ -913,21 +909,13 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 400
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 404
       }
     ]
@@ -953,13 +941,35 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.CloneController",
+    "Method": "GetActivationReadiness",
+    "RelativePath": "api/v1/clone/{cloneId}/activation-readiness",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTO.Clone.ActivationReadinessResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",
           "text/json"
         ],
-        "StatusCode": 404
+        "StatusCode": 200
       }
     ]
   },
@@ -984,12 +994,8 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 404
       }
     ]
@@ -1020,21 +1026,13 @@
         "StatusCode": 200
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 400
       },
       {
-        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
+        "Type": "System.Void",
+        "MediaTypes": [],
         "StatusCode": 404
       }
     ]
@@ -1569,6 +1567,140 @@
         "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 202
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 429
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "UploadGitHub",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/github",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.UploadGitHubRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 202
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 400
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 402
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 403
+      },
+      {
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.KnowledgeUploadResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 429
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.KnowledgeController",
+    "Method": "UploadGoogleDrive",
+    "RelativePath": "api/v1/clonewizard/{cloneId}/knowledge/google-drive",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "KeiroGenesis.API.DTOs.Knowledge.UploadGoogleDriveRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": [

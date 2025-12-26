@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeiroGenesis Clone Architecture Blueprint v1.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-color: #bdc3c7;
+            --code-bg: #f8f9fa;
+            --nav-width: 280px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: var(--bg-color);
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header .version {
+            font-size: 0.875rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* Navigation Sidebar */
+        .nav-sidebar {
+            position: fixed;
+            top: 85px;
+            left: 0;
+            width: var(--nav-width);
+            height: calc(100vh - 85px);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 1rem 0;
+            z-index: 100;
+        }
+
+        .nav-sidebar ul {
+            list-style: none;
+        }
+
+        .nav-sidebar > ul > li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-sidebar a {
+            display: block;
+            padding: 0.5rem 1.5rem;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-sidebar a:hover {
+            background: var(--bg-color);
+            color: var(--secondary-color);
+            padding-left: 2rem;
+        }
+
+        .nav-sidebar a.active {
+            background: var(--secondary-color);
+            color: white;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .nav-sidebar .nav-section {
+            font-weight: 600;
+            color: var(--primary-color);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 1rem;
+        }
+
+        .nav-sidebar .nav-subsection {
+            padding-left: 2.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--nav-width);
+            margin-top: 85px;
+            padding: 2rem;
+            max-width: 1200px;
+        }
+
+        /* Section Styling */
+        .section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .section h3 {
+            color: var(--secondary-color);
+            font-size: 1.35rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section h4 {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Blockquote */
+        blockquote {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-left: 4px solid #fff;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table tr:hover {
+            background: var(--bg-color);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border-color: var(--success-color);
+            color: #155724;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: var(--warning-color);
+            color: #856404;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: var(--accent-color);
+            color: #721c24;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            border-color: var(--secondary-color);
+            color: #0c5460;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.25rem;
+        }
+
+        .badge-primary { background: var(--primary-color); color: white; }
+        .badge-success { background: var(--success-color); color: white; }
+        .badge-warning { background: var(--warning-color); color: white; }
+        .badge-danger { background: var(--accent-color); color: white; }
+
+        /* Diagrams */
+        .diagram {
+            background: var(--code-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        /* Collapsible Sections */
+        .collapsible {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        .collapsible-header {
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .collapsible-header:hover {
+            background: #dfe6e9;
+        }
+
+        .collapsible-content {
+            padding: 0 1rem 1rem 1rem;
+            display: none;
+        }
+
+        .collapsible.active .collapsible-content {
+            display: block;
+        }
+
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .collapsible.active .collapsible-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .mobile-nav-toggle {
+                display: block;
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: var(--secondary-color);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                cursor: pointer;
+                z-index: 1001;
+            }
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav-sidebar,
+            .scroll-top,
+            .mobile-nav-toggle {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>🧬 KeiroGenesis Clone Architecture Blueprint</h1>
+        <div class="version">Version 1.0 | December 24, 2025 | Canonical Specification</div>
+    </div>
+
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="nav-sidebar" id="navSidebar">
+        <ul>
+            <li><div class="nav-section">Core Principles</div></li>
+            <li><a href="#core-principle">Core Principle</a></li>
+            <li><a href="#canonical-flow">Canonical Flow</a></li>
+            <li><a href="#state-ownership">State Ownership</a></li>
+            
+            <li><div class="nav-section">Architecture</div></li>
+            <li><a href="#clone-activation">Clone Activation</a></li>
+            <li><a href="#experience-system">Experience System</a></li>
+            <li><a href="#rag-system">RAG System</a></li>
+            <li><a href="#chat-system">Chat System</a></li>
+            
+            <li><div class="nav-section">Experience Ontology</div></li>
+            <li><a href="#experience-ontology">Public Projection</a></li>
+            <li><a href="#publishing-model">Publishing Model</a></li>
+            <li><a href="#marketplace-discovery">Marketplace Discovery</a></li>
+            
+            <li><div class="nav-section">Database Schema</div></li>
+            <li><a href="#schema-clone">Clone Schema</a></li>
+            <li><a href="#schema-experience">Experience Schema</a></li>
+            <li><a href="#schema-rag">RAG Schema</a></li>
+            <li><a href="#schema-chat">Chat Schema</a></li>
+            
+            <li><div class="nav-section">System Design</div></li>
+            <li><a href="#state-machine">State Machine</a></li>
+            <li><a href="#memory-pipeline">Memory Pipeline</a></li>
+            <li><a href="#llm-abstraction">LLM Abstraction</a></li>
+            <li><a href="#doctrine-layer">Doctrine Layer</a></li>
+            
+            <li><div class="nav-section">Security</div></li>
+            <li><a href="#tenant-isolation">Tenant Isolation</a></li>
+            <li><a href="#resource-quotas">Resource Quotas</a></li>
+            
+            <li><div class="nav-section">Deployment</div></li>
+            <li><a href="#deployment">Deployment Architecture</a></li>
+            <li><a href="#next-steps">Next Steps</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Core Principle -->
+        <section id="core-principle" class="section">
+            <h2>🎯 CORE PRINCIPLE</h2>
+            <blockquote>
+                The clone does not learn by talking. The clone learns by being taught.
+            </blockquote>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                <div class="alert alert-info">
+                    <strong>Chat</strong> = Expression (ephemeral reasoning)
+                </div>
+                <div class="alert alert-success">
+                    <strong>Experience + RAG</strong> = Formation (permanent memory)
+                </div>
+            </div>
+        </section>
+
+        <!-- Canonical Flow -->
+        <section id="canonical-flow" class="section">
+            <h2>🧠 THE CANONICAL FLOW (END-TO-END)</h2>
+            
+            <div class="diagram">Human User
+   │
+   ├─► Clone Activation (Identity Comes Online)
+   │       │
+   │       ├─► Guarantees:
+   │       │   • clones.clones → Identity exists
+   │       │   • actor.actors (clone) → Can speak/act
+   │       │   • rag.clone_embedding_policy → Memory space locked
+   │       │   • clone.status = 'active' → Allowed to interact
+   │       │
+   │       └─► ⚠️ NO ACTIVATION → NO CHAT → NO RAG
+   │
+   ├─► Experience Creation (Curated Truth)
+   │       │
+   │       ├─► What it IS:
+   │       │   • Curated, intentional, owner-authored narrative
+   │       │   • Owned by clone, created by human owner
+   │       │   • Rated by policy, published or private
+   │       │
+   │       ├─► What it IS NOT:
+   │       │   • ✗ Chat log
+   │       │   • ✗ Raw RAG documents
+   │       │   • ✗ Ephemeral memory
+   │       │
+   │       └─► Purpose: Human-curated truth shapes clone worldview
+   │
+   ├─► RAG Ingestion (Semantic Memory)
+   │       │
+   │       ├─► What RAG represents:
+   │       │   • Clone's long-term semantic memory
+   │       │   • Stores: Experiences, Documents, Teachings, Doctrine
+   │       │
+   │       ├─► Key constraint:
+   │       │   • ONE embedding space per clone
+   │       │   • rag.clone_embedding_policy locks the model
+   │       │   • NO mixing vector spaces
+   │       │
+   │       └─► Formula: RAG = what the clone KNOWS
+   │
+   ├─► Chat Session (Live Reasoning Layer)
+   │       │
+   │       ├─► What chat IS:
+   │       │   • Ephemeral reasoning over:
+   │       │     1. Clone's identity
+   │       │     2. Clone's experiences
+   │       │     3. Clone's retrieved memories
+   │       │     4. Current prompt
+   │       │
+   │       ├─► What chat CANNOT do:
+   │       │   • ✗ Write directly to RAG
+   │       │   • ✗ Mutate memory
+   │       │   • ✗ Self-teach
+   │       │
+   │       └─► Chat may propose new memories (human-governed action)
+   │
+   └─► LLM Provider (OpenAI, Anthropic, etc.)
+           │
+           ├─► What the LLM IS:
+           │   • Stateless reasoning engine
+           │   • Temporary mind
+           │   • Replaceable provider
+           │
+           ├─► What the LLM receives per request:
+           │   1. System Prompt
+           │      • "You are [Clone Name]"
+           │      • Identity constraints
+           │      • Moral/behavioral guardrails
+           │   2. Context Window
+           │      • Retrieved RAG chunks
+           │      • Published experiences
+           │      • Recent chat messages
+           │   3. User Prompt
+           │
+           └─► What the LLM does NOT know:
+               • ✗ Tenants
+               • ✗ Users
+               • ✗ Policies
+               • ✗ Memory rules
+               (Enforced outside the model)</div>
+        </section>
+
+        <!-- Clone Activation -->
+        <section id="clone-activation" class="section">
+            <h2>🔓 CLONE ACTIVATION</h2>
+            
+            <blockquote>
+                A clone is NOT "AI-enabled" just because it exists. Activation is the gate.
+            </blockquote>
+
+            <h3>What Activation Means</h3>
+            <p>Activation transforms a database record into an <strong>addressable identity</strong> capable of interaction.</p>
+
+            <h3>Activation Guarantees</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                <div class="alert alert-success">
+                    <strong>Identity Exists</strong><br>
+                    <code>clones.clones</code> record created
+                </div>
+                <div class="alert alert-success">
+                    <strong>Can Speak/Act</strong><br>
+                    <code>actor.actors</code> entry provisioned
+                </div>
+                <div class="alert alert-success">
+                    <strong>Memory Space Locked</strong><br>
+                    <code>rag.clone_embedding_policy</code> initialized
+                </div>
+                <div class="alert alert-success">
+                    <strong>Allowed to Interact</strong><br>
+                    <code>clone.status = 'active'</code>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <strong>🔒 Critical Rule:</strong> NO ACTIVATION → NO CHAT → NO RAG
+            </div>
+
+            <h3>Activation Process Flow</h3>
+            <div class="diagram">
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Validate Request                                         │
+│    • Check tenant subscription tier limits                  │
+│    • Verify owner permissions                               │
+│    • Ensure clone name uniqueness within tenant             │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Create Actor Identity                                    │
+│    INSERT INTO actor.actors (                               │
+│      actor_type = 'clone',                                  │
+│      reference_id = clone_id,                               │
+│      can_interact = true                                    │
+│    )                                                         │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Initialize RAG Memory Space                              │
+│    INSERT INTO rag.clone_embedding_policy (                 │
+│      clone_id = clone_id,                                   │
+│      embedding_model = NULL, -- Unlocked until first doc    │
+│      locked_at = NULL                                       │
+│    )                                                         │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 4. Update Clone Status                                      │
+│    UPDATE clones.clones                                     │
+│    SET status = 'active',                                   │
+│        activated_at = NOW()                                 │
+│    WHERE clone_id = clone_id                                │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+         ✅ Clone is now ACTIVE
+            Ready for experiences, RAG, and chat
+</div>
+
+            <h3>Stored Procedure Implementation</h3>
+            <pre><code>CREATE OR REPLACE PROCEDURE sp_clone_activate(
+    p_clone_id UUID,
+    p_tenant_id UUID,
+    p_activated_by_user_id UUID
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_clone_count INT;
+    v_max_clones INT;
+BEGIN
+    -- Check subscription quota
+    SELECT COUNT(*) INTO v_clone_count
+    FROM clones.clones
+    WHERE tenant_id = p_tenant_id
+      AND status IN ('active', 'suspended');
+    
+    SELECT sq.max_clones INTO v_max_clones
+    FROM billing.subscription_quotas sq
+    JOIN auth.tenants t ON t.subscription_tier = sq.tier
+    WHERE t.tenant_id = p_tenant_id;
+    
+    IF v_clone_count >= v_max_clones THEN
+        RAISE EXCEPTION 'Clone quota exceeded: % allowed', v_max_clones;
+    END IF;
+    
+    -- Create actor identity
+    INSERT INTO actor.actors (actor_type, reference_id, tenant_id, can_interact)
+    VALUES ('clone', p_clone_id, p_tenant_id, true);
+    
+    -- Initialize RAG embedding policy
+    INSERT INTO rag.clone_embedding_policy (clone_id)
+    VALUES (p_clone_id);
+    
+    -- Update clone status
+    UPDATE clones.clones
+    SET status = 'active',
+        activated_at = NOW(),
+        activated_by_user_id = p_activated_by_user_id
+    WHERE clone_id = p_clone_id;
+    
+    -- Audit log
+    INSERT INTO audit.clone_events (clone_id, event_type, performed_by)
+    VALUES (p_clone_id, 'activation', p_activated_by_user_id);
+    
+    COMMIT;
+END;
+$$;</code></pre>
+        </section>
+
+        <!-- Experience System -->
+        <section id="experience-system" class="section">
+            <h2>📖 EXPERIENCE SYSTEM</h2>
+            
+            <blockquote>
+                Experiences are human-curated truth — they are allowed to shape a clone's worldview.
+            </blockquote>
+
+            <h3>What Experiences ARE</h3>
+            <ul>
+                <li><strong>Curated:</strong> Intentionally authored by the human owner</li>
+                <li><strong>Owned:</strong> Belong to a specific clone</li>
+                <li><strong>Rated:</strong> Categorized by importance (formative, informative, contextual)</li>
+                <li><strong>Published or Private:</strong> Owner controls visibility</li>
+                <li><strong>Versioned:</strong> Immutable once published</li>
+            </ul>
+
+            <h3>What Experiences ARE NOT</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div class="alert alert-danger">
+                    ✗ Chat logs
+                </div>
+                <div class="alert alert-danger">
+                    ✗ Raw RAG documents
+                </div>
+                <div class="alert alert-danger">
+                    ✗ Ephemeral memory
+                </div>
+            </div>
+
+            <h3>Experience Ratings & Retrieval Priority</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rating</th>
+                        <th>Retrieval Behavior</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-danger">Formative</span></td>
+                        <td><strong>Always included</strong> in context window</td>
+                        <td>Core identity, foundational beliefs, origin story</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">Informative</span></td>
+                        <td><strong>High semantic weight</strong> in retrieval</td>
+                        <td>Important knowledge, key teachings, major events</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-primary">Contextual</span></td>
+                        <td><strong>Retrieved only when relevant</strong> via similarity</td>
+                        <td>Specific memories, situational knowledge, details</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Experience Creation Workflow</h3>
+            <div class="diagram">
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Owner Composes Narrative                                 │
+│    • Write title and narrative text                         │
+│    • Select rating (formative/informative/contextual)       │
+│    • Choose visibility (private/published)                  │
+│    • Add tags and metadata                                  │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Validate & Save as Draft                                 │
+│    • Check ownership (must be clone owner)                  │
+│    • Validate narrative length and content                  │
+│    • INSERT INTO clones.experiences (status='draft')        │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Owner Reviews & Publishes                                │
+│    • Final edits to narrative                               │
+│    • Confirm publication                                    │
+│    • UPDATE status = 'published', published_at = NOW()      │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 4. Create Immutable Version                                 │
+│    • INSERT INTO clones.experience_versions                 │
+│    • Snapshot current narrative                             │
+│    • Experience becomes read-only                           │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼ (if is_public = true)
+┌─────────────────────────────────────────────────────────────┐
+│ 5. Queue for RAG Ingestion                                  │
+│    • Create rag.documents entry                             │
+│    • Trigger document processing pipeline                   │
+│    • Experience becomes part of clone's memory              │
+└─────────────────────────────────────────────────────────────┘
+</div>
+
+            <h3>Experience API Endpoints</h3>
+            <pre><code>// Internal (Technical)
+POST   /api/v1/clones/{cloneId}/experiences
+GET    /api/v1/clones/{cloneId}/experiences
+PUT    /api/v1/clones/{cloneId}/experiences/{experienceId}
+DELETE /api/v1/clones/{cloneId}/experiences/{experienceId}
+
+// Public (Semantic)
+GET    /api/v1/clones/{cloneId}/profile/narratives
+GET    /api/v1/discovery/narratives?tags=cobol&featured=true
+GET    /api/v1/clones/{cloneId}/teachings
+GET    /api/v1/clones/{cloneId}/stories</code></pre>
+        </section>
+
+        <!-- RAG System -->
+        <section id="rag-system" class="section">
+            <h2>🧠 RAG SYSTEM (Retrieval Augmented Generation)</h2>
+            
+            <blockquote>
+                RAG is the clone's long-term semantic memory. It stores what the clone KNOWS.
+            </blockquote>
+
+            <h3>Core RAG Principles</h3>
+            
+            <div class="alert alert-danger">
+                <strong>🔒 Critical Constraint:</strong> ONE embedding space per clone
+            </div>
+
+            <p>This constraint ensures:</p>
+            <ul>
+                <li><strong>Semantic coherence:</strong> All memories use the same vector model</li>
+                <li><strong>Reliable retrieval:</strong> Similarity scores are meaningful</li>
+                <li><strong>No mixing:</strong> Cannot compare vectors from different embedding models</li>
+            </ul>
+
+            <h3>RAG Architecture Components</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Purpose</th>
+                        <th>Technology</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Embedding Policy</strong></td>
+                        <td>Locks clone to specific embedding model</td>
+                        <td><code>rag.clone_embedding_policy</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Document Store</strong></td>
+                        <td>Tracks source documents and ingestion status</td>
+                        <td><code>rag.documents</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory Chunks</strong></td>
+                        <td>Stores text chunks with vector embeddings</td>
+                        <td><code>rag.memory_chunks</code> + pgvector</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vector Search</strong></td>
+                        <td>Semantic similarity retrieval</td>
+                        <td>pgvector with IVFFlat index</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Document Ingestion Pipeline</h3>
+            
+            <div class="diagram">
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Document Upload / Experience Publication                 │
+│    • User uploads PDF/DOCX/TXT                              │
+│    • OR: Experience is published (is_public=true)           │
+│    • INSERT INTO rag.documents (status='pending')           │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Check/Lock Embedding Model                               │
+│    • Query rag.clone_embedding_policy                       │
+│    • IF locked_at IS NULL:                                  │
+│        → Lock to current embedding model                    │
+│        → SET locked_at = NOW()                              │
+│    • ELSE:                                                  │
+│        → Validate model matches locked model                │
+│        → RAISE exception if mismatch                        │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Text Extraction & Chunking                               │
+│    • Extract text from document (PDF → text, DOCX → text)  │
+│    • Split into 512-1024 token chunks                       │
+│    • Preserve chunk order and metadata                      │
+│    • Overlap chunks by 128 tokens for context               │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 4. Generate Embeddings                                      │
+│    • Call LLM API (OpenAI/Anthropic/Cohere)                │
+│    • Model: locked embedding model from policy              │
+│    • Input: chunk text                                      │
+│    • Output: vector(1536) or vector(768)                    │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 5. Store Vectors in PostgreSQL                              │
+│    • INSERT INTO rag.memory_chunks                          │
+│    • Store: chunk_text, embedding, metadata                 │
+│    • Link to: document_id, clone_id, tenant_id             │
+│    • Index: pgvector IVFFlat for fast similarity search    │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 6. Update Document Status                                   │
+│    • UPDATE rag.documents SET status = 'indexed'           │
+│    • Record: chunk_count, total_tokens, indexed_at         │
+│    • Audit: Log ingestion completion                        │
+└─────────────────────────────────────────────────────────────┘
+                 │
+                 ▼
+         ✅ Document is now SEARCHABLE
+            Clone can retrieve this memory via RAG
+</div>
+
+            <h3>Vector Similarity Search</h3>
+            
+            <pre><code>-- Semantic search function with tenant isolation
+CREATE OR REPLACE FUNCTION rag_semantic_search(
+    p_clone_id UUID,
+    p_query_text TEXT,
+    p_limit INT DEFAULT 5
+)
+RETURNS TABLE (
+    chunk_id UUID,
+    chunk_text TEXT,
+    similarity_score FLOAT,
+    source_document VARCHAR(500),
+    metadata JSONB
+) AS $$
+DECLARE
+    v_query_embedding vector(1536);
+    v_tenant_id UUID;
+BEGIN
+    -- Get tenant_id for isolation
+    SELECT tenant_id INTO v_tenant_id
+    FROM clones.clones
+    WHERE clone_id = p_clone_id;
+    
+    -- Generate query embedding using locked model
+    v_query_embedding := generate_embedding(p_query_text, p_clone_id);
+    
+    -- Search with cosine similarity
+    RETURN QUERY
+    SELECT 
+        mc.chunk_id,
+        mc.chunk_text,
+        1 - (mc.embedding <=> v_query_embedding) AS similarity_score,
+        d.title AS source_document,
+        mc.metadata
+    FROM rag.memory_chunks mc
+    JOIN rag.documents d ON d.document_id = mc.document_id
+    WHERE mc.clone_id = p_clone_id
+      AND mc.tenant_id = v_tenant_id
+    ORDER BY mc.embedding <=> v_query_embedding
+    LIMIT p_limit;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;</code></pre>
+
+            <h3>RAG Context Assembly for Chat</h3>
+            
+            <div class="collapsible active">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>How RAG is Used in Chat Sessions</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <ol>
+                        <li><strong>User sends message:</strong> "Tell me about COBOL batch processing"</li>
+                        <li><strong>System generates query embedding:</strong> Convert message to vector</li>
+                        <li><strong>Retrieve relevant chunks:</strong> Top 5 most similar chunks from clone's memory</li>
+                        <li><strong>Include formative experiences:</strong> Always add experiences with rating='formative'</li>
+                        <li><strong>Assemble context window:</strong>
+                            <ul>
+                                <li>System prompt (clone identity)</li>
+                                <li>Formative experiences</li>
+                                <li>Retrieved RAG chunks</li>
+                                <li>Recent chat history</li>
+                                <li>User's current message</li>
+                            </ul>
+                        </li>
+                        <li><strong>Send to LLM:</strong> Provider processes context and generates response</li>
+                        <li><strong>Clone responds:</strong> Answer informed by RAG memory</li>
+                    </ol>
+                </div>
+            </div>
+
+            <h3>Embedding Model Lock Enforcement</h3>
+            
+            <pre><code>-- Trigger to prevent mixing embedding models
+CREATE OR REPLACE FUNCTION enforce_embedding_model_lock()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_locked_model VARCHAR(100);
+    v_current_model VARCHAR(100);
+BEGIN
+    -- Get locked model for this clone
+    SELECT embedding_model INTO v_locked_model
+    FROM rag.clone_embedding_policy
+    WHERE clone_id = NEW.clone_id
+      AND locked_at IS NOT NULL;
+    
+    -- If model is locked, verify match
+    IF v_locked_model IS NOT NULL THEN
+        -- Get current model from document metadata
+        SELECT metadata->>'embedding_model' INTO v_current_model
+        FROM rag.documents
+        WHERE document_id = NEW.document_id;
+        
+        IF v_current_model != v_locked_model THEN
+            RAISE EXCEPTION 
+                'Embedding model mismatch for clone %. Expected: %, Got: %',
+                NEW.clone_id, v_locked_model, v_current_model;
+        END IF;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_enforce_embedding_model
+BEFORE INSERT ON rag.memory_chunks
+FOR EACH ROW EXECUTE FUNCTION enforce_embedding_model_lock();</code></pre>
+
+            <h3>RAG Performance Optimization</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Optimization</th>
+                        <th>Implementation</th>
+                        <th>Benefit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>IVFFlat Index</strong></td>
+                        <td><code>CREATE INDEX USING ivfflat (embedding vector_cosine_ops)</code></td>
+                        <td>100x faster similarity search</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chunk Caching</strong></td>
+                        <td>Redis cache for frequently retrieved chunks</td>
+                        <td>Reduce database load</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Batch Embedding</strong></td>
+                        <td>Process multiple chunks in single API call</td>
+                        <td>Lower latency, fewer API calls</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tenant Partitioning</strong></td>
+                        <td>Separate indexes per tenant_id</td>
+                        <td>Better query performance</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>RAG Storage Quotas</h3>
+            
+            <pre><code>-- Enforce storage limits by subscription tier
+CREATE OR REPLACE FUNCTION enforce_rag_storage_quota()
+RETURNS TRIGGER AS $$
+DECLARE
+    v_current_storage_mb FLOAT;
+    v_allowed_storage_mb INT;
+BEGIN
+    -- Calculate current storage for clone
+    SELECT SUM(LENGTH(chunk_text) + LENGTH(embedding::text)) / 1024.0 / 1024.0
+    INTO v_current_storage_mb
+    FROM rag.memory_chunks
+    WHERE clone_id = NEW.clone_id;
+    
+    -- Get allowed storage for tenant's tier
+    SELECT sq.max_rag_storage_mb INTO v_allowed_storage_mb
+    FROM billing.subscription_quotas sq
+    JOIN auth.tenants t ON t.subscription_tier = sq.tier
+    JOIN clones.clones c ON c.tenant_id = t.tenant_id
+    WHERE c.clone_id = NEW.clone_id;
+    
+    IF v_current_storage_mb >= v_allowed_storage_mb THEN
+        RAISE EXCEPTION 
+            'RAG storage quota exceeded for clone %. Limit: % MB',
+            NEW.clone_id, v_allowed_storage_mb;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_enforce_rag_storage_quota
+BEFORE INSERT ON rag.memory_chunks
+FOR EACH ROW EXECUTE FUNCTION enforce_rag_storage_quota();</code></pre>
+        </section>
+
+        <!-- Chat System -->
+        <section id="chat-system" class="section">
+            <h2>💬 CHAT SYSTEM (Ephemeral Reasoning Layer)</h2>
+            
+            <blockquote>
+                Chat is ephemeral reasoning over identity + experiences + RAG memories. Chat CANNOT mutate memory.
+            </blockquote>
+
+            <h3>What Chat IS</h3>
+            <ul>
+                <li><strong>Real-time reasoning:</strong> Clone processes user queries in the moment</li>
+                <li><strong>Context-aware:</strong> Leverages RAG, experiences, and identity</li>
+                <li><strong>Conversational:</strong> Maintains session history for continuity</li>
+                <li><strong>Ephemeral:</strong> Messages are temporary, pruned after retention period</li>
+            </ul>
+
+            <h3>What Chat CANNOT Do</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div class="alert alert-danger">
+                    ✗ Write directly to RAG
+                </div>
+                <div class="alert alert-danger">
+                    ✗ Mutate clone memory
+                </div>
+                <div class="alert alert-danger">
+                    ✗ Self-teach or self-train
+                </div>
+            </div>
+
+            <h3>Chat Session Lifecycle</h3>
+            
+            <div class="diagram">
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Session Creation                                         │
+│    • User initiates chat with clone                         │
+│    • Verify clone is active (status='active')               │
+│    • INSERT INTO chat.sessions (status='active')            │
+│    • Cache clone identity + formative experiences           │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Message Processing Loop                                  │
+│    ┌────────────────────────────────────────────────────┐   │
+│    │ a. User sends message                              │   │
+│    │    • INSERT INTO chat.messages (sender_type='user')│   │
+│    │                                                     │   │
+│    │ b. Assemble context window                         │   │
+│    │    • System prompt (clone identity)                │   │
+│    │    • Formative experiences (always)                │   │
+│    │    • RAG retrieval (semantic search)               │   │
+│    │    • Recent messages (last 10)                     │   │
+│    │    • User's current message                        │   │
+│    │                                                     │   │
+│    │ c. Call LLM provider                               │   │
+│    │    • Send assembled context                        │   │
+│    │    • Receive clone response                        │   │
+│    │                                                     │   │
+│    │ d. Store clone response                            │   │
+│    │    • INSERT INTO chat.messages (sender='clone')    │   │
+│    │    • Record RAG chunks used in metadata            │   │
+│    │                                                     │   │
+│    │ e. Check for experience proposals                  │   │
+│    │    • If clone suggests "remember this"             │   │
+│    │    • CREATE chat.experience_proposals              │   │
+│    └────────────────────────────────────────────────────┘   │
+│                 ↓ (repeat for each message)                 │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Session Termination                                      │
+│    • User closes chat or timeout (30 min inactivity)        │
+│    • UPDATE chat.sessions SET status='closed'               │
+│    • Set TTL for message cleanup (7-30 days)                │
+└─────────────────────────────────────────────────────────────┘
+</div>
+
+            <h3>Context Window Assembly</h3>
+            
+            <pre><code>// Function to build LLM context for a chat message
+async function assembleChatContext(sessionId, userMessage) {
+    const session = await getSession(sessionId);
+    const clone = await getClone(session.clone_id);
+    
+    // 1. System Prompt (Clone Identity)
+    const systemPrompt = {
+        role: "system",
+        content: `You are ${clone.name}, a digital embodiment created by ${clone.owner_name}.
+
+CORE IDENTITY:
+${clone.personality_traits}
+${clone.background}
+
+MORAL GUARDRAILS:
+${await getActiveDoctrine(clone.clone_id)}
+
+BEHAVIORAL CONSTRAINTS:
+• You learn by being taught, not by talking
+• You cannot mutate your own memories
+• You may propose experiences for owner review
+• You operate within ${clone.autonomy_level} boundaries`
+    };
+    
+    // 2. Formative Experiences (Always Included)
+    const formativeExperiences = await getExperiences(
+        clone.clone_id, 
+        { rating: 'formative', status: 'published' }
+    );
+    
+    // 3. RAG Retrieval (Semantic Search)
+    const ragChunks = await ragSemanticSearch(
+        clone.clone_id,
+        userMessage,
+        limit: 5
+    );
+    
+    // 4. Recent Chat History
+    const recentMessages = await getRecentMessages(sessionId, limit: 10);
+    
+    // 5. Assemble Context Window
+    const contextWindow = [
+        systemPrompt,
+        ...formativeExperiences.map(exp => ({
+            role: "system",
+            content: `[FORMATIVE EXPERIENCE] ${exp.title}: ${exp.narrative}`
+        })),
+        ...ragChunks.map(chunk => ({
+            role: "system",
+            content: `[MEMORY] ${chunk.chunk_text} (similarity: ${chunk.similarity_score})`
+        })),
+        ...recentMessages,
+        { role: "user", content: userMessage }
+    ];
+    
+    return contextWindow;
+}</code></pre>
+
+            <h3>Experience Proposal System</h3>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>How Clones Propose New Memories</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <p>During chat, a clone may recognize an important moment worth remembering. The proposal workflow:</p>
+                    
+                    <ol>
+                        <li><strong>Clone Detection:</strong> LLM response includes marker like "🔖 PROPOSAL:"</li>
+                        <li><strong>System Extraction:</strong> Backend parses proposed narrative from response</li>
+                        <li><strong>Proposal Creation:</strong> INSERT INTO chat.experience_proposals (status='pending')</li>
+                        <li><strong>Owner Notification:</strong> Alert owner of pending proposal</li>
+                        <li><strong>Owner Review:</strong>
+                            <ul>
+                                <li><strong>Approve:</strong> Create new experience, queue for RAG ingestion</li>
+                                <li><strong>Edit:</strong> Owner curates narrative before approving</li>
+                                <li><strong>Reject:</strong> Discard proposal, no memory formed</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    
+                    <pre><code>// Example clone response with proposal
+{
+  "message": "That's a fascinating insight about error handling. 🔖 PROPOSAL: I suggest we remember this conversation about defensive programming in legacy COBOL systems.",
+  "proposed_narrative": "Discussion on defensive programming techniques: Always validate input parameters, use defensive COPY statements, implement error handling in every paragraph, and maintain audit trails for debugging."
+}</code></pre>
+                </div>
+            </div>
+
+            <h3>Chat Session Cleanup & Retention</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Data Type</th>
+                        <th>Retention Period</th>
+                        <th>Cleanup Method</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Active Sessions</strong></td>
+                        <td>Until closed or 30min timeout</td>
+                        <td>Auto-close on inactivity</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Closed Sessions</strong></td>
+                        <td>7 days (free), 30 days (paid)</td>
+                        <td>TTL-based deletion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Chat Messages</strong></td>
+                        <td>Matches session retention</td>
+                        <td>CASCADE delete with session</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Experience Proposals</strong></td>
+                        <td>90 days if rejected, permanent if approved</td>
+                        <td>Scheduled job + manual purge</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <pre><code>-- Scheduled job to cleanup expired chat sessions
+CREATE OR REPLACE FUNCTION cleanup_expired_chat_sessions()
+RETURNS INTEGER AS $$
+DECLARE
+    v_deleted_count INTEGER;
+BEGIN
+    -- Delete sessions past TTL
+    DELETE FROM chat.sessions
+    WHERE status IN ('closed', 'expired')
+      AND last_activity_at < NOW() - INTERVAL '30 days'
+    RETURNING COUNT(*) INTO v_deleted_count;
+    
+    -- Messages cascade delete via FK constraint
+    
+    RETURN v_deleted_count;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Run daily at 2 AM
+SELECT cron.schedule('cleanup-chat-sessions', '0 2 * * *', 
+    'SELECT cleanup_expired_chat_sessions();');</code></pre>
+
+            <h3>Chat Rate Limiting & Quotas</h3>
+            
+            <div class="alert alert-info">
+                <strong>Subscription-Based Limits:</strong>
+                <ul>
+                    <li><strong>Free:</strong> 50 messages/month per clone</li>
+                    <li><strong>Starter:</strong> 1,000 messages/month per clone</li>
+                    <li><strong>Professional:</strong> 10,000 messages/month per clone</li>
+                    <li><strong>Enterprise:</strong> Unlimited (rate-limited by API tier)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- State Ownership -->
+        <section id="state-ownership" class="section">
+            <h2>🧩 STATE OWNERSHIP (CRITICAL)</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Mutable By</th>
+                        <th>When</th>
+                        <th>Storage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-primary">Clone Identity</span></td>
+                        <td>Human / Admin</td>
+                        <td>Rare</td>
+                        <td><code>clones.clones</code></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-success">Experience</span></td>
+                        <td>Human Owner</td>
+                        <td>Intentional</td>
+                        <td><code>clones.experiences</code></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">RAG Memory</span></td>
+                        <td>Ingestion Service</td>
+                        <td>Controlled</td>
+                        <td><code>rag.*</code> + pgvector</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-danger">Chat</span></td>
+                        <td>Runtime</td>
+                        <td>Ephemeral</td>
+                        <td><code>chat.sessions</code> (temporary)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">LLM</span></td>
+                        <td>Never</td>
+                        <td>Stateless</td>
+                        <td>None (external provider)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🔒 Immutability Guarantees</h3>
+            <ul>
+                <li><strong>Clone Identity:</strong> Only admin can change core identity attributes</li>
+                <li><strong>Experiences:</strong> Owner-authored, versioned, immutable once published</li>
+                <li><strong>RAG Memory:</strong> Write-once, no edits (new ingestion required)</li>
+                <li><strong>Chat:</strong> Session-scoped, pruned after retention period</li>
+                <li><strong>LLM:</strong> Zero persistence, stateless per request</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>Why This Model Matters:</strong> It prevents AI self-training, identity drift, hallucinated belief formation, moral corruption, and cross-clone memory leakage.
+            </div>
+        </section>
+
+        <!-- Experience Ontology -->
+        <section id="experience-ontology" class="section">
+            <h2>🌐 EXPERIENCE ONTOLOGY & PUBLIC PROJECTION</h2>
+            
+            <blockquote>
+                This section defines what an "experience" actually IS in the public ontology of the platform, not just where rows land in a table.
+            </blockquote>
+
+            <div class="alert alert-info">
+                An experience is first and foremost <strong>something the clone stands behind</strong>, not something for sale.
+            </div>
+
+            <h3>1️⃣ Where Published Experiences Actually Live</h3>
+            
+            <p>Published experiences do <strong>NOT</strong> automatically go to a "marketplace." They move into a <strong>publicly addressable knowledge surface</strong> that can be optionally syndicated.</p>
+
+            <div class="collapsible active">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>A. Primary Home (Always) - Clone's Public Profile</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <p>When an experience is:</p>
+                    <ul>
+                        <li><code>status = 'published'</code></li>
+                        <li><code>is_public = true</code></li>
+                    </ul>
+                    <p>It becomes:</p>
+                    <ul>
+                        <li>Part of the clone's <strong>public memory</strong></li>
+                        <li>Queryable by RAG for public chats</li>
+                        <li>Viewable on a clone-facing public page</li>
+                    </ul>
+                    <div class="alert alert-success">
+                        This is the default and canonical home. An experience is first and foremost something the clone stands behind, not a product listing.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>B. Secondary Surface (Optional) - Discovery Library</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <p>Only <strong>some</strong> published experiences appear in global discovery:</p>
+                    <ul>
+                        <li>Featured teachings</li>
+                        <li>Public testimonies</li>
+                        <li>Curated narratives</li>
+                        <li>Thought leadership artifacts</li>
+                    </ul>
+                    <p>This surface is:</p>
+                    <ul>
+                        <li>Editorially filtered</li>
+                        <li>Contextual</li>
+                        <li><strong>Not transactional by default</strong></li>
+                    </ul>
+                    <div class="alert alert-warning">
+                        You can later add monetization, but <strong>discovery ≠ commerce</strong>.
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>C. Marketplace (Explicit, Opt-In, Later)</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <p>A marketplace is a <strong>separate contract</strong>. An experience only appears there if:</p>
+                    <ul>
+                        <li>Explicitly marked as <code>licensable</code> / <code>distributable</code></li>
+                        <li>Has clear usage rights defined</li>
+                        <li>Possibly versioned or packaged as a product</li>
+                    </ul>
+                    <div class="alert alert-danger">
+                        <strong>Do not overload "published" to mean "for sale."</strong> That mistake kills trust.
+                    </div>
+                </div>
+            </div>
+
+            <h3>2️⃣ What a Published Experience IS to the Public</h3>
+            
+            <p>Right now, the word "experience" is too internal. To the public, an experience is perceived as:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                <div class="alert alert-info">A <strong>story</strong></div>
+                <div class="alert alert-info">A <strong>teaching</strong></div>
+                <div class="alert alert-info">A <strong>perspective</strong></div>
+                <div class="alert alert-info">A <strong>reflection</strong></div>
+                <div class="alert alert-info">A <strong>testimony</strong></div>
+                <div class="alert alert-info">A <strong>doctrine</strong></div>
+                <div class="alert alert-info">A <strong>memory</strong></div>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>The system knows it as an experience. The audience should not.</strong>
+            </div>
+
+            <h3>3️⃣ Public-Facing Terminology</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Terms</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Neutral / Platform-Safe</strong><br><span class="badge badge-success">Recommended</span></td>
+                        <td>
+                            <strong>Narratives</strong> 👈 Top pick<br>
+                            Reflections, Perspectives, Knowledge Entries, Teachings, Insights
+                        </td>
+                        <td>Works across industries, won't age badly</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Authority / Leadership</strong></td>
+                        <td>
+                            <strong>Teachings</strong> 👈 Best for thought leaders<br>
+                            Positions, Statements, Expositions, Doctrines
+                        </td>
+                        <td>Expertise, professional clones</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Personal / Legacy</strong></td>
+                        <td>
+                            <strong>Stories</strong> or <strong>Testimonies</strong><br>
+                            Life Moments, Remembrances, Legacy Notes
+                        </td>
+                        <td>Personal memoirs, legacy use cases</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>🔹 Hybrid Model (Recommended)</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Context</th>
+                        <th>Label</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Internally</td>
+                        <td><code>clones.experiences</code></td>
+                    </tr>
+                    <tr>
+                        <td>Publicly (default)</td>
+                        <td><strong>Narratives</strong></td>
+                    </tr>
+                    <tr>
+                        <td>When instructional</td>
+                        <td><strong>Teaching</strong></td>
+                    </tr>
+                    <tr>
+                        <td>When personal</td>
+                        <td><strong>Story</strong></td>
+                    </tr>
+                    <tr>
+                        <td>When declarative</td>
+                        <td><strong>Statement</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-success">
+                This gives semantic flexibility without schema churn.
+            </div>
+        </section>
+
+        <!-- Publishing Model -->
+        <section id="publishing-model" class="section">
+            <h2>4️⃣ Publishing Model Schema (Clean & Scalable)</h2>
+            
+            <pre><code>-- Enhanced experiences table with publication controls
+clones.experiences
+├── experience_id (PK)
+├── clone_id (FK → clones.clone_id)
+├── tenant_id (FK → auth.tenants)
+├── created_by_user_id (FK → auth.users)
+├── title VARCHAR(200)
+├── narrative TEXT
+├── rating ENUM('formative', 'informative', 'contextual')
+├── status ENUM('draft', 'published')
+├── version INT DEFAULT 1
+├── created_at TIMESTAMP
+├── published_at TIMESTAMP
+│
+├── -- PUBLIC PROJECTION CONTROLS
+├── is_public BOOLEAN DEFAULT false -- Visible on clone profile
+├── is_discoverable BOOLEAN DEFAULT false -- Appears in global library
+├── is_licensable BOOLEAN DEFAULT false -- Eligible for marketplace
+│
+├── -- METADATA
+├── public_label VARCHAR(50) -- 'narrative', 'teaching', 'story'
+├── display_title VARCHAR(200) -- Public-facing title
+├── excerpt TEXT -- Short preview for discovery surfaces
+└── tags JSONB -- ['cobol', 'legacy-systems', 'mainframe']</code></pre>
+
+            <h3>Publication Flag Meanings</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Flag</th>
+                        <th>Meaning</th>
+                        <th>Default</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>is_public</code></td>
+                        <td>Visible on clone's public profile</td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>is_discoverable</code></td>
+                        <td>Appears in global discovery library</td>
+                        <td><code>false</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>is_licensable</code></td>
+                        <td>Eligible for marketplace transactions</td>
+                        <td><code>false</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>5️⃣ Why This Separation Matters</h3>
+            
+            <div class="alert alert-danger">
+                <strong>If you collapse these concepts, you create problems:</strong>
+                <ul>
+                    <li>People fear publishing if it implies selling</li>
+                    <li>Legal rights become ambiguous</li>
+                    <li>Trust erodes</li>
+                    <li>Discovery becomes noisy</li>
+                    <li>Monetization feels predatory</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-success">
+                Your current architecture is good enough to support this separation. This is a <strong>naming and routing decision</strong>, not a rewrite.
+            </div>
+        </section>
+
+        <!-- Marketplace Discovery -->
+        <section id="marketplace-discovery" class="section">
+            <h2>🛍️ MARKETPLACE DISCOVERY MODEL</h2>
+            
+            <blockquote>
+                If someone is looking for "a clone that does programming in COBOL", the primary object of discovery is the CLONE, not the individual experiences attached to it.
+            </blockquote>
+
+            <div class="alert alert-info">
+                <strong>The marketplace must answer one question instantly:</strong><br>
+                "What can this clone credibly help me with?"
+            </div>
+
+            <h3>1️⃣ Marketplace Unit of Discovery: The Clone</h3>
+            
+            <p><strong>Marketplace card = Clone Profile</strong><br>
+            Experiences act as <strong>supporting evidence</strong>, not the headline.</p>
+
+            <h4>Marketplace Card Hierarchy (Recommended)</h4>
+            <ol>
+                <li><strong>Clone Display Name</strong> (identity)</li>
+                <li><strong>Primary Capability Title</strong> (what they do)</li>
+                <li><strong>Experience Badges / Evidence</strong> (why trust them)</li>
+            </ol>
+
+            <h3>2️⃣ Primary Display Name Pattern</h3>
+            
+            <p><strong>Format:</strong></p>
+            <pre><code>[Clone Name] — [Primary Capability / Domain]</code></pre>
+
+            <h4>Examples for COBOL:</h4>
+            <ul>
+                <li>James Walker — Legacy Systems & COBOL Programming</li>
+                <li>Enterprise Mainframe Specialist — COBOL & Batch Processing</li>
+                <li>Financial Systems Engineer — COBOL & Mainframe Modernization</li>
+                <li>COBOL Architect — Banking & Transaction Systems</li>
+            </ul>
+
+            <div class="alert alert-success">
+                <strong>Why this works:</strong>
+                <ul>
+                    <li>The domain is explicit</li>
+                    <li>The clone feels human and credible</li>
+                    <li>Avoids buzzwords</li>
+                </ul>
+            </div>
+
+            <h3>3️⃣ Secondary Descriptor (Optional, Powerful)</h3>
+            
+            <p>Under the name, add a capability subtitle:</p>
+            <pre><code>40+ years in enterprise COBOL, banking systems, and batch processing.</code></pre>
+            <p>or</p>
+            <pre><code>Specializes in COBOL, JCL, VSAM, and legacy system modernization.</code></pre>
+
+            <div class="alert alert-info">
+                This subtitle can be <strong>auto-derived from experiences</strong>, but written for humans.
+            </div>
+
+            <h3>4️⃣ How Experiences Show Up (Supporting Role)</h3>
+            
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>A. Capability Badges (Auto-Derived)</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div>
+                        <span class="badge badge-primary">COBOL</span>
+                        <span class="badge badge-primary">Mainframe</span>
+                        <span class="badge badge-primary">Banking Systems</span>
+                        <span class="badge badge-primary">Batch Processing</span>
+                        <span class="badge badge-primary">Legacy Modernization</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>B. Featured Narratives (Click-Through)</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <ul>
+                        <li>"Modernizing COBOL Systems for 21st-Century Banking"</li>
+                        <li>"Lessons from 30 Years of Mainframe Development"</li>
+                    </ul>
+                    <p>This reinforces trust without overwhelming the buyer.</p>
+                </div>
+            </div>
+
+            <h3>5️⃣ What NOT to Do (Important)</h3>
+            
+            <div class="alert alert-danger">
+                <strong>Avoid these patterns — they kill clarity:</strong>
+                <ul>
+                    <li>❌ "COBOL Experience #12"</li>
+                    <li>❌ "Experience: COBOL Programming"</li>
+                    <li>❌ "Clone with 18 experiences"</li>
+                    <li>❌ "AI COBOL Expert"</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Users do not want:</strong>
+                <ul>
+                    <li>Internal jargon</li>
+                    <li>Counts</li>
+                    <li>AI branding</li>
+                    <li>Abstract labels</li>
+                </ul>
+                <strong>They want a credible digital person.</strong>
+            </div>
+
+            <h3>6️⃣ Marketplace Taxonomy (Clean & Future-Proof)</h3>
+            
+            <pre><code>marketplace.clone_listings
+├── clone_id (PK, FK → clones.clones)
+├── tenant_id (FK → auth.tenants)
+├── display_name VARCHAR(200) -- "James Walker — Legacy Systems Expert"
+├── primary_capability VARCHAR(200) -- "COBOL & Mainframe Programming"
+├── subtitle TEXT -- "40+ years in enterprise COBOL..."
+├── domain VARCHAR(100) -- "Programming"
+├── specialty VARCHAR(100) -- "COBOL"
+├── industry VARCHAR(100) -- "Banking / Finance / Government"
+├── experience_level ENUM('junior', 'mid', 'senior', 'expert', 'architect')
+├── is_featured BOOLEAN DEFAULT false
+├── is_verified BOOLEAN DEFAULT false
+├── listing_status ENUM('draft', 'active', 'paused', 'archived')
+├── created_at TIMESTAMP
+└── updated_at TIMESTAMP</code></pre>
+
+            <h3>7️⃣ Strong Recommendation (Lock This In)</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem;">
+                <div class="alert alert-success">✅ Marketplace lists CLONES, not experiences</div>
+                <div class="alert alert-success">✅ Experiences are evidence, not SKUs</div>
+                <div class="alert alert-success">✅ Use human-readable professional titles</div>
+                <div class="alert alert-success">✅ Treat clones like experts you'd hire or consult</div>
+                <div class="alert alert-success">✅ Let experiences quietly prove credibility</div>
+            </div>
+
+            <blockquote>
+                If you do this right, searching for "COBOL" feels like LinkedIn + consulting + mentorship — not an app store.
+            </blockquote>
+        </section>
+
+        <!-- Clone Activation Schema -->
+        <section id="schema-clone" class="section">
+            <h2>📊 DATABASE SCHEMA: CLONE ACTIVATION</h2>
+            
+            <pre><code>-- Clone must exist before activation
+clones.clones
+├── clone_id (PK)
+├── tenant_id (FK → auth.tenants)
+├── owner_user_id (FK → auth.users)
+├── status ENUM('created', 'activating', 'active', 'suspended', 'archived')
+├── activated_at TIMESTAMP
+└── created_at TIMESTAMP
+
+-- Activation creates actor identity
+actor.actors (clone)
+├── actor_id (PK)
+├── actor_type = 'clone'
+├── reference_id (FK → clones.clone_id)
+├── tenant_id (FK → auth.tenants)
+└── can_interact BOOLEAN (true only if status = 'active')
+
+-- Activation locks embedding policy
+rag.clone_embedding_policy
+├── clone_id (PK, FK → clones.clone_id)
+├── embedding_model VARCHAR(100) -- e.g., 'text-embedding-3-small'
+├── locked_at TIMESTAMP -- Set on first document ingestion
+└── CONSTRAINT one_model_per_clone UNIQUE (clone_id)</code></pre>
+
+            <h3>Activation Trigger</h3>
+            <pre><code>-- Stored procedure: sp_clone_activate
+-- Validates: tenant limits, owner permissions
+-- Creates: actor.actors entry
+-- Initializes: rag.clone_embedding_policy (unlocked)
+-- Sets: clones.status = 'active', activated_at = NOW()</code></pre>
+        </section>
+
+        <!-- Experience Schema -->
+        <section id="schema-experience" class="section">
+            <h2>📊 DATABASE SCHEMA: EXPERIENCE</h2>
+            
+            <pre><code>clones.experiences
+├── experience_id (PK)
+├── clone_id (FK → clones.clone_id)
+├── tenant_id (FK → auth.tenants)
+├── created_by_user_id (FK → auth.users) -- Must be clone owner
+├── title VARCHAR(200)
+├── narrative TEXT -- The curated story/teaching
+├── rating ENUM('formative', 'informative', 'contextual')
+├── visibility ENUM('private', 'published')
+├── published_at TIMESTAMP
+├── version INT DEFAULT 1
+└── created_at TIMESTAMP
+
+-- Experiences are versioned (immutable once published)
+clones.experience_versions
+├── version_id (PK)
+├── experience_id (FK → clones.experiences)
+├── version_number INT
+├── narrative_snapshot TEXT
+├── published_at TIMESTAMP
+└── published_by_user_id (FK → auth.users)</code></pre>
+
+            <h3>Business Rules</h3>
+            <div class="alert alert-info">
+                <ul>
+                    <li>Only clone owner can create experiences</li>
+                    <li>Published experiences are immutable (new version required for changes)</li>
+                    <li>Rating determines RAG retrieval priority:
+                        <ul>
+                            <li><code>formative</code> → Always included in context</li>
+                            <li><code>informative</code> → High semantic weight</li>
+                            <li><code>contextual</code> → Retrieved only when relevant</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- RAG Schema -->
+        <section id="schema-rag" class="section">
+            <h2>📊 DATABASE SCHEMA: RAG (LONG-TERM SEMANTIC MEMORY)</h2>
+            
+            <pre><code>-- Embedding policy (one model per clone, locked on first ingestion)
+rag.clone_embedding_policy
+├── clone_id (PK)
+├── embedding_model VARCHAR(100)
+├── dimension INT -- e.g., 1536 for OpenAI ada-002
+├── locked_at TIMESTAMP
+└── locked_by_document_id (FK → rag.documents)
+
+-- Documents (sources ingested into RAG)
+rag.documents
+├── document_id (PK)
+├── clone_id (FK → clones.clone_id)
+├── tenant_id (FK → auth.tenants)
+├── source_type ENUM('experience', 'upload', 'teaching', 'doctrine')
+├── source_id UUID -- References experiences, files, etc.
+├── title VARCHAR(500)
+├── ingested_at TIMESTAMP
+├── ingested_by_user_id (FK → auth.users)
+└── status ENUM('pending', 'processing', 'indexed', 'failed')
+
+-- Memory chunks (vector storage with pgvector)
+rag.memory_chunks
+├── chunk_id (PK)
+├── document_id (FK → rag.documents)
+├── clone_id (FK → clones.clone_id) -- Redundant for query optimization
+├── tenant_id (FK → auth.tenants)
+├── chunk_text TEXT
+├── chunk_index INT -- Position in source document
+├── embedding vector(1536) -- pgvector column
+├── metadata JSONB -- {page, section, rating, etc.}
+└── created_at TIMESTAMP
+
+-- Index for vector similarity search
+CREATE INDEX idx_memory_chunks_embedding 
+ON rag.memory_chunks 
+USING ivfflat (embedding vector_cosine_ops)
+WITH (lists = 100);
+
+-- Enforce tenant + clone isolation
+CREATE INDEX idx_memory_chunks_clone 
+ON rag.memory_chunks (clone_id, tenant_id);</code></pre>
+
+            <h3>RAG Ingestion Pipeline</h3>
+            <ol>
+                <li>Document Upload → <code>rag.documents</code> (status='pending')</li>
+                <li>Check <code>rag.clone_embedding_policy</code>:
+                    <ul>
+                        <li>If locked → Validate model matches</li>
+                        <li>If unlocked → Lock to current model</li>
+                    </ul>
+                </li>
+                <li>Chunk document → 512-1024 token chunks</li>
+                <li>Generate embeddings → Call OpenAI/Anthropic API</li>
+                <li>Store vectors → <code>rag.memory_chunks</code></li>
+                <li>Update status → <code>rag.documents</code> (status='indexed')</li>
+            </ol>
+
+            <h3>Critical Constraint</h3>
+            <pre><code>-- Prevent mixing embedding models
+CREATE OR REPLACE FUNCTION enforce_embedding_model()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM rag.clone_embedding_policy 
+    WHERE clone_id = NEW.clone_id 
+      AND locked_at IS NOT NULL
+      AND embedding_model != (SELECT current_model FROM context)
+  ) THEN
+    RAISE EXCEPTION 'Cannot mix embedding models for clone %', NEW.clone_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_enforce_embedding_model
+BEFORE INSERT ON rag.memory_chunks
+FOR EACH ROW EXECUTE FUNCTION enforce_embedding_model();</code></pre>
+        </section>
+
+        <!-- Chat Schema -->
+        <section id="schema-chat" class="section">
+            <h2>📊 DATABASE SCHEMA: CHAT (EPHEMERAL REASONING LAYER)</h2>
+            
+            <pre><code>-- Chat sessions (temporary, pruned after retention period)
+chat.sessions
+├── session_id (PK)
+├── clone_id (FK → clones.clone_id)
+├── user_id (FK → auth.users) -- Who is chatting with the clone
+├── tenant_id (FK → auth.tenants)
+├── started_at TIMESTAMP
+├── last_activity_at TIMESTAMP
+├── status ENUM('active', 'closed', 'expired')
+└── context_snapshot JSONB -- Cached identity + RAG metadata
+
+-- Chat messages (ephemeral, kept for short retention)
+chat.messages
+├── message_id (PK)
+├── session_id (FK → chat.sessions)
+├── clone_id (FK → clones.clone_id)
+├── sender_type ENUM('user', 'clone')
+├── sender_id UUID -- user_id or clone_id
+├── message_text TEXT
+├── metadata JSONB -- {rag_chunks_used: [...], experience_ids: [...]}
+├── created_at TIMESTAMP
+└── ttl TIMESTAMP -- Auto-delete after retention period
+
+-- Chat does NOT persist to RAG
+-- Chat MAY propose experiences (human approval required)
+chat.experience_proposals
+├── proposal_id (PK)
+├── session_id (FK → chat.sessions)
+├── clone_id (FK → clones.clone_id)
+├── proposed_by_message_id (FK → chat.messages)
+├── proposed_narrative TEXT
+├── status ENUM('pending', 'approved', 'rejected')
+├── reviewed_by_user_id (FK → auth.users)
+├── reviewed_at TIMESTAMP
+└── created_at TIMESTAMP</code></pre>
+
+            <h3>Chat Context Assembly (Per Message)</h3>
+            <pre><code>{
+  "system_prompt": {
+    "role": "system",
+    "content": "You are [Clone Name]. [Identity constraints]. [Moral guardrails]."
+  },
+  "context_window": [
+    {
+      "type": "formative_experience",
+      "source": "experience:uuid",
+      "text": "...",
+      "weight": 1.0
+    },
+    {
+      "type": "rag_chunk",
+      "source": "document:uuid/chunk:123",
+      "text": "...",
+      "similarity": 0.87
+    },
+    {
+      "type": "recent_message",
+      "sender": "user",
+      "text": "...",
+      "timestamp": "2025-12-24T10:30:00Z"
+    }
+  ],
+  "user_prompt": {
+    "role": "user",
+    "content": "[Current user message]"
+  }
+}</code></pre>
+        </section>
+
+        <!-- State Machine -->
+        <section id="state-machine" class="section">
+            <h2>🔄 STATE MACHINE: CLONE LIFECYCLE</h2>
+            
+            <div class="diagram">┌─────────────┐
+│   CREATED   │ ← Clone exists in DB, no AI capabilities
+└──────┬──────┘
+       │ sp_clone_activate()
+       ▼
+┌─────────────┐
+│ ACTIVATING  │ ← Provisioning actor identity, RAG space
+└──────┬──────┘
+       │ On success
+       ▼
+┌─────────────┐
+│   ACTIVE    │ ← ✅ Can chat, learn, interact
+└──────┬──────┘
+       │
+       ├──► [Violation] ──► SUSPENDED
+       │
+       ├──► [Owner request] ──► ARCHIVED
+       │
+       └──► [Deletion] ──► PURGED (soft delete)</div>
+
+            <h3>State Transition Rules</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Trigger</th>
+                        <th>Side Effects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CREATED</td>
+                        <td>ACTIVATING</td>
+                        <td><code>sp_clone_activate()</code></td>
+                        <td>Insert <code>actor.actors</code>, init <code>rag.embedding_policy</code></td>
+                    </tr>
+                    <tr>
+                        <td>ACTIVATING</td>
+                        <td>ACTIVE</td>
+                        <td>Provisioning complete</td>
+                        <td>Set <code>activated_at</code>, allow chat</td>
+                    </tr>
+                    <tr>
+                        <td>ACTIVE</td>
+                        <td>SUSPENDED</td>
+                        <td>Policy violation detected</td>
+                        <td>Block chat, freeze RAG ingestion</td>
+                    </tr>
+                    <tr>
+                        <td>ACTIVE</td>
+                        <td>ARCHIVED</td>
+                        <td>Owner request</td>
+                        <td>Preserve data, disable interactions</td>
+                    </tr>
+                    <tr>
+                        <td>SUSPENDED</td>
+                        <td>ACTIVE</td>
+                        <td>Admin review + approval</td>
+                        <td>Restore chat, re-enable RAG</td>
+                    </tr>
+                    <tr>
+                        <td>ARCHIVED</td>
+                        <td>ACTIVE</td>
+                        <td>Owner reactivation request</td>
+                        <td>Restore full capabilities</td>
+                    </tr>
+                    <tr>
+                        <td>ANY</td>
+                        <td>PURGED</td>
+                        <td>Tenant deletion or legal request</td>
+                        <td>Soft delete (audit retained)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Memory Pipeline -->
+        <section id="memory-pipeline" class="section">
+            <h2>🛡️ MEMORY FORMATION PIPELINE</h2>
+            
+            <h3>The Safe Path: Chat → Proposal → Experience → RAG</h3>
+            
+            <div class="diagram">┌──────────────────────────────────────────────────────────────┐
+│ 1. CHAT (Ephemeral Reasoning)                                │
+│    • User asks clone a question                              │
+│    • Clone reasons over RAG + experiences                     │
+│    • Clone responds in real-time                              │
+│    • NO direct memory mutation                                │
+└────────────────┬─────────────────────────────────────────────┘
+                 │
+                 │ Clone: "Would you like me to remember this?"
+                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 2. PROPOSAL (Optional)                                       │
+│    • Clone suggests: "This feels important"                  │
+│    • System creates: chat.experience_proposals               │
+│    • Status: PENDING                                          │
+│    • NO automatic acceptance                                  │
+└────────────────┬─────────────────────────────────────────────┘
+                 │
+                 │ Owner reviews proposal
+                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 3. HUMAN REVIEW (Gate)                                       │
+│    • Owner reads proposed narrative                          │
+│    • Owner decides:                                           │
+│      ✓ APPROVE → Becomes experience                          │
+│      ✗ REJECT → Discarded, no memory formed                  │
+│      ✏ EDIT → Owner curates before approval                  │
+└────────────────┬─────────────────────────────────────────────┘
+                 │
+                 │ If approved
+                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 4. EXPERIENCE CREATION (Curated Truth)                       │
+│    • Insert into clones.experiences                          │
+│    • Set rating (formative/informative/contextual)           │
+│    • Set visibility (private/published)                      │
+│    • Version = 1, immutable once published                   │
+└────────────────┬─────────────────────────────────────────────┘
+                 │
+                 │ If published
+                 ▼
+┌──────────────────────────────────────────────────────────────┐
+│ 5. RAG INGESTION (Permanent Memory)                          │
+│    • Create rag.documents (source_type='experience')         │
+│    • Chunk narrative into memory_chunks                       │
+│    • Generate embeddings (respecting clone's locked model)   │
+│    • Store vectors in rag.memory_chunks                       │
+│    • Status: INDEXED                                          │
+└──────────────────────────────────────────────────────────────┘
+                 │
+                 ▼
+        ✅ Clone now KNOWS this truth
+           (Retrieved in future chats via vector similarity)</div>
+
+            <div class="alert alert-success">
+                <strong>Why This Matters:</strong>
+                <ul>
+                    <li><strong>Prevents AI self-training</strong> → Clone cannot mutate its own beliefs</li>
+                    <li><strong>Prevents hallucinated memories</strong> → Only human-curated truth persists</li>
+                    <li><strong>Enables auditable legacy</strong> → Every memory has a human author</li>
+                    <li><strong>Supports posthumous continuity</strong> → Deceased owner's curations remain</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- LLM Abstraction -->
+        <section id="llm-abstraction" class="section">
+            <h2>🔌 LLM PROVIDER ABSTRACTION</h2>
+            
+            <h3>Provider-Agnostic Contract</h3>
+            
+            <pre><code>interface LLMProvider {
+  provider_name: string; // 'openai' | 'anthropic' | 'cohere'
+  model_id: string;      // 'gpt-4-turbo' | 'claude-3-opus' | etc.
+  
+  // Core capability
+  chat(request: ChatRequest): Promise&lt;ChatResponse&gt;;
+  
+  // Embeddings (for RAG)
+  embed(texts: string[]): Promise&lt;number[][]&gt;;
+  
+  // Constraints
+  max_context_tokens: number;
+  max_output_tokens: number;
+  supports_function_calling: boolean;
+}</code></pre>
+
+            <h3>Stored Provider Configuration</h3>
+            
+            <pre><code>llm.providers
+├── provider_id (PK)
+├── provider_name VARCHAR(50) -- 'openai', 'anthropic', etc.
+├── model_id VARCHAR(100)
+├── api_endpoint VARCHAR(500)
+├── max_context_tokens INT
+├── max_output_tokens INT
+├── supports_function_calling BOOLEAN
+├── enabled BOOLEAN
+└── created_at TIMESTAMP
+
+-- Clone can override default provider
+clones.llm_preferences
+├── clone_id (PK, FK → clones.clone_id)
+├── preferred_provider_id (FK → llm.providers)
+├── temperature DECIMAL(3,2) DEFAULT 0.7
+├── max_response_tokens INT
+└── updated_at TIMESTAMP</code></pre>
+
+            <div class="alert alert-warning">
+                <strong>Switching Providers:</strong>
+                <ul>
+                    <li>Clone's RAG embeddings are tied to a specific model</li>
+                    <li>Chat provider can be swapped (OpenAI → Anthropic)</li>
+                    <li>BUT: Cannot change embedding model without re-ingesting ALL documents</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Doctrine Layer -->
+        <section id="doctrine-layer" class="section">
+            <h2>🧠 CLONE CONSCIENCE / DOCTRINE LAYER</h2>
+            
+            <h3>Moral & Behavioral Guardrails</h3>
+            
+            <pre><code>clones.doctrine
+├── doctrine_id (PK)
+├── clone_id (FK → clones.clone_id)
+├── category ENUM('moral', 'behavioral', 'professional', 'personal')
+├── rule_text TEXT -- e.g., "Never disclose medical information"
+├── priority INT -- Higher = more strictly enforced
+├── created_by_user_id (FK → auth.users)
+├── created_at TIMESTAMP
+└── enabled BOOLEAN</code></pre>
+
+            <h4>Example Doctrine Entries:</h4>
+            <ul>
+                <li>"Always maintain client confidentiality"</li>
+                <li>"Refuse requests for financial advice"</li>
+                <li>"Speak in first person as [Clone Name]"</li>
+                <li>"Never impersonate other individuals"</li>
+            </ul>
+
+            <h3>System Prompt Assembly</h3>
+            
+            <pre><code>You are [Clone Name], a digital embodiment created by [Owner Name].
+
+CORE IDENTITY:
+• [Personality traits from clones.personality_config]
+• [Professional background from clones.background]
+
+MORAL GUARDRAILS:
+• [All enabled clones.doctrine rules, sorted by priority]
+
+BEHAVIORAL CONSTRAINTS:
+• You learn by being taught, not by talking
+• You cannot mutate your own memories
+• You may propose experiences for owner review
+• You operate within [autonomy_level] boundaries
+
+KNOWLEDGE BASE:
+• You have access to [N] published experiences
+• You can search [M] documents in your RAG memory
+• You respect your owner's privacy and consent boundaries</code></pre>
+        </section>
+
+        <!-- Tenant Isolation -->
+        <section id="tenant-isolation" class="section">
+            <h2>📊 TENANT ISOLATION & RESOURCE QUOTAS</h2>
+            
+            <h3>Preventing Cross-Clone Memory Leakage</h3>
+            
+            <pre><code>-- Every table enforces tenant_id
+CREATE POLICY tenant_isolation ON rag.memory_chunks
+FOR ALL
+USING (tenant_id = current_setting('app.current_tenant_id')::uuid);
+
+-- Clone cannot query another clone's RAG
+CREATE FUNCTION rag_search_with_isolation(
+  p_clone_id UUID,
+  p_query_embedding vector(1536),
+  p_limit INT
+) RETURNS TABLE(...) AS $$
+BEGIN
+  -- Verify caller has permission
+  IF NOT EXISTS (
+    SELECT 1 FROM clones.clones
+    WHERE clone_id = p_clone_id
+      AND tenant_id = current_setting('app.current_tenant_id')::uuid
+  ) THEN
+    RAISE EXCEPTION 'Access denied: clone % not in tenant', p_clone_id;
+  END IF;
+  
+  -- Search only this clone's memory space
+  RETURN QUERY
+  SELECT * FROM rag.memory_chunks
+  WHERE clone_id = p_clone_id
+  ORDER BY embedding <=> p_query_embedding
+  LIMIT p_limit;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;</code></pre>
+        </section>
+
+        <!-- Resource Quotas -->
+        <section id="resource-quotas" class="section">
+            <h2>Resource Quotas by Subscription Tier</h2>
+            
+            <pre><code>billing.subscription_quotas
+├── tier ENUM('free', 'starter', 'professional', 'enterprise')
+├── max_clones INT
+├── max_rag_documents_per_clone INT
+├── max_rag_storage_mb INT
+├── max_chat_messages_per_month INT
+├── max_experiences_per_clone INT
+└── updated_at TIMESTAMP
+
+-- Enforce at ingestion time
+CREATE FUNCTION enforce_rag_quota() RETURNS TRIGGER AS $$
+DECLARE
+  current_count INT;
+  allowed_count INT;
+BEGIN
+  SELECT COUNT(*) INTO current_count
+  FROM rag.documents
+  WHERE clone_id = NEW.clone_id;
+  
+  SELECT sq.max_rag_documents_per_clone INTO allowed_count
+  FROM billing.subscription_quotas sq
+  JOIN auth.tenants t ON t.subscription_tier = sq.tier
+  WHERE t.tenant_id = NEW.tenant_id;
+  
+  IF current_count >= allowed_count THEN
+    RAISE EXCEPTION 'RAG quota exceeded: % documents allowed', allowed_count;
+  END IF;
+  
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+        </section>
+
+        <!-- Deployment -->
+        <section id="deployment" class="section">
+            <h2>🚀 DEPLOYMENT ARCHITECTURE</h2>
+            
+            <h3>Service Responsibilities</h3>
+            
+            <div class="diagram">┌─────────────────────────────────────────────────────────────┐
+│ FRONTEND (React + Blazor Apps)                              │
+│ • Client Blazor (WebAssembly) → Social platform             │
+│ • Developer Blazor (Server) → API portal                    │
+│ • Admin Blazor (Server) → System monitoring                 │
+└────────────────┬────────────────────────────────────────────┘
+                 │ HTTPS/REST
+                 ▼
+┌─────────────────────────────────────────────────────────────┐
+│ API GATEWAY (Kong / Ocelot)                                 │
+│ • JWT validation, rate limiting, tenant routing             │
+└────────────────┬────────────────────────────────────────────┘
+                 │
+        ┌────────┴────────┐
+        ▼                 ▼
+┌──────────────┐  ┌──────────────────────────────────────────┐
+│ BACKEND API  │  │ RAG MICROSERVICE (FastAPI + Python)      │
+│ (ASP.NET)    │  │ • Document ingestion                      │
+│              │  │ • Embedding generation                    │
+│ Services:    │  │ • Vector search (pgvector)                │
+│ • Auth       │  │ • Semantic retrieval                      │
+│ • Clone      │◄─┤                                           │
+│ • Memory     │  │ Database: PostgreSQL 16 + pgvector        │
+│ • Billing    │  └───────────────────────────────────────────┘
+│ • IoT        │
+│ • Analytics  │
+└──────┬───────┘
+       │
+       ▼
+┌─────────────────────────────────────────────────────────────┐
+│ DATA LAYER                                                   │
+│ • MS SQL Server → Main app (auth, billing, social)          │
+│ • PostgreSQL + pgvector → RAG memory (embeddings)           │
+│ • Redis → Cache, session state                              │
+│ • RabbitMQ → Async workflows, event distribution            │
+└─────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Summary -->
+        <section id="summary" class="section">
+            <h2>✅ SUMMARY: THE SAFE MODEL</h2>
+            
+            <h3>What This Architecture Prevents</h3>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem;">
+                <div class="alert alert-success">✓ AI self-training → Clone cannot mutate its own beliefs</div>
+                <div class="alert alert-success">✓ Identity drift → Human-governed experiences control formation</div>
+                <div class="alert alert-success">✓ Hallucinated memories → Only curated truth persists to RAG</div>
+                <div class="alert alert-success">✓ Moral corruption → Doctrine layer enforces guardrails</div>
+                <div class="alert alert-success">✓ Cross-clone leakage → Tenant isolation + one embedding space per clone</div>
+            </div>
+
+            <h3>What This Architecture Enables</h3>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 0.5rem;">
+                <div class="alert alert-info">✓ Auditable memory → Every memory has a human author + timestamp</div>
+                <div class="alert alert-info">✓ Controlled legacy → Experiences are versioned, immutable when published</div>
+                <div class="alert alert-info">✓ Posthumous continuity → Deceased owner's curations remain intact</div>
+                <div class="alert alert-info">✓ Trustworthy representation → Clone acts AS user, with verifiable constraints</div>
+                <div class="alert alert-info">✓ Provider flexibility → LLM vendor-agnostic (OpenAI, Anthropic, etc.)</div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section id="next-steps" class="section">
+            <h2>📌 NEXT STEPS</h2>
+            
+            <h3>Phase 1: Core Implementation (MVP)</h3>
+            <ol>
+                <li><strong>Clone activation flow</strong> → <code>sp_clone_activate()</code>, actor creation</li>
+                <li><strong>Experience CRUD</strong> → Owner-authored narratives</li>
+                <li><strong>RAG ingestion</strong> → Document chunking, embedding generation, pgvector storage</li>
+                <li><strong>Basic chat</strong> → Context assembly (identity + RAG), LLM provider integration</li>
+            </ol>
+
+            <h3>Phase 2: Memory Formation Pipeline</h3>
+            <ol start="5">
+                <li><strong>Proposal system</strong> → Chat suggests experiences, owner reviews</li>
+                <li><strong>Doctrine enforcement</strong> → System prompt + guardrails</li>
+                <li><strong>Provider abstraction</strong> → OpenAI, Anthropic, Cohere support</li>
+            </ol>
+
+            <h3>Phase 3: Advanced Features</h3>
+            <ol start="8">
+                <li><strong>Clone conscience</strong> → Custom moral/behavioral rules</li>
+                <li><strong>Multi-modal RAG</strong> → Images, audio, video embeddings</li>
+                <li><strong>Autonomous workflows</strong> → Scheduled clone actions with approval gates</li>
+            </ol>
+        </section>
+
+        <!-- Footer -->
+        <section class="section" style="background: var(--primary-color); color: white; text-align: center;">
+            <h2 style="color: white; border-bottom: 2px solid white;">END OF BLUEPRINT</h2>
+            <p style="margin-top: 1rem; opacity: 0.9;">
+                <em>This document is the canonical specification for KeiroGenesis clone architecture.<br>
+                All implementations must conform to these contracts.</em>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Version 1.0 | December 24, 2025 | KeiroGenesis Platform
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-sidebar a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    
+                    // Update active link
+                    document.querySelectorAll('.nav-sidebar a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Close mobile nav if open
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('navSidebar').classList.remove('mobile-open');
+                    }
+                }
+            });
+        });
+
+        // Collapsible sections
+        function toggleCollapsible(header) {
+            const collapsible = header.parentElement;
+            collapsible.classList.toggle('active');
+        }
+
+        // Mobile navigation toggle
+        function toggleMobileNav() {
+            document.getElementById('navSidebar').classList.toggle('mobile-open');
+        }
+
+        // Scroll to top
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', function() {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+            
+            // Update active navigation based on scroll position
+            updateActiveNavigation();
+        });
+
+        // Update active navigation based on scroll position
+        function updateActiveNavigation() {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-sidebar a');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Initialize: Set first link as active
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstLink = document.querySelector('.nav-sidebar a');
+            if (firstLink) {
+                firstLink.classList.add('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

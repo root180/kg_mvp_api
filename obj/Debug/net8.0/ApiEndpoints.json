@@ -949,8 +949,8 @@
   },
   {
     "ContainingType": "KeiroGenesis.API.Controllers.V1.CloneController",
-    "Method": "GetActivationReadiness",
-    "RelativePath": "api/v1/clone/{cloneId}/activation-readiness",
+    "Method": "GetActivationCheck",
+    "RelativePath": "api/v1/clone/{cloneId}/activation-check",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -1029,6 +1029,37 @@
         "Type": "System.Void",
         "MediaTypes": [],
         "StatusCode": 400
+      },
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "KeiroGenesis.API.Controllers.V1.CloneController",
+    "Method": "GetCloneReview",
+    "RelativePath": "api/v1/clone/{cloneId}/validation-review",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cloneId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "KeiroGenesis.API.DTO.Clone.CloneReviewResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
       },
       {
         "Type": "System.Void",

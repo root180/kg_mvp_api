@@ -55,3 +55,450 @@ DETAIL: It could refer to either a PL/pgSQL variable or a table column.
     Routine: plpgsql_post_column_ref
 2025-12-25 00:09:11.770 -05:00 [Information] Ensuring actor runtime for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
 2025-12-25 00:09:11.812 -05:00 [Information] Actor runtime ensured for clone e44c77c4-6a01-4909-b394-c104296d274c: actor_id=171899a2-ddb5-4401-8548-e2b7ebf2e49a, is_new=True
+2025-12-25 00:11:32.029 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-25 00:11:32.214 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 00:11:32.216 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-25 00:11:32.216 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-25 00:11:32.217 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 00:11:35.257 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-25 00:11:35.259 -05:00 [Warning] Startup email notification failed to send
+2025-12-25 00:11:45.451 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-25 00:11:45.826 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-25 00:11:46.044 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "Active"
+2025-12-25 00:11:46.243 -05:00 [Warning] Clone e44c77c4-6a01-4909-b394-c104296d274c cannot be activated: "Clone cannot be activated without an assigned actor. Call POST /api/v1/actors/ensure-runtime/{cloneId} first."
+2025-12-25 10:51:27.098 -05:00 [Information] Ensuring actor runtime for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-25 10:51:27.178 -05:00 [Information] Actor runtime ensured for clone e44c77c4-6a01-4909-b394-c104296d274c: actor_id=1a4d90c7-3388-4017-b6f0-336b346908c9, is_new=True
+2025-12-25 10:52:37.374 -05:00 [Information] Updating status for clone e44c77c4-6a01-4909-b394-c104296d274c to "Active"
+2025-12-25 13:32:00.969 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-25 13:32:01.055 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 13:32:01.057 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-25 13:32:01.057 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-25 13:32:01.057 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 13:32:04.360 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-25 13:32:04.363 -05:00 [Warning] Startup email notification failed to send
+2025-12-25 15:16:05.353 -05:00 [Warning] Overriding address(es) '"http://0.0.0.0:8080"'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-12-25 15:16:05.531 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 15:16:05.533 -05:00 [Information] 🚀 KeiroGenesis API Started Successfully
+2025-12-25 15:16:05.534 -05:00 [Information] 📖 Swagger: http://localhost:8080
+2025-12-25 15:16:05.534 -05:00 [Information] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2025-12-25 15:16:08.684 -05:00 [Error] ❌ SendGrid error Unauthorized: "{\"errors\":[{\"message\":\"The provided authorization grant is invalid, expired, or revoked\",\"field\":null,\"help\":null}]}"
+2025-12-25 15:16:08.686 -05:00 [Warning] Startup email notification failed to send
+2025-12-25 15:20:30.244 -05:00 [Information] Using connection string from ConnectionStrings:PostgreSQL
+2025-12-25 15:20:30.619 -05:00 [Information] PostgreSQL connection test succeeded
+2025-12-25 15:21:33.705 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:21:34.225 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.wizard_step does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.wizard_step does not exist
+    InternalPosition: 179
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.display_name,
+        c.clone_slug,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.wizard_step,
+        c.created_at,
+        c.capabilities,
+        c.user_id
+                     FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 17 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:29:36.814 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:29:37.350 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.capabilities does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.capabilities does not exist
+    InternalPosition: 224
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.display_name,
+        c.clone_slug,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.wizard_step,
+        c.created_at,
+        c.capabilities,
+        c.user_id
+                     FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 17 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:29:48.350 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:29:48.740 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.capabilities does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.capabilities does not exist
+    InternalPosition: 224
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.display_name,
+        c.clone_slug,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.wizard_step,
+        c.created_at,
+        c.capabilities,
+        c.user_id
+                     FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 17 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:33:12.059 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:33:12.549 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column c.capabilities does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column c.capabilities does not exist
+    InternalPosition: 224
+    InternalQuery: SELECT 
+        c.clone_id,
+        c.display_name,
+        c.clone_slug,
+        c.tagline,
+        c.bio,
+        c.avatar_url,
+        c.visibility,
+        c.status,
+        c.wizard_step,
+        c.created_at,
+        c.capabilities,
+        c.user_id
+                     FROM clone.clones c
+    WHERE c.clone_id = p_clone_id
+      AND c.tenant_id = p_tenant_id
+      AND c.user_id = p_user_id
+      AND c.deleted_at IS NULL
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 17 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:37:37.307 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:37:37.836 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42P01: relation "auth.users" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "auth.users" does not exist
+    InternalPosition: 122
+    InternalQuery: SELECT 
+        u.user_id,
+        u.email,
+        COALESCE(u.full_name, u.email) as full_name
+                    FROM auth.users u
+    WHERE u.user_id = p_user_id
+      AND u.tenant_id = p_tenant_id
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 61 at SQL statement
+    File: parse_relation.c
+    Line: 1428
+    Routine: parserOpenTable
+2025-12-25 15:38:39.675 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:38:40.229 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column u.full_name does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column u.full_name does not exist
+    InternalPosition: 62
+    InternalQuery: SELECT 
+        u.user_id,
+        u.email,
+        COALESCE(u.full_name, u.email) as full_name
+                    FROM core.users u
+    WHERE u.user_id = p_user_id
+      AND u.tenant_id = p_tenant_id
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 61 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:41:34.254 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:41:34.625 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42P01: relation "auth.users" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "auth.users" does not exist
+    InternalPosition: 122
+    InternalQuery: SELECT 
+        u.user_id,
+        u.email,
+        COALESCE(u.full_name, u.email) as full_name
+                    FROM auth.users u
+    WHERE u.user_id = p_user_id
+      AND u.tenant_id = p_tenant_id
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 61 at SQL statement
+    File: parse_relation.c
+    Line: 1428
+    Routine: parserOpenTable
+2025-12-25 15:42:33.662 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:42:34.130 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42703: column u.tenant_id does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column u.tenant_id does not exist
+    InternalPosition: 177
+    InternalQuery: SELECT 
+        u.user_id,
+        u.email,
+        COALESCE(u.full_name, u.email) as full_name
+                    FROM core.users u
+    WHERE u.user_id = p_user_id
+      AND u.tenant_id = p_tenant_id
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 61 at SQL statement
+    File: parse_relation.c
+    Line: 3716
+    Routine: errorMissingColumn
+2025-12-25 15:46:21.192 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 15:46:21.680 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42804: structure of query does not match function result type
+
+DETAIL: Returned type character varying(100) does not match expected type text in column 2.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42804
+    MessageText: structure of query does not match function result type
+    Detail: Returned type character varying(100) does not match expected type text in column 2.
+    Where: SQL statement "SELECT
+        -- Clone Info
+        v_clone.clone_id,
+        v_clone.display_name,
+        v_clone.clone_slug,
+        v_clone.tagline,
+        v_clone.bio,
+        v_clone.avatar_url,
+        v_clone.visibility,
+        v_clone.status,
+        v_clone.wizard_step,
+        v_clone.created_at,
+        
+        -- Actor Info
+        v_has_actor,
+        v_actor.actor_id,
+        v_actor.handle,
+        v_actor.status,
+        v_actor.autonomy_level,
+        
+        -- Experiences
+        v_exp_total,
+        v_exp_published,
+        v_exp_draft,
+        
+        -- Capabilities from entitlements
+        v_capabilities,
+        
+        -- User Info
+        v_user.user_id,
+        v_user.email,
+        v_user.full_name,
+        
+        -- Readiness
+        v_can_activate,
+        v_blockers,
+        v_warnings"
+PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 175 at RETURN QUERY
+    File: attmap.c
+    Line: 118
+    Routine: build_attrmap_by_position
+2025-12-25 17:10:38.881 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 17:11:47.680 -05:00 [Information] Creating experience for clone e44c77c4-6a01-4909-b394-c104296d274c, user dad3cc65-4c7d-48f3-8639-d74c229b69ea
+2025-12-25 17:12:44.603 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 17:18:11.765 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 17:24:44.001 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 22:58:50.173 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 22:59:59.944 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 23:00:00.437 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42702: column reference "total_experiences" is ambiguous
+
+DETAIL: It could refer to either a PL/pgSQL variable or a table column.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42702
+    MessageText: column reference "total_experiences" is ambiguous
+    Detail: It could refer to either a PL/pgSQL variable or a table column.
+    InternalPosition: 17
+    InternalQuery: SELECT 
+        total_experiences,
+        published_experiences,
+        draft_experiences
+                                                       FROM experience.fn_get_clone_experience_counts(p_tenant_id, p_user_id, p_clone_id)
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 76 at SQL statement
+    File: pl_comp.c
+    Line: 1133
+    Routine: plpgsql_post_column_ref
+2025-12-25 23:01:38.412 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 23:01:38.814 -05:00 [Error] Error getting clone review for e44c77c4-6a01-4909-b394-c104296d274c
+Npgsql.PostgresException (0x80004005): 42702: column reference "total_experiences" is ambiguous
+
+DETAIL: It could refer to either a PL/pgSQL variable or a table column.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.<ReadMessage>g__ReadMessageSequential|49_0(NpgsqlConnector connector, Boolean async)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Dapper.SqlMapper.QueryAsync[T](IDbConnection cnn, Type effectiveType, CommandDefinition command) in /_/Dapper/SqlMapper.Async.cs:line 434
+   at KeiroGenesis.API.Repositories.CloneRepository.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+   at KeiroGenesis.API.Services.CloneService.GetCloneReviewAsync(Guid tenantId, Guid userId, Guid cloneId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42702
+    MessageText: column reference "total_experiences" is ambiguous
+    Detail: It could refer to either a PL/pgSQL variable or a table column.
+    InternalPosition: 21
+    InternalQuery: SELECT 
+            total_experiences,
+            published_experiences,
+            draft_experiences
+                                                               FROM experience.fn_get_clone_experience_counts(p_tenant_id, p_user_id, p_clone_id)
+    Where: PL/pgSQL function clone.fn_get_clone_review(uuid,uuid,uuid) line 80 at SQL statement
+    File: pl_comp.c
+    Line: 1133
+    Routine: plpgsql_post_column_ref
+2025-12-25 23:02:24.138 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 23:08:27.034 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c
+2025-12-25 23:11:44.519 -05:00 [Information] Getting pre-activation review for clone e44c77c4-6a01-4909-b394-c104296d274c

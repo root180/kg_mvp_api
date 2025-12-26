@@ -1,0 +1,3346 @@
+{
+	"info": {
+		"_postman_id": "dd84a9e9-0894-479a-b925-9a66e9e16a55",
+		"name": "KeiroGenesis - MASTER COLLECTION",
+		"description": "Complete end-to-end test suite: Registration → Auth → Password Management → Email Update → Profile → Clone Wizard → Activation → Chat. Includes ALL endpoints from all collections.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30169508"
+	},
+	"item": [
+		{
+			"name": "🚀 STEP 1 - Registration & Initial Setup",
+			"item": [
+				{
+					"name": "1.1 Register New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"console.log('📥 Registration Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && response.data) {",
+									"    if (response.data.accessToken) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        console.log('✅ Access token saved:', response.data.accessToken.substring(0, 20) + '...');",
+									"    }",
+									"    if (response.data.refreshToken) {",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        console.log('✅ Refresh token saved');",
+									"    }",
+									"    if (response.data.userId) {",
+									"        pm.collectionVariables.set('userId', response.data.userId);",
+									"        console.log('✅ User ID saved:', response.data.userId);",
+									"    }",
+									"    if (response.data.tenantId) {",
+									"        pm.collectionVariables.set('tenantId', response.data.tenantId);",
+									"        console.log('✅ Tenant ID saved:', response.data.tenantId);",
+									"    }",
+									"}",
+									"",
+									"pm.test('Registration successful', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"    pm.expect(response.data).to.have.property('accessToken');",
+									"    pm.expect(response.data).to.have.property('userId');",
+									"    pm.expect(response.data).to.have.property('tenantId');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Roy\",\n  \"username\": \"johndoe_{{$timestamp}}\",\n  \"email\": \"john.doe.{{$timestamp}}@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"date_of_birth\": \"1990-01-01\",\n  \"mobile_number\": \"202-576-3455\",\n  \"gender\": \"Male\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user account and receive JWT tokens"
+					},
+					"response": []
+				}
+			],
+			"description": "Register new user and get initial tokens"
+		},
+		{
+			"name": "🔐 STEP 2 - Login & Token Management",
+			"item": [
+				{
+					"name": "2.1 Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"console.log('📥 Login Response:', JSON.stringify(response, null, 2));",
+									"",
+									"// Handle multiple response structures",
+									"if (pm.response.code === 200) {",
+									"    if (response.success && response.data && response.data.accessToken) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        console.log('✅ Tokens saved (data wrapper)');",
+									"    } else if (response.accessToken) {",
+									"        pm.collectionVariables.set('accessToken', response.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.refreshToken);",
+									"        console.log('✅ Tokens saved (root level)');",
+									"    }",
+									"}",
+									"",
+									"pm.test('Login successful', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"console.log('');",
+									"console.log('🎉 LOGIN SUCCESSFUL - Ready for authenticated requests!');",
+									"console.log('👉 Next: Test password or email management');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"testuser@example.com\",\n  \"password\": \"TestPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login with email and password to get JWT tokens"
+					},
+					"response": []
+				},
+				{
+					"name": "2.2 Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success && response.data) {",
+									"    pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"    pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"    console.log('✅ Tokens refreshed successfully');",
+									"}",
+									"",
+									"pm.test('Token refresh successful', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh"
+							]
+						},
+						"description": "Refresh access token using refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "2.3 Logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/logout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"logout"
+							]
+						},
+						"description": "Logout and revoke refresh tokens"
+					},
+					"response": []
+				}
+			],
+			"description": "Login and manage JWT tokens"
+		},
+		{
+			"name": "🔑 STEP 3 - Password Management",
+			"item": [
+				{
+					"name": "3.1 Forgot Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"console.log('📧 Password Reset Email Sent');",
+									"console.log('ℹ️ Check your email for reset link with token');",
+									"console.log('');",
+									"console.log('⚠️ MANUAL STEP REQUIRED:');",
+									"console.log('1. Check email inbox');",
+									"console.log('2. Copy the reset token from email');",
+									"console.log('3. Set it in collection variable: resetToken');",
+									"",
+									"pm.test('Request successful', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"testuser@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						},
+						"description": "Request password reset email"
+					},
+					"response": []
+				},
+				{
+					"name": "3.2 Validate Reset Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.isValid) {",
+									"    console.log('✅ Reset token is VALID');",
+									"    console.log('👉 Proceed to reset password');",
+									"} else {",
+									"    console.log('❌ Reset token is INVALID or EXPIRED');",
+									"    console.log('👉 Request new token via Forgot Password');",
+									"}",
+									"",
+									"pm.test('Token validation response received', function() {",
+									"    pm.expect(response.success).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"{{resetToken}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/validate-reset-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"validate-reset-token"
+							]
+						},
+						"description": "Validate reset token before showing reset form"
+					},
+					"response": []
+				},
+				{
+					"name": "3.3 Reset Password (With Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success) {",
+									"    console.log('✅ PASSWORD RESET SUCCESSFUL');",
+									"    console.log('👉 You can now login with: NewPassword123!');",
+									"    console.log('👉 Update the Login request body with new password');",
+									"}",
+									"",
+									"pm.test('Password reset successful', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token\": \"{{resetToken}}\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						},
+						"description": "Reset password using token from email"
+					},
+					"response": []
+				},
+				{
+					"name": "3.4 Change Password (Authenticated)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success) {",
+									"    console.log('✅ PASSWORD CHANGED');",
+									"    console.log('⚠️ Tokens may be invalidated - login again');",
+									"}",
+									"",
+									"pm.test('Password changed successfully', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"currentPassword\": \"TestPassword123!\",\n  \"newPassword\": \"NewPassword456!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/change-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"change-password"
+							]
+						},
+						"description": "Change password while logged in"
+					},
+					"response": []
+				},
+				{
+					"name": "3.5 Forgot Username",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"teckhne@gmail.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/forgot-username",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"forgot-username"
+							]
+						},
+						"description": "Send username reminder email"
+					},
+					"response": []
+				}
+			],
+			"description": "Test forgot password, reset, and change workflows"
+		},
+		{
+			"name": "📧 STEP 4 - Email Update (NEW FEATURE)",
+			"item": [
+				{
+					"name": "4.1 Request Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"console.log('📥 Email Change Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success) {",
+									"    console.log('');",
+									"    console.log('✅ EMAIL CHANGE REQUEST CREATED');",
+									"    console.log('📧 Check your NEW email:', response.newEmail);",
+									"    console.log('🔢 Enter the 6-digit verification code');",
+									"    console.log('⏰ Code expires:', response.expiresAt);",
+									"    console.log('');",
+									"    console.log('⚠️ SECURITY ALERT:');",
+									"    console.log('Your OLD email also received a notification');",
+									"    console.log('');",
+									"    console.log('👉 NEXT STEPS:');",
+									"    console.log('1. Check email inbox for 6-digit code');",
+									"    console.log('2. Set code in variable: emailVerificationCode');",
+									"    console.log('3. Run: 4.2 Verify Email Change');",
+									"}",
+									"",
+									"pm.test('Email change request created', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"    pm.expect(response.newEmail).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"newEmail\": \"{{newEmail}}\",\n  \"currentPassword\": \"TestPassword123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/user/email/change-request",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"email",
+								"change-request"
+							]
+						},
+						"description": "Request email change. Requires password. Sends 6-digit code to NEW email and notification to OLD email."
+					},
+					"response": []
+				},
+				{
+					"name": "4.2 Verify Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📥 Verification Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success) {",
+									"    console.log('');",
+									"    console.log('🎉 EMAIL SUCCESSFULLY UPDATED!');",
+									"    console.log('');",
+									"    console.log('📧 Old email:', response.oldEmail);",
+									"    console.log('📧 New email:', response.newEmail);",
+									"    console.log('');",
+									"    console.log('⚠️ IMPORTANT:');",
+									"    console.log('Use NEW email for future logins!');",
+									"    console.log('Update the Login request body with new email');",
+									"} else {",
+									"    console.log('❌ VERIFICATION FAILED');",
+									"    console.log('Reason:', response.message);",
+									"    console.log('');",
+									"    console.log('Common issues:');",
+									"    console.log('- Invalid code (check your email)');",
+									"    console.log('- Code expired (24 hour limit)');",
+									"    console.log('- Email already taken by another user');",
+									"}",
+									"",
+									"pm.test('Email change verification', function() {",
+									"    pm.expect(response.success).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"verificationCode\": \"{{emailVerificationCode}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/user/email/verify-change",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"email",
+								"verify-change"
+							]
+						},
+						"description": "Verify email change with 6-digit code"
+					},
+					"response": []
+				},
+				{
+					"name": "4.3 Get Pending Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📥 Pending Change Status:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.hasPendingChange) {",
+									"    console.log('⏳ PENDING CHANGE:');",
+									"    console.log('New email:', response.newEmail);",
+									"    console.log('Requested:', response.requestedAt);",
+									"    console.log('Expires:', response.expiresAt);",
+									"    console.log('Is expired:', response.isExpired);",
+									"} else {",
+									"    console.log('✅ No pending email changes');",
+									"}",
+									"",
+									"pm.test('Status retrieved', function() {",
+									"    pm.expect(response.hasPendingChange).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/user/email/pending-change",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"email",
+								"pending-change"
+							]
+						},
+						"description": "Check if there's a pending email change request"
+					},
+					"response": []
+				},
+				{
+					"name": "4.4 Cancel Email Change",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success) {",
+									"    console.log('✅ Email change request CANCELLED');",
+									"} else {",
+									"    console.log('ℹ️', response.message);",
+									"}",
+									"",
+									"pm.test('Cancel request processed', function() {",
+									"    pm.expect(response.success).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/user/email/cancel-change",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"user",
+								"email",
+								"cancel-change"
+							]
+						},
+						"description": "Cancel pending email change request"
+					},
+					"response": []
+				}
+			],
+			"description": "Change email address with verification code"
+		},
+		{
+			"name": "STEP 5 - Identification and Rating",
+			"item": [
+				{
+					"name": "5.2 Get Identity Verification Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"status"
+							]
+						},
+						"description": "Get current identity verification status (signals). Shows: VerificationLevel, AgeVerified, HumanVerified, GovernmentIDVerified."
+					},
+					"response": []
+				},
+				{
+					"name": "5.3 Get Content Rating Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/content/ratings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"content",
+								"ratings"
+							]
+						},
+						"description": "Get content rating decisions. Shows: AllowedRating (G/PG/etc), PreferredRating, ContentLevel."
+					},
+					"response": []
+				},
+				{
+					"name": "5.1 Get Current User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('👤 User Profile:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('✅ USER PROFILE:');",
+									"    console.log('User ID:', response.data.userId);",
+									"    console.log('Email:', response.data.email);",
+									"    console.log('Username:', response.data.username);",
+									"    console.log('Name:', response.data.firstName, response.data.lastName);",
+									"    console.log('Role:', response.data.role);",
+									"    console.log('');",
+									"    console.log('🎉 Ready to create clone!');",
+									"}",
+									"",
+									"pm.test('Profile retrieved', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"    pm.expect(response.data.userId).to.exist;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}} /api/v1/auth/profile",
+							"host": [
+								"{{baseUrl}} "
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile"
+							]
+						},
+						"description": "Get current authenticated user profile"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🤖 STEP 6 - Clone Creation Wizard (6 Steps)",
+			"item": [
+				{
+					"name": "Step 6.1 - Create Draft Clone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const response = pm.response.json();",
+									"console.log('📥 Step 1 Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (pm.response.code === 200) {",
+									"    if (!response.success) {",
+									"        console.error('❌ API returned success=false');",
+									"        console.error('Error message:', response.message);",
+									"        throw new Error('Clone creation failed: ' + response.message);",
+									"    }",
+									"    ",
+									"    // Handle multiple response structures",
+									"    if (response.data && response.data.cloneId) {",
+									"        pm.collectionVariables.set('cloneId', response.data.cloneId);",
+									"        pm.collectionVariables.set('cloneSlug', response.data.cloneSlug || '');",
+									"        console.log('✅ Clone created:', response.data.cloneId);",
+									"        console.log('✅ Clone slug:', response.data.cloneSlug);",
+									"    } else if (response.cloneId) {",
+									"        pm.collectionVariables.set('cloneId', response.cloneId);",
+									"        pm.collectionVariables.set('cloneSlug', response.cloneSlug || '');",
+									"        console.log('✅ Clone created (root):', response.cloneId);",
+									"    } else if (response.data && response.data.clone_id) {",
+									"        pm.collectionVariables.set('cloneId', response.data.clone_id);",
+									"        pm.collectionVariables.set('cloneSlug', response.data.clone_slug || '');",
+									"        console.log('✅ Clone created (snake_case):', response.data.clone_id);",
+									"    } else {",
+									"        console.error('❌ No cloneId found in response!');",
+									"        throw new Error('Could not extract cloneId');",
+									"    }",
+									"}",
+									"",
+									"const savedCloneId = pm.collectionVariables.get('cloneId');",
+									"console.log('🔍 Verification - cloneId in variables:', savedCloneId);",
+									"",
+									"if (!savedCloneId) {",
+									"    console.error('❌ cloneId NOT saved!');",
+									"    throw new Error('Failed to save cloneId');",
+									"}",
+									"",
+									"pm.test('Clone draft created', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"pm.test('cloneId saved to variables', function() {",
+									"    const savedId = pm.collectionVariables.get('cloneId');",
+									"    pm.expect(savedId).to.be.a('string');",
+									"    pm.expect(savedId.length).to.be.greaterThan(0);",
+									"});",
+									"",
+									"console.log('');",
+									"console.log('🎉 CLONE DRAFT CREATED');",
+									"console.log('👉 Next: Step 2 - Update Avatar');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"displayName\": \"Dr. John Taylor\",\n  \"tagline\": \"Faith. Family. Leadership.\",\n  \"bio\": \"A digital clone representing wisdom, experience, and values.\",\n  \"visibility\": \"private\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clonewizard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clonewizard"
+							]
+						},
+						"description": "Step 1: Create draft clone with basic info"
+					},
+					"response": []
+				},
+				{
+					"name": "Step 6.2 - Update Avatar",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cloneId = pm.collectionVariables.get('cloneId');",
+									"console.log('🔍 Pre-request check - cloneId:', cloneId);",
+									"",
+									"if (!cloneId) {",
+									"    console.error('❌ cloneId not set!');",
+									"    throw new Error('❌ cloneId not set. Run Step 6.1 first!');",
+									"}",
+									"",
+									"console.log('✅ cloneId found:', cloneId);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📥 Step 2 Response:', JSON.stringify(response, null, 2));",
+									"",
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Avatar updated', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"console.log('✅ Step 2 complete: Avatar updated');",
+									"console.log('👉 Next: Step 3 - Configure Personality');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"avatarUrl\": \"https://example.com/avatars/john-taylor.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clonewizard/{{cloneId}}/avatar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clonewizard",
+								"{{cloneId}}",
+								"avatar"
+							]
+						},
+						"description": "Step 2: Upload clone avatar"
+					},
+					"response": []
+				},
+				{
+					"name": "Step 6.3 - Configure Personality",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cloneId = pm.collectionVariables.get('cloneId');",
+									"if (!cloneId) throw new Error('❌ Run Step 6.1 first!');"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('🎭 Personality configured:', JSON.stringify(response, null, 2));",
+									"",
+									"pm.test('Personality configured', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"console.log('✅ Step 3 complete: Personality set');",
+									"console.log('👉 Next: Step 4 - Upload Knowledge');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tone\": \"professional\",\n  \"communicationStyle\": \"thoughtful\",\n  \"traits\": [\"wisdom\", \"patience\", \"leadership\"],\n  \"temperament\": \"balanced\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clonewizard/{{cloneId}}/personality",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clonewizard",
+								"{{cloneId}}",
+								"personality"
+							]
+						},
+						"description": "Step 3: Configure clone personality traits"
+					},
+					"response": []
+				},
+				{
+					"name": "Step 6.4 - Upload Knowledge",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cloneId = pm.collectionVariables.get('cloneId');",
+									"if (!cloneId) throw new Error('❌ Run Step 6.1 first!');"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📚 Knowledge uploaded:', JSON.stringify(response, null, 2));",
+									"",
+									"pm.test('Knowledge uploaded', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"console.log('✅ Step 4 complete: Knowledge base added');",
+									"console.log('👉 Next: Step 5 - Set Capabilities');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"documents\": [\n    {\n      \"title\": \"Leadership Principles\",\n      \"content\": \"Core values and leadership approaches that guide decision-making and inspire others.\",\n      \"category\": \"philosophy\"\n    },\n    {\n      \"title\": \"Life Experiences\",\n      \"content\": \"Key moments and lessons learned throughout a lifetime of service.\",\n      \"category\": \"biography\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clonewizard/{{cloneId}}/knowledge",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clonewizard",
+								"{{cloneId}}",
+								"knowledge"
+							]
+						},
+						"description": "Step 4: Upload knowledge documents for RAG"
+					},
+					"response": []
+				},
+				{
+					"name": "Step 6.6 - Review & Finalize",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const cloneId = pm.collectionVariables.get('cloneId');",
+									"if (!cloneId) throw new Error('❌ Run Step 6.1 first!');"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('✅ Finalization:', JSON.stringify(response, null, 2));",
+									"",
+									"pm.test('Clone finalized', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});",
+									"",
+									"console.log('');",
+									"console.log('🎉 CLONE CREATION COMPLETE!');",
+									"console.log('✅ All 6 steps finished');",
+									"console.log('👉 Next: Check clone status and activate');"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clonewizard/{{cloneId}}/activate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clonewizard",
+								"{{cloneId}}",
+								"activate"
+							]
+						},
+						"description": "Step 6: Finalize clone creation - Ready for activation!"
+					},
+					"response": []
+				}
+			],
+			"description": "Complete 6-step clone creation process with enhanced diagnostics"
+		},
+		{
+			"name": "🔧 STEP 7 - Clone Management",
+			"item": [
+				{
+					"name": "7.1 Get Clone Details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('🤖 Clone Details:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('📋 CLONE INFO:');",
+									"    console.log('Display Name:', response.data.displayName);",
+									"    console.log('Status:', response.data.status);",
+									"    console.log('Visibility:', response.data.visibility);",
+									"    console.log('Created:', response.data.createdAt);",
+									"    console.log('');",
+									"}",
+									"",
+									"pm.test('Clone details retrieved', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Get complete clone details"
+					},
+					"response": []
+				},
+				{
+					"name": "7.2 Get Clone Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📊 Clone Status:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('🔍 STATUS CHECK:');",
+									"    console.log('Status:', response.data.status);",
+									"    console.log('Is Active:', response.data.isActive);",
+									"    console.log('Ready for Chat:', response.data.isReady);",
+									"    console.log('');",
+									"    ",
+									"    if (response.data.status === 'active') {",
+									"        console.log('✅ Clone is ACTIVE - Ready for chat!');",
+									"    } else {",
+									"        console.log('⚠️ Clone needs activation');",
+									"        console.log('👉 Run: 8.1 Activate Clone');",
+									"    }",
+									"}",
+									"",
+									"pm.test('Status retrieved', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}",
+								"status"
+							]
+						},
+						"description": "Check clone activation status"
+					},
+					"response": []
+				},
+				{
+					"name": "7.3 Update Clone Info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"displayName\": \"Dr. John Taylor (Updated)\",\n  \"tagline\": \"Updated: Faith. Family. Leadership.\",\n  \"bio\": \"Updated biography with additional context.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Update clone basic information"
+					},
+					"response": []
+				},
+				{
+					"name": "7.4 List My Clones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📋 My Clones:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && Array.isArray(response.data)) {",
+									"    console.log('');",
+									"    console.log('📊 CLONES SUMMARY:');",
+									"    console.log('Total clones:', response.data.length);",
+									"    console.log('');",
+									"    response.data.forEach((clone, i) => {",
+									"        console.log(`${i + 1}. ${clone.displayName}`);",
+									"        console.log(`   Status: ${clone.status}`);",
+									"        console.log(`   ID: ${clone.cloneId}`);",
+									"    });",
+									"    console.log('');",
+									"}",
+									"",
+									"pm.test('Clones list retrieved', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/my-clones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"my-clones"
+							]
+						},
+						"description": "List all clones owned by current user"
+					},
+					"response": []
+				}
+			],
+			"description": "View and update clone details"
+		},
+		{
+			"name": "🔓 STEP 8 - Capabilities (PRE-ACTION)",
+			"item": [
+				{
+					"name": "8.1 Get My Entitlements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}✅ {{baseUrl}}/api/v1/capabilities/entitlements",
+							"host": [
+								"{{baseUrl}}✅ {{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"entitlements"
+							]
+						},
+						"description": "Get resolved capabilities based on: Subscription Tier + Identity Level + Policy. Shows what actions user CAN perform."
+					},
+					"response": []
+				}
+			],
+			"description": "View capabilities resolved from tier + identity + policy. Shows what user CAN do."
+		},
+		{
+			"name": "📝 STEP 9 - Experiences (PRE-ACTION DRAFTS)",
+			"item": [
+				{
+					"name": "Get My Clones",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Check if the response is successful and has clones\r",
+									"if (jsonData.success && jsonData.clones && jsonData.clones.length > 0) {\r",
+									"    \r",
+									"    // Get the first clone (or you can select a specific one)\r",
+									"    var firstClone = jsonData.clones[0];\r",
+									"    \r",
+									"    // Save cloneId to environment variable\r",
+									"    pm.environment.set(\"cloneId\", firstClone.cloneId);\r",
+									"    \r",
+									"    // Optional: Save other useful data\r",
+									"    pm.environment.set(\"tenantId\", firstClone.tenantId);\r",
+									"    pm.environment.set(\"userId\", firstClone.userId);\r",
+									"    pm.environment.set(\"cloneSlug\", firstClone.cloneSlug);\r",
+									"    \r",
+									"    // Log to console for verification\r",
+									"    console.log(\"✅ Saved cloneId: \" + firstClone.cloneId);\r",
+									"    console.log(\"✅ Clone name: \" + firstClone.displayName);\r",
+									"    console.log(\"✅ Clone status: \" + firstClone.status);\r",
+									"    \r",
+									"} else {\r",
+									"    console.log(\"⚠️ No clones found in response\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/my-clones",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"my-clones"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9.1 Create Experience Draft",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Save experienceId for subsequent requests",
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    if (jsonData.experienceId) {",
+									"        pm.collectionVariables.set('experienceId', jsonData.experienceId);",
+									"        console.log('Experience ID saved:', jsonData.experienceId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"My First Experience\",\n    \"description\": \"This is a test experience for my clone\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clones/{{cloneId}}/experiences/draft",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clones",
+								"{{cloneId}}",
+								"experiences",
+								"draft"
+							]
+						},
+						"description": "Create a new experience draft for a specific clone.\n\n**Route Parameters:**\n- `cloneId` - UUID of the clone (from collection variable)\n\n**Body:**\n```json\n{\n    \"name\": \"Experience name\",\n    \"description\": \"Optional description\"\n}\n```\n\n**Response:**\n```json\n{\n    \"success\": true,\n    \"message\": \"Experience draft created\",\n    \"experienceId\": \"uuid\",\n    \"cloneId\": \"uuid\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "9.2 Set Experience Rating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rating\": \"PG\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clones/{{cloneId}}/experiences/{{experienceId}}/rating",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clones",
+								"{{cloneId}}",
+								"experiences",
+								"{{experienceId}}",
+								"rating"
+							]
+						},
+						"description": "Set content rating for an experience.\n\n**Route Parameters:**\n- `cloneId` - UUID of the clone\n- `experienceId` - UUID of the experience (auto-saved from step 1)\n\n**Body:**\n```json\n{\n    \"rating\": \"G\" | \"PG\" | \"PG13\" | \"MA\"\n}\n```\n\n**Ratings:**\n- `G` - General Audiences (All ages)\n- `PG` - Parental Guidance\n- `PG13` - Parents Strongly Cautioned (Under 13)\n- `MA` - Mature Audiences Only (18+)\n\n**Response:**\n```json\n{\n    \"success\": true,\n    \"message\": \"Rating set\",\n    \"experienceId\": \"uuid\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "9.3 Publish Experience",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"isPublic\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clones/{{cloneId}}/experiences/{{experienceId}}/publish",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clones",
+								"{{cloneId}}",
+								"experiences",
+								"{{experienceId}}",
+								"publish"
+							]
+						},
+						"description": "Publish an experience (make it available for interactions).\n\n**Route Parameters:**\n- `cloneId` - UUID of the clone\n- `experienceId` - UUID of the experience\n\n**Body:**\n```json\n{\n    \"isPublic\": true  // true = public, false = private\n}\n```\n\n**Response:**\n```json\n{\n    \"success\": true,\n    \"message\": \"Experience published\",\n    \"experienceId\": \"uuid\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "9.4 List Clone Experiences",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clones/{{cloneId}}/experiences",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clones",
+								"{{cloneId}}",
+								"experiences"
+							]
+						},
+						"description": "List all experiences for a specific clone.\n\n**Route Parameters:**\n- `cloneId` - UUID of the clone\n\n**Response:**\n```json\n[\n    {\n        \"experience_id\": \"uuid\",\n        \"name\": \"Experience 1\",\n        \"rating\": \"PG\",\n        \"status\": \"published\",\n        \"created_at\": \"...\"\n    },\n    {\n        \"experience_id\": \"uuid\",\n        \"name\": \"Experience 2\",\n        \"rating\": \"MA\",\n        \"status\": \"draft\",\n        \"created_at\": \"...\"\n    }\n]\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "9.5 Get Experience Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clones/{{cloneId}}/experiences/{{experienceId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clones",
+								"{{cloneId}}",
+								"experiences",
+								"{{experienceId}}"
+							]
+						},
+						"description": "Get details of a specific experience.\n\n**Route Parameters:**\n- `cloneId` - UUID of the clone\n- `experienceId` - UUID of the experience\n\n**Response:**\n```json\n{\n    \"experience_id\": \"uuid\",\n    \"clone_id\": \"uuid\",\n    \"name\": \"Experience name\",\n    \"description\": \"Description\",\n    \"rating\": \"PG\",\n    \"is_public\": true,\n    \"status\": \"published\",\n    \"created_at\": \"2025-12-23T...\"\n}\n```"
+					},
+					"response": []
+				},
+				{
+					"name": "9.6 List My Draft Experiences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/experiences?state=draft",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"experiences"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "draft"
+								}
+							]
+						},
+						"description": "List all draft experiences. These are unpublished and private."
+					},
+					"response": []
+				},
+				{
+					"name": "9.7 Update Draft Experience",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Updated Experience Title\",\n  \"description\": \"Updated description\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/experiences/{{experienceId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"experiences",
+								"{{experienceId}}"
+							]
+						},
+						"description": "Update a draft experience. Still unpublished."
+					},
+					"response": []
+				},
+				{
+					"name": "9.8 Delete Draft Experience",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/experiences/{{experienceId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"experiences",
+								"{{experienceId}}"
+							]
+						},
+						"description": "Delete a draft experience. Safe since it was never published."
+					},
+					"response": []
+				}
+			],
+			"description": "Create and manage DRAFT experiences. These are private preparations, not published actions.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "🔍 STEP 10 - Pre-Action Review (MANDATORY CHECKPOINT)",
+			"item": [
+				{
+					"name": "10.1 Review Identity Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"status"
+							]
+						},
+						"description": "REVIEW CHECKPOINT: Confirm identity verification level before activation."
+					},
+					"response": []
+				},
+				{
+					"name": "10.2 Review Content Rating",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/identity/ratings",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"identity",
+								"ratings"
+							]
+						},
+						"description": "REVIEW CHECKPOINT: Confirm content rating and access level."
+					},
+					"response": []
+				},
+				{
+					"name": "10.3 Review Entitlements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/entitlements",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"entitlements"
+							]
+						},
+						"description": "REVIEW CHECKPOINT: Confirm what actions are allowed."
+					},
+					"response": []
+				},
+				{
+					"name": "10.4 Review Draft Experiences",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/experiences?state=draft",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"experiences"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "draft"
+								}
+							]
+						},
+						"description": "REVIEW CHECKPOINT: Confirm prepared experiences ready for activation."
+					},
+					"response": []
+				}
+			],
+			"description": "⚠️ MANDATORY: Execute ALL these requests before Clone Activation. This proves user saw their constraints and capabilities.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "🚀 STEP 12 - Clone Activation",
+			"item": [
+				{
+					"name": "12.1 Assign Actor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actors/ensure-runtime/{cloneId}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actors",
+								"ensure-runtime",
+								"{cloneId}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12.2 Pre-Activation-Check",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "12.3 Final-Activation-Review",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}/final-activation-review",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}",
+								"final-activation-review"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12.4 Activate Clone",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('🚀 Activation Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success) {",
+									"    console.log('');",
+									"    console.log('🎉 CLONE ACTIVATED SUCCESSFULLY!');",
+									"    console.log('✅ Clone is now ready for conversations');",
+									"    console.log('');",
+									"    console.log('👉 Next: Start chatting with your clone!');",
+									"    console.log('Run: 9.1 Start Conversation');",
+									"} else {",
+									"    console.log('❌ Activation failed:', response.message);",
+									"}",
+									"",
+									"pm.test('Clone activated', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"active\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}",
+								"status"
+							]
+						},
+						"description": "Activate clone for conversations. Required before chatting."
+					},
+					"response": []
+				},
+				{
+					"name": "12.2 Deactivate Clone",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"status\": \"inactive\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/clone/{{cloneId}}/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clone",
+								"{{cloneId}}",
+								"status"
+							]
+						},
+						"description": "Deactivate clone (pause conversations)"
+					},
+					"response": []
+				}
+			],
+			"description": "Activate clone to enable conversations",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "💬 STEP 13 - Chat with Clone",
+			"item": [
+				{
+					"name": "13.1 Start Conversation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('💬 Chat Response:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('=================================');",
+									"    console.log('🤖 CLONE SAYS:');",
+									"    console.log('=================================');",
+									"    console.log(response.data.response || response.data.message);",
+									"    console.log('=================================');",
+									"    console.log('');",
+									"    ",
+									"    if (response.data.conversationId) {",
+									"        pm.collectionVariables.set('conversationId', response.data.conversationId);",
+									"        console.log('💾 Conversation ID saved:', response.data.conversationId);",
+									"    }",
+									"    ",
+									"    console.log('');",
+									"    console.log('✅ First message sent successfully!');",
+									"    console.log('👉 Continue: 9.2 Continue Conversation');",
+									"}",
+									"",
+									"pm.test('Clone responded', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"    const hasResponse = response.data.response || response.data.message;",
+									"    pm.expect(hasResponse).to.exist;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Hello! Tell me about yourself and your core values.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actor/chat/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actor",
+								"chat",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Send first message to your clone"
+					},
+					"response": []
+				},
+				{
+					"name": "13.2 Continue Conversation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('=================================');",
+									"    console.log('🤖 CLONE SAYS:');",
+									"    console.log('=================================');",
+									"    console.log(response.data.response || response.data.message);",
+									"    console.log('=================================');",
+									"    console.log('');",
+									"}",
+									"",
+									"pm.test('Clone responded', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"What are your thoughts on leadership in challenging times?\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actor/chat/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actor",
+								"chat",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Continue the conversation with follow-up questions"
+					},
+					"response": []
+				},
+				{
+					"name": "13.3 Ask About Knowledge",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"",
+									"if (response.success && response.data) {",
+									"    console.log('');",
+									"    console.log('=================================');",
+									"    console.log('🤖 CLONE SAYS:');",
+									"    console.log('=================================');",
+									"    console.log(response.data.response || response.data.message);",
+									"    console.log('=================================');",
+									"    console.log('');",
+									"    console.log('💡 Testing RAG knowledge retrieval');",
+									"}",
+									"",
+									"pm.test('Clone responded with knowledge', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"message\": \"Tell me about your leadership principles that you uploaded earlier.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actor/chat/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actor",
+								"chat",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Test RAG knowledge retrieval"
+					},
+					"response": []
+				},
+				{
+					"name": "13.4 Get Conversation History",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('📜 Conversation History:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.success && Array.isArray(response.data)) {",
+									"    console.log('');",
+									"    console.log('=== FULL CONVERSATION HISTORY ===');",
+									"    console.log('');",
+									"    response.data.forEach((msg, i) => {",
+									"        const sender = msg.sender === 'user' ? 'YOU' : 'CLONE';",
+									"        console.log(`[${i + 1}] ${sender}:`);",
+									"        console.log(msg.message);",
+									"        console.log(`   (${msg.timestamp})`);",
+									"        console.log('');",
+									"    });",
+									"    console.log('=================================');",
+									"    console.log(`Total messages: ${response.data.length}`);",
+									"}",
+									"",
+									"pm.test('History retrieved', function() {",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actor/chat/{{cloneId}}/history",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actor",
+								"chat",
+								"{{cloneId}}",
+								"history"
+							]
+						},
+						"description": "Get full conversation history with clone"
+					},
+					"response": []
+				}
+			],
+			"description": "Have conversations with your activated clone"
+		},
+		{
+			"name": "🎯 STEP 14 - Capability System",
+			"item": [
+				{
+					"name": "Get My Entitlements (Full Bundle)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const bundle = pm.response.json();",
+									"console.log('📊 Entitlement Bundle:', JSON.stringify(bundle, null, 2));",
+									"",
+									"// Display subscription info",
+									"console.log('\\n🎯 SUBSCRIPTION INFO:');",
+									"console.log('  Tier:', bundle.subscription_name);",
+									"console.log('  Max Clones:', bundle.max_clones);",
+									"console.log('  Max Users:', bundle.max_users);",
+									"console.log('  Storage:', bundle.max_storage_mb + 'MB');",
+									"console.log('  Monthly Interactions:', bundle.monthly_interactions);",
+									"",
+									"// Display capabilities",
+									"console.log('\\n✅ CAPABILITIES (' + bundle.capabilities.length + ' total):');",
+									"bundle.capabilities.forEach((cap, idx) => {",
+									"    const approval = cap.effective_requires_approval ? '⚠️ Approval' : '';",
+									"    const limit = cap.effective_max_daily_uses ? `(${cap.effective_max_daily_uses}/day)` : '';",
+									"    console.log(`  ${idx + 1}. ${cap.capability_code} - ${cap.capability_name} ${approval} ${limit}`);",
+									"});",
+									"",
+									"// Test assertions",
+									"pm.test('Has subscription tier', function() {",
+									"    pm.expect(bundle.subscription_name).to.be.a('string');",
+									"});",
+									"",
+									"pm.test('Has numeric limits', function() {",
+									"    pm.expect(bundle.max_clones).to.be.a('number');",
+									"    pm.expect(bundle.max_users).to.be.a('number');",
+									"    pm.expect(bundle.max_storage_mb).to.be.a('number');",
+									"    pm.expect(bundle.monthly_interactions).to.be.a('number');",
+									"});",
+									"",
+									"pm.test('Has capabilities array', function() {",
+									"    pm.expect(bundle.capabilities).to.be.an('array');",
+									"    pm.expect(bundle.capabilities.length).to.be.above(0);",
+									"});",
+									"",
+									"pm.test('Each capability has required fields', function() {",
+									"    bundle.capabilities.forEach(cap => {",
+									"        pm.expect(cap).to.have.property('capability_code');",
+									"        pm.expect(cap).to.have.property('capability_name');",
+									"        pm.expect(cap).to.have.property('effective_trust_level_required');",
+									"        pm.expect(cap).to.have.property('effective_requires_approval');",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/entitlements",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"entitlements"
+							]
+						},
+						"description": "Get complete entitlement bundle including subscription tier, limits, and all capabilities for the authenticated user"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Single Capability - clone.create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const result = pm.response.json();",
+									"console.log('🔍 Capability Check Result:', JSON.stringify(result, null, 2));",
+									"",
+									"if (result.has_capability) {",
+									"    console.log('✅ User HAS capability:', result.capability_code);",
+									"} else {",
+									"    console.log('❌ User LACKS capability:', result.capability_code);",
+									"}",
+									"",
+									"pm.test('Has capability_code field', function() {",
+									"    pm.expect(result).to.have.property('capability_code');",
+									"});",
+									"",
+									"pm.test('Has has_capability boolean', function() {",
+									"    pm.expect(result).to.have.property('has_capability');",
+									"    pm.expect(result.has_capability).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/check/clone.create",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"check",
+								"clone.create"
+							]
+						},
+						"description": "Quick boolean check if user has the 'clone.create' capability"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Single Capability - clone.delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const result = pm.response.json();",
+									"console.log('🔍 Capability Check Result:', JSON.stringify(result, null, 2));",
+									"",
+									"if (result.has_capability) {",
+									"    console.log('✅ User HAS capability:', result.capability_code);",
+									"} else {",
+									"    console.log('❌ User LACKS capability:', result.capability_code);",
+									"    console.log('💡 Upgrade to Starter tier or higher to unlock this feature');",
+									"}",
+									"",
+									"pm.test('Has capability_code field', function() {",
+									"    pm.expect(result).to.have.property('capability_code');",
+									"});",
+									"",
+									"pm.test('Has has_capability boolean', function() {",
+									"    pm.expect(result).to.have.property('has_capability');",
+									"    pm.expect(result.has_capability).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/check/clone.delete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"check",
+								"clone.delete"
+							]
+						},
+						"description": "Quick boolean check if user has the 'clone.delete' capability (typically requires Starter tier or higher)"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Single Capability - experience.monetize",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const result = pm.response.json();",
+									"console.log('🔍 Capability Check Result:', JSON.stringify(result, null, 2));",
+									"",
+									"if (result.has_capability) {",
+									"    console.log('✅ User CAN monetize experiences');",
+									"} else {",
+									"    console.log('❌ User CANNOT monetize experiences');",
+									"    console.log('💎 Upgrade to Professional tier to unlock monetization');",
+									"}",
+									"",
+									"pm.test('Has capability_code field', function() {",
+									"    pm.expect(result).to.have.property('capability_code');",
+									"});",
+									"",
+									"pm.test('Has has_capability boolean', function() {",
+									"    pm.expect(result).to.have.property('has_capability');",
+									"    pm.expect(result.has_capability).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/check/experience.monetize",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"check",
+								"experience.monetize"
+							]
+						},
+						"description": "Quick boolean check if user has the 'experience.monetize' capability (typically requires Professional tier)"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Single Capability - clone.autonomy.advanced",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const result = pm.response.json();",
+									"console.log('🔍 Capability Check Result:', JSON.stringify(result, null, 2));",
+									"",
+									"if (result.has_capability) {",
+									"    console.log('✅ User HAS advanced autonomy');",
+									"    console.log('🤖 Clone can operate with 24-hour autonomy window');",
+									"} else {",
+									"    console.log('❌ User LACKS advanced autonomy');",
+									"    console.log('🏢 Upgrade to Enterprise tier to unlock advanced autonomy');",
+									"}",
+									"",
+									"pm.test('Has capability_code field', function() {",
+									"    pm.expect(result).to.have.property('capability_code');",
+									"});",
+									"",
+									"pm.test('Has has_capability boolean', function() {",
+									"    pm.expect(result).to.have.property('has_capability');",
+									"    pm.expect(result.has_capability).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/check/clone.autonomy.advanced",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"check",
+								"clone.autonomy.advanced"
+							]
+						},
+						"description": "Quick boolean check if user has the 'clone.autonomy.advanced' capability (Enterprise tier only)"
+					},
+					"response": []
+				},
+				{
+					"name": "Check Custom Capability (Variable)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function() {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const result = pm.response.json();",
+									"const capCode = pm.collectionVariables.get('capabilityCode');",
+									"",
+									"console.log('🔍 Checking capability:', capCode);",
+									"console.log('📊 Result:', JSON.stringify(result, null, 2));",
+									"",
+									"if (result.has_capability) {",
+									"    console.log('✅ User HAS capability:', capCode);",
+									"} else {",
+									"    console.log('❌ User LACKS capability:', capCode);",
+									"}",
+									"",
+									"pm.test('Has capability_code field', function() {",
+									"    pm.expect(result).to.have.property('capability_code');",
+									"    pm.expect(result.capability_code).to.equal(capCode);",
+									"});",
+									"",
+									"pm.test('Has has_capability boolean', function() {",
+									"    pm.expect(result).to.have.property('has_capability');",
+									"    pm.expect(result.has_capability).to.be.a('boolean');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/capabilities/check/{{capabilityCode}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"capabilities",
+								"check",
+								"{{capabilityCode}}"
+							]
+						},
+						"description": "Check any capability using the 'capabilityCode' collection variable. Change the variable to test different capabilities."
+					},
+					"response": []
+				}
+			],
+			"description": "Query user capabilities and entitlements based on subscription tier"
+		},
+		{
+			"name": "STEP 15 Actor Runtime",
+			"item": [
+				{
+					"name": "15.1 Ensure Actor Runtime",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.collectionVariables.set('actor_id', response.actorId);",
+									"    console.log('✅ Actor runtime ensured');",
+									"    console.log('Actor ID:', response.actorId);",
+									"    console.log('Is New:', response.isNew);",
+									"    console.log('Message:', response.message);",
+									"} else {",
+									"    console.log('❌ Actor runtime failed');",
+									"    console.log('Response:', pm.response.text());",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/actors/ensure-runtime/{{cloneId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"actors",
+								"ensure-runtime",
+								"{{cloneId}}"
+							]
+						},
+						"description": "Ensure actor runtime exists for clone (IDEMPOTENT - NEW ENDPOINT)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🏥 STEP 16 - Health & System",
+			"item": [
+				{
+					"name": "16.2 System Status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/system/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"system",
+								"status"
+							]
+						},
+						"description": "Get detailed system status (requires auth)"
+					},
+					"response": []
+				},
+				{
+					"name": "16.1 Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"console.log('🏥 Health Check:', JSON.stringify(response, null, 2));",
+									"",
+									"if (response.status === 'healthy') {",
+									"    console.log('✅ API is HEALTHY');",
+									"} else {",
+									"    console.log('⚠️ API has issues');",
+									"}",
+									"",
+									"pm.test('API is healthy', function() {",
+									"    pm.expect(response.status).to.equal('healthy');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/health",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						},
+						"description": "Check API health status"
+					},
+					"response": []
+				},
+				{
+					"name": "Level 1-Age Verification (Unverified → AgeAssured)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"date_of_birth\": \"1990-01-01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/verify/age",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"verify",
+								"age"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Level 2 - Human Verification (AgeAssured → HumanVerified)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"verification_method\": \"email\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/verify/human",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"verify",
+								"human"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Level 3 -  Government ID Verification (HumanVerified → GovernmentVerified)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id_type\": \"drivers_license\",\r\n  \"id_number\": \"D1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/verify/government-id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"verify",
+								"government-id"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Level 4 - Biometric Verification (GovernmentVerified → BiometricVerified)",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"biometric_type\": \"facial_recognition\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/auth/identity/verify/biometric",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"identity",
+								"verify",
+								"biometric"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "System health and diagnostics"
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "tenantId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cloneId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "cloneSlug",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "resetToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "emailVerificationCode",
+			"value": "123456",
+			"type": "string"
+		},
+		{
+			"key": "newEmail",
+			"value": "newemail@example.com",
+			"type": "string"
+		},
+		{
+			"key": "conversationId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "experienceId",
+			"value": ""
+		}
+	]
+}

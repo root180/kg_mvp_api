@@ -9,10 +9,12 @@ using KeiroGenesis.API.DTO.Clone;
 using KeiroGenesis.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -198,8 +200,41 @@ namespace KeiroGenesis.API.Repositories
             return ((bool)result.can_activate, (string)result.reason);
         }
 
+       
+        // Get actor for a clone
+        public async Task<dynamic?> GetCloneActorAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            var result = await conn.QueryAsync(
+                @"SELECT 
+            a.actor_id,
+            a.display_name,
+            a.handle,
+            a.actor_type,
+            a.status,
+            a.avatar_url,
+            ca.autonomy_level,
+            ca.is_memorial,
+            ca.owner_actor_id,
+            ca.created_at as linked_at
+          FROM actor.actors a
+          JOIN actor.clone_actors ca ON ca.actor_id = a.actor_id
+          JOIN clone.clones c ON c.clone_id = ca.clone_id
+          WHERE ca.clone_id = @clone_id
+            AND c.tenant_id = @tenant_id
+            AND c.user_id = @user_id
+            AND c.deleted_at IS NULL",
+                new { clone_id = cloneId, tenant_id = tenantId, user_id = userId }
+            );
+
+            return result.FirstOrDefault();
+        }
+
+
         // *** NEW: Get activation readiness details ***
-        public async Task<dynamic?> GetActivationReadinessAsync(
+        public async Task<dynamic?> GetActivationCheckAsync(
             Guid tenantId, Guid userId, Guid cloneId)
         {
             using var conn = _db.CreateConnection();
@@ -213,6 +248,24 @@ namespace KeiroGenesis.API.Repositories
 
             return result.FirstOrDefault();
         }
+
+        // Get comprehensive clone review for pre-activation check
+        public async Task<dynamic?> GetCloneReviewAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            using var conn = _db.CreateConnection();
+
+            // Use a stored function to get all review data
+            var result = await conn.QueryAsync(
+                @"SELECT * FROM clone.fn_get_clone_review(
+            @tenant_id, @user_id, @clone_id
+        )",
+                new { tenant_id = tenantId, user_id = userId, clone_id = cloneId }
+            );
+
+            return result.FirstOrDefault();
+        }
+
 
     }
 
@@ -561,12 +614,12 @@ namespace KeiroGenesis.API.Services
             }
         }
         // *** NEW: Check activation readiness ***
-        public async Task<ActivationReadinessResponse> GetActivationReadinessAsync(
+        public async Task<ActivationReadinessResponse> GetActivationCheckAsync(
             Guid tenantId, Guid userId, Guid cloneId)
         {
             try
             {
-                var readiness = await _repo.GetActivationReadinessAsync(
+                var readiness = await _repo.GetActivationCheckAsync(
                     tenantId, userId, cloneId);
 
                 if (readiness == null)
@@ -659,7 +712,139 @@ namespace KeiroGenesis.API.Services
             }
         }
 
+        public async Task<CloneActorResponse> GetCloneActorAsync(
+            Guid tenantId, Guid userId, Guid cloneId)
+        {
+            try
+            {
+                var actor = await _repo.GetCloneActorAsync(tenantId, userId, cloneId);
 
+                if (actor == null)
+                {
+                    return new CloneActorResponse
+                    {
+                        Success = false,
+                        CloneId = cloneId,
+                        Message = "No actor found for this clone"
+                    };
+                }
+
+                return new CloneActorResponse
+                {
+                    Success = true,
+                    CloneId = cloneId,
+                    ActorId = actor.actor_id,
+                    DisplayName = actor.display_name ?? "",
+                    Handle = actor.handle ?? "",
+                    ActorType = actor.actor_type ?? "",
+                    Status = actor.status ?? "",
+                    AvatarUrl = actor.avatar_url ?? "",
+                    AutonomyLevel = actor.autonomy_level ?? "supervised",
+                    IsMemorial = actor.is_memorial ?? false,
+                    OwnerActorId = actor.owner_actor_id,
+                    LinkedAt = actor.linked_at,
+                    Message = "Actor retrieved successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting actor for clone {CloneId}", cloneId);
+                return new CloneActorResponse
+                {
+                    Success = false,
+                    CloneId = cloneId,
+                    Message = $"Failed to retrieve actor: {ex.Message}"
+                };
+            }
+        }
+
+        public async Task<CloneReviewResponse> GetCloneReviewAsync(
+    Guid tenantId, Guid userId, Guid cloneId)
+        {
+            try
+            {
+                var review = await _repo.GetCloneReviewAsync(tenantId, userId, cloneId);
+
+                if (review == null)
+                {
+                    return new CloneReviewResponse
+                    {
+                        Success = false,
+                        Message = "Clone not found or access denied"
+                    };
+                }
+
+                // Parse blockers and warnings arrays
+                var blockers = new List<string>();
+                var warnings = new List<string>();
+
+                if (review.activation_blockers != null)
+                {
+                    string[] blockersArray = review.activation_blockers;
+                    blockers.AddRange(blockersArray);
+                }
+
+                if (review.warnings != null)
+                {
+                    string[] warningsArray = review.warnings;
+                    warnings.AddRange(warningsArray);
+                }
+
+                return new CloneReviewResponse
+                {
+                    Success = true,
+                    Message = review.can_activate
+                        ? "Clone is ready for activation"
+                        : "Clone cannot be activated - see blockers",
+
+                    // Clone Info
+                    CloneId = review.clone_id,
+                    DisplayName = review.display_name ?? "",
+                    CloneSlug = review.clone_slug ?? "",
+                    Tagline = review.tagline ?? "",
+                    Bio = review.bio ?? "",
+                    AvatarUrl = review.avatar_url ?? "",
+                    Visibility = review.visibility ?? "private",
+                    Status = review.status ?? "draft",
+                    WizardStep = review.wizard_step ?? 0,
+                    CreatedAt = review.created_at,
+
+                    // Actor Info
+                    HasActor = review.has_actor ?? false,
+                    ActorId = review.actor_id,
+                    ActorHandle = review.actor_handle ?? "",
+                    ActorStatus = review.actor_status ?? "",
+                    AutonomyLevel = review.autonomy_level ?? "supervised",
+
+                    // Experiences
+                    TotalExperiences = review.total_experiences ?? 0,
+                    PublishedExperiences = review.published_experiences ?? 0,
+                    DraftExperiences = review.draft_experiences ?? 0,
+
+                    // Capabilities
+                    Capabilities = review.capabilities?.ToString() ?? "{}",
+
+                    // Owner Info
+                    OwnerUserId = review.owner_user_id,
+                    OwnerEmail = review.owner_email ?? "",
+                    OwnerDisplayName = review.owner_display_name ?? "",
+
+                    // Readiness
+                    CanActivate = review.can_activate ?? false,
+                    ActivationBlockers = blockers,
+                    Warnings = warnings
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting clone review for {CloneId}", cloneId);
+                return new CloneReviewResponse
+                {
+                    Success = false,
+                    Message = $"Failed to retrieve clone review: {ex.Message}"
+                };
+            }
+        }
     }
 
    
@@ -812,6 +997,137 @@ namespace KeiroGenesis.API.DTO.Clone
         public string Message { get; init; } = string.Empty;
     }
 
+    public sealed class CloneActorResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; init; }
+
+        [JsonPropertyName("cloneId")]
+        public Guid CloneId { get; init; }
+
+        [JsonPropertyName("actorId")]
+        public Guid? ActorId { get; init; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; init; } = string.Empty;
+
+        [JsonPropertyName("handle")]
+        public string Handle { get; init; } = string.Empty;
+
+        [JsonPropertyName("actorType")]
+        public string ActorType { get; init; } = string.Empty;
+
+        [JsonPropertyName("status")]
+        public string Status { get; init; } = string.Empty;
+
+        [JsonPropertyName("avatarUrl")]
+        public string AvatarUrl { get; init; } = string.Empty;
+
+        [JsonPropertyName("autonomyLevel")]
+        public string AutonomyLevel { get; init; } = string.Empty;
+
+        [JsonPropertyName("isMemorial")]
+        public bool IsMemorial { get; init; }
+
+        [JsonPropertyName("ownerActorId")]
+        public Guid? OwnerActorId { get; init; }
+
+        [JsonPropertyName("linkedAt")]
+        public DateTime? LinkedAt { get; init; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; init; } = string.Empty;
+    }
+
+    public sealed class CloneReviewResponse
+    {
+        [JsonPropertyName("success")]
+        public bool Success { get; init; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; init; } = string.Empty;
+
+        // Clone Information
+        [JsonPropertyName("cloneId")]
+        public Guid CloneId { get; init; }
+
+        [JsonPropertyName("displayName")]
+        public string DisplayName { get; init; } = string.Empty;
+
+        [JsonPropertyName("cloneSlug")]
+        public string CloneSlug { get; init; } = string.Empty;
+
+        [JsonPropertyName("tagline")]
+        public string Tagline { get; init; } = string.Empty;
+
+        [JsonPropertyName("bio")]
+        public string Bio { get; init; } = string.Empty;
+
+        [JsonPropertyName("avatarUrl")]
+        public string AvatarUrl { get; init; } = string.Empty;
+
+        [JsonPropertyName("visibility")]
+        public string Visibility { get; init; } = string.Empty;
+
+        [JsonPropertyName("status")]
+        public string Status { get; init; } = string.Empty;
+
+        [JsonPropertyName("wizardStep")]
+        public int WizardStep { get; init; }
+
+        [JsonPropertyName("createdAt")]
+        public DateTime? CreatedAt { get; init; }
+
+        // Actor Information
+        [JsonPropertyName("hasActor")]
+        public bool HasActor { get; init; }
+
+        [JsonPropertyName("actorId")]
+        public Guid? ActorId { get; init; }
+
+        [JsonPropertyName("actorHandle")]
+        public string ActorHandle { get; init; } = string.Empty;
+
+        [JsonPropertyName("actorStatus")]
+        public string ActorStatus { get; init; } = string.Empty;
+
+        [JsonPropertyName("autonomyLevel")]
+        public string AutonomyLevel { get; init; } = string.Empty;
+
+        // Experiences
+        [JsonPropertyName("totalExperiences")]
+        public int TotalExperiences { get; init; }
+
+        [JsonPropertyName("publishedExperiences")]
+        public int PublishedExperiences { get; init; }
+
+        [JsonPropertyName("draftExperiences")]
+        public int DraftExperiences { get; init; }
+
+        // Capabilities
+        [JsonPropertyName("capabilities")]
+        public string Capabilities { get; init; } = "{}";
+
+        // Owner Information
+        [JsonPropertyName("ownerUserId")]
+        public Guid? OwnerUserId { get; init; }
+
+        [JsonPropertyName("ownerEmail")]
+        public string OwnerEmail { get; init; } = string.Empty;
+
+        [JsonPropertyName("ownerDisplayName")]
+        public string OwnerDisplayName { get; init; } = string.Empty;
+
+        // Activation Readiness
+        [JsonPropertyName("canActivate")]
+        public bool CanActivate { get; init; }
+
+        [JsonPropertyName("activationBlockers")]
+        public List<string> ActivationBlockers { get; init; } = new();
+
+        [JsonPropertyName("warnings")]
+        public List<string> Warnings { get; init; } = new();
+    }
 }
 
 
@@ -821,7 +1137,7 @@ namespace KeiroGenesis.API.DTO.Clone
 #region Controller
 namespace KeiroGenesis.API.Controllers.V1
 {
-    
+
     [Route("api/v1/clone")]
     [Authorize]
     public class CloneController : ControllerBase
@@ -996,24 +1312,52 @@ namespace KeiroGenesis.API.Controllers.V1
         /// 
         /// **Use this endpoint before showing "Activate" button in UI**
         /// </remarks>
-        [HttpGet("{cloneId}/activation-readiness")]
+        [HttpGet("{cloneId}/pre-activation-check")]
         [ProducesResponseType(typeof(ActivationReadinessResponse), 200)]
-        public async Task<IActionResult> GetActivationReadiness(Guid cloneId)
+        public async Task<IActionResult> GetActivationCheck(Guid cloneId)
         {
             var tenantId = GetTenantId();
             var userId = GetCurrentUserId();
 
-            var result = await _service.GetActivationReadinessAsync(
+            var result = await _service.GetActivationCheckAsync(
                 tenantId, userId, cloneId);
 
             return Ok(result);
         }
 
 
+        /// <summary>
+        /// Get comprehensive pre-activation review for clone
+        /// </summary>
+        /// <remarks>
+        /// Returns a complete review of the clone including:
+        /// - Clone basic information
+        /// - Actor assignment status
+        /// - Experiences count (published vs draft)
+        /// - Configured capabilities
+        /// - Owner information
+        /// - Activation readiness with specific blockers and warnings
+        /// 
+        /// **Use this endpoint before activation to catch any issues!**
+        /// </remarks>
+        [HttpGet("{cloneId}/final-activation-review")]
+        [ProducesResponseType(typeof(CloneReviewResponse), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetCloneReview(Guid cloneId)
+        {
+            var tenantId = GetTenantId();
+            var userId = GetCurrentUserId();
 
+            _logger.LogInformation("Getting pre-activation review for clone {CloneId}", cloneId);
+
+            var result = await _service.GetCloneReviewAsync(tenantId, userId, cloneId);
+
+            if (!result.Success)
+                return NotFound(result);
+
+            return Ok(result);
+        }
     }
-
-
 
 }
 #endregion
